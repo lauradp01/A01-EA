@@ -23,8 +23,6 @@ KRR = KG(vR,vR) ;
 Fext_L = Fext(vL,1) ;
 Fext_R = Fext(vR,1) ;
 
-%uL = KLL\(Fext_L-KLR*uR) ;
-%uL = Solver.system((Fext_L-KLR*uR),KLL) ;
 uL = Solver.chooseMode("Iterative").system((Fext_L-KLR*uR),KLL) ;
 RR = KRR*uR + KRL*uL - Fext_R ;
 
