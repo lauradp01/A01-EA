@@ -142,4 +142,8 @@ sig_cr = buckling(n_el,Td,x,Tn,mat)  ; %Pa
 
 sig_comparison = [sig sig_cr] ;
 
+%% SOLVER MODE
+[uDirect,uIterative] = solverMode(vL,vR,uR,KG,Fext) ;
 
+%% TESTS
+results = runtests('tests.m') ;
