@@ -1,3 +1,4 @@
+
 classdef DirectSolver < Solver
 
     properties
@@ -8,4 +9,5 @@ classdef DirectSolver < Solver
            solution = RHS\LHS ;
         end
     end
+
 end

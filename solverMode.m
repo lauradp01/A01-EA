@@ -1,3 +1,4 @@
+
 function [uDirect,uIterative] = solverMode(vL,vR,uR,KG,Fext)
 %--------------------------------------------------------------------------
 % The function takes as inputs:
