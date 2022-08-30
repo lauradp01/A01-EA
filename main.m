@@ -103,6 +103,10 @@ n_nod = size(Tn,2);           % Number of nodes for each element
 n_el_dof = n_i*n_nod;         % Number of DOFs for each element 
 
 % Computation of the DOFs connectivities
+s.n_el = n_el;
+c = ConnectivitiesComputer(s);
+Td = c.compute();
+
 Td = connectDOFs(n_el,n_nod,n_i,Tn);
 
 % Computation of element stiffness matrices
