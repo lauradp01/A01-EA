@@ -104,50 +104,53 @@ n_el_dof = n_i*n_nod;         % Number of DOFs for each element
 
 % Computation of the DOFs connectivities
 s.n_el = n_el;
-c = ConnectivitiesComputer(s);
+s.n_nod = n_nod ;
+s.n_i = n_i ;
+s.Tn = Tn ;
+c = Connectivities(s);
 Td = c.compute();
 
-Td = connectDOFs(n_el,n_nod,n_i,Tn);
-
-% Computation of element stiffness matrices
-Kel = computeKelBar(n_d,n_el,x,Tn,mat,Tmat);
-
-% Global matrix assembly
-KG = assemblyKG(n_el,n_el_dof,n_dof,Td,Kel);
-
-% Global force vector assembly
-Fext = computeF(n_i,n_dof,Fdata);
-
-% Apply conditions 
-[vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
-
-% System resolution
-[u,R] = solveSys(vL,vR,uR,KG,Fext);
-
-% Compute strain and stresses
-[eps,sig] = computeStrainStressBar(deltaT,n_el,u,Td,x,Tn,mat,Tmat);
-
-%% POSTPROCESS
-
-% Plot displacements
-plotDisp(n_d,n,u,x,Tn,1);
-
-% Plot strains
-plotStrainStress(n_d,eps,x,Tn,{'Strain'});
-
-% Plot stress
-plotStrainStress(n_d,sig,x,Tn,{'Stress';'(Pa)'});
-
-% Plot stress in defomed mesh
-plotBarStressDef(x,Tn,u,sig,1)
-
-u_node4 = (u(7)^2+u(8)^2)^0.5 *1e3 ; %mm
-sig_cr = buckling(n_el,Td,x,Tn,mat)  ; %Pa
-
-sig_comparison = [sig sig_cr] ;
-
-%% SOLVER MODE
-[uDirect,uIterative] = solverMode(vL,vR,uR,KG,Fext) ;
-
-%% TESTS
-results = runtests('tests.m') ;
+% Td = connectDOFs(n_el,n_nod,n_i,Tn);
+% 
+% % Computation of element stiffness matrices
+% Kel = computeKelBar(n_d,n_el,x,Tn,mat,Tmat);
+% 
+% % Global matrix assembly
+% KG = assemblyKG(n_el,n_el_dof,n_dof,Td,Kel);
+% 
+% % Global force vector assembly
+% Fext = computeF(n_i,n_dof,Fdata);
+% 
+% % Apply conditions 
+% [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
+% 
+% % System resolution
+% [u,R] = solveSys(vL,vR,uR,KG,Fext);
+% 
+% % Compute strain and stresses
+% [eps,sig] = computeStrainStressBar(deltaT,n_el,u,Td,x,Tn,mat,Tmat);
+% 
+% %% POSTPROCESS
+% 
+% % Plot displacements
+% plotDisp(n_d,n,u,x,Tn,1);
+% 
+% % Plot strains
+% plotStrainStress(n_d,eps,x,Tn,{'Strain'});
+% 
+% % Plot stress
+% plotStrainStress(n_d,sig,x,Tn,{'Stress';'(Pa)'});
+% 
+% % Plot stress in defomed mesh
+% plotBarStressDef(x,Tn,u,sig,1)
+% 
+% u_node4 = (u(7)^2+u(8)^2)^0.5 *1e3 ; %mm
+% sig_cr = buckling(n_el,Td,x,Tn,mat)  ; %Pa
+% 
+% sig_comparison = [sig sig_cr] ;
+% 
+% %% SOLVER MODE
+% [uDirect,uIterative] = solverMode(vL,vR,uR,KG,Fext) ;
+% 
+% %% TESTS
+% results = runtests('tests.m') ;
