@@ -1,13 +1,16 @@
 
-classdef Connectivities
+classdef ConnectivitiesComputer < handle
 
     properties (Access = private)
-    
+        n_el
+        n_nod
+        n_i
+        Tn
     end
 
     methods (Access = public)
 
-        function obj = main_class(cParams)
+        function obj = ConnectivitiesComputer(cParams)
            obj.init(cParams);
         end
 
@@ -28,20 +31,13 @@ classdef Connectivities
 
     end
 
-
-
     methods (Access = private)
-    
-
         function init(obj,cParams)
-            n_el = cParams.n_el;
-            
-            
-
+            obj.n_el = cParams.n_el;
+            obj.n_nod = cParams.n_nod ;
+            obj.n_i = cParams.n_i ;
+            obj.Tn = cParams.Tn ;
         end
-        
-        
-      
     end
 
 end
