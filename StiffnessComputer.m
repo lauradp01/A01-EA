@@ -1,3 +1,4 @@
+
 classdef StiffnessComputer < handle
    
     properties (Access = private)
@@ -56,9 +57,9 @@ classdef StiffnessComputer < handle
             obj.mat = cParams.mat ;
             obj.Tmat = cParams.Tmat ;
         end
+    end 
         
-        
-    end
+  
 
     
 end
