@@ -21,6 +21,7 @@ classdef StiffnessComputer < handle
             coord = obj.x ;
             connec = obj.Tn ;
             materialData = obj.mat ;
+            materialConnec = obj.Tmat ;
                         
             n_nod = size(connec,2) ;  
             n_el_dof = nDim*n_nod ;

@@ -111,10 +111,8 @@ s.Tn = Tn ;
 c = ConnectivitiesComputer(s);
 Td = c.compute();
 
-% Td = connectDOFs(n_el,n_nod,n_i,Tn);
-% 
-% % Computation of element stiffness matrices
 
+% Computation of element stiffness matrices
 t.n_d = n_d ;
 t.n_el = n_el ;
 t.x = x ;
@@ -125,28 +123,46 @@ t.Tmat = Tmat ;
 d = StiffnessComputer(t) ;
 Kel = d.compute() ;
 
-% Kel = computeKelBar(n_d,n_el,x,Tn,mat,Tmat);
-% 
-% % Global matrix assembly
+
+% Global matrix assembly
 p.n_el = n_el ;
 p.n_el_dof = n_el_dof ;
 p.n_dof = n_dof ;
 p.Td = Td ;
 p.Kel = Kel ;
 
+e = AssemblyComputer(p) ;
+KG = e.compute() ;
 
 
-% KG = assemblyKG(n_el,n_el_dof,n_dof,Td,Kel);
-% 
-% % Global force vector assembly
-% Fext = computeF(n_i,n_dof,Fdata);
-% 
-% % Apply conditions 
-% [vL,vR,uR] = applyCond(n_i,n_dof,fixNod);
-% 
-% % System resolution
-% [u,R] = solveSys(vL,vR,uR,KG,Fext);
-% 
+
+% Global force vector assembly
+q.n_dof = n_dof ;
+q.Fdata = Fdata ;
+
+f = ForceComputer(q) ;
+Fext = f.compute() ;
+
+
+% Apply conditions 
+r.n_dof = n_dof ;
+r.fixNod = fixNod ;
+
+g = ConditionsComputer(r) ;
+[vL,vR,uR] = g.compute() ;
+
+
+% System resolution
+m.vL = vL ;
+m.vR = vR ;
+m.uR = uR ;
+m.KG = KG ;
+m.Fext = Fext ;
+
+h = SystemSolver(m) ;
+[u,R] = h.compute() ;
+
+
 % % Compute strain and stresses
 % [eps,sig] = computeStrainStressBar(deltaT,n_el,u,Td,x,Tn,mat,Tmat);
 % 
@@ -170,7 +186,7 @@ p.Kel = Kel ;
 % sig_comparison = [sig sig_cr] ;
 % 
 % %% SOLVER MODE
-% [uDirect,uIterative] = solverMode(vL,vR,uR,KG,Fext) ;
+ [uDirect,uIterative] = solverMode(vL,vR,uR,KG,Fext) ;
 % 
 % %% TESTS
-% results = runtests('tests.m') ;
+ results = runtests('tests.m') ;
