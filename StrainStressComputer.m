@@ -1,12 +1,11 @@
-classdef StrainStressComputer
-    %UNTITLED9 Summary of this class goes here
-    %   Detailed explanation goes here
 
-    properties
+classdef StrainStressComputer
+   
+    properties (Access = private)
         Property1
     end
 
-    methods
+    methods (Access = public)
         function obj = untitled9(inputArg1,inputArg2)
             %UNTITLED9 Construct an instance of this class
             %   Detailed explanation goes here
@@ -19,4 +18,5 @@ classdef StrainStressComputer
             outputArg = obj.Property1 + inputArg;
         end
     end
+
 end
