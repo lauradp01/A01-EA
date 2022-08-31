@@ -18,12 +18,12 @@ classdef ConnectivitiesComputer < handle
             nElem = obj.n_el;
             nNod = obj.n_nod;
             nDim = obj.n_i;
-
+            connec = obj.Tn;
             Td = zeros(nElem,nNod*nDim) ;
             for i = 1:nElem
                 for j = 1:nNod
                     column = j*nDim ;
-                    dof = obj.computeDof(i,j);
+                    dof = nDim * connec(i,j) ;
                     for a = 1:nDim
                         Td(i,column) = dof ;
                         column = column-1 ;
@@ -45,10 +45,8 @@ classdef ConnectivitiesComputer < handle
             obj.Tn = cParams.Tn ;
         end
 
-        function dof = computeDof(obj,i,j)
-            connec = obj.Tn;
-            nDim   = obj.n_i;
-            dof = nDim * connec(i,j);
+        function
+
         end
 
     end
