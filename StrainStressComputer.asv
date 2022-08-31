@@ -1,0 +1,54 @@
+
+classdef StrainStressComputer < handle
+   
+    properties (Access = private)
+        deltaT
+        n_el
+        u
+        Td
+        x
+        Tn
+        mat
+        Tmat
+    end
+
+    methods (Access = public)
+        function obj = StrainStressComputer(cParams)
+            obj.init(cParams) ;
+        end
+
+        function [eps,sig] = compute(obj)
+            incrementT = obj.deltaT ;
+            nElem = obj.n_el ;
+            displacement = obj.u ;
+            connecDOF = obj.Td ;
+            coord = obj.x ;
+            connec = obj.Tn ;
+            material = obj.mat ;
+            matConnec = obj.Tmat ;            
+
+            
+        end
+    end
+
+    methods (Access = private)
+        function init(obj,cParams)
+            obj.deltaT = cParams.deltaT ;
+            obj.n_el = cParams.n_el ;
+            obj.u = cParams.u ;
+            obj.Td = cParams.Td ;
+            obj.x = cParams.x ;
+            obj.Tn = cParams.Tn ;
+            obj.mat = cParams.mat ;
+            obj.Tmat = cParams.Tmat ;
+        end
+
+
+        
+    end
+
+end
+
+   
+
+
