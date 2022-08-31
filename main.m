@@ -107,15 +107,35 @@ s.n_el = n_el;
 s.n_nod = n_nod ;
 s.n_i = n_i ;
 s.Tn = Tn ;
+
 c = ConnectivitiesComputer(s);
 Td = c.compute();
 
 % Td = connectDOFs(n_el,n_nod,n_i,Tn);
 % 
 % % Computation of element stiffness matrices
+
+t.n_d = n_d ;
+t.n_el = n_el ;
+t.x = x ;
+t.Tn = Tn ;
+t.mat = mat ;
+t.Tmat = Tmat ;
+
+d = StiffnessComputer(t) ;
+Kel = d.compute() ;
+
 % Kel = computeKelBar(n_d,n_el,x,Tn,mat,Tmat);
 % 
 % % Global matrix assembly
+p.n_el = n_el ;
+p.n_el_dof = n_el_dof ;
+p.n_dof = n_dof ;
+p.Td = Td ;
+p.Kel = Kel ;
+
+
+
 % KG = assemblyKG(n_el,n_el_dof,n_dof,Td,Kel);
 % 
 % % Global force vector assembly
