@@ -173,15 +173,27 @@ s.Tn = Tn ;
 s.mat = mat ;
 s.Tmat = Tmat ;
 
-c = StrainStressComputer(s) ;
-[eps, sig] = c.compute() ;
+% c = StrainStressComputer(s) ;
+% [eps, sig] = c.compute() ;
 
 % [eps,sig] = computeStrainStressBar(deltaT,n_el,u,Td,x,Tn,mat,Tmat);
 % 
-% %% POSTPROCESS
-% 
-% % Plot displacements
+%% POSTPROCESS
+
+% Plot displacements
+s.n_d = n_d ;
+s.n = n ;
+s.u = u ;
+s.x = Tn ;
+s.fact = 1 ;
+
+% c = DisplacementGraph(s) ;
+% c.plot() ; %em queda super lleig
+
 % plotDisp(n_d,n,u,x,Tn,1);
+
+
+
 % 
 % % Plot strains
 % plotStrainStress(n_d,eps,x,Tn,{'Strain'});
@@ -197,8 +209,18 @@ c = StrainStressComputer(s) ;
 % 
 % sig_comparison = [sig sig_cr] ;
 % 
-% %% SOLVER MODE
+%% SOLVER MODE
+s.vL = vL ;
+s.vR = vR ;
+s.uR = uR ;
+s.KG = KG ;
+s.Fext = Fext ;
+
+c = DirectOrIterative(s) ;
+[uDirect,uIterative] = c.compute() ;
+
 % [uDirect,uIterative] = solverMode(vL,vR,uR,KG,Fext) ;
 % 
-% %% TESTS
-% results = runtests('tests.m') ;
+
+%% TESTS
+ results = runtests('tests.m') ;
