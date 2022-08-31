@@ -219,8 +219,5 @@ s.Fext = Fext ;
 c = DirectOrIterative(s) ;
 [uDirect,uIterative] = c.compute() ;
 
-% [uDirect,uIterative] = solverMode(vL,vR,uR,KG,Fext) ;
-% 
-
 %% TESTS
- results = runtests('tests.m') ;
+results = runtests('tests.m') ;
