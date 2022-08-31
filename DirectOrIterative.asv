@@ -1,0 +1,78 @@
+classdef DirectOrIterative < handle
+    %UNTITLED11 Summary of this class goes here
+    %   Detailed explanation goes here
+
+    properties (Access = private)
+        vL
+        vR
+        uR
+        KG
+        Fext
+    end
+
+    methods (Access = public)
+        function obj = DirectOrIterative(cParams)
+            obj.init(cParams) ;
+        end
+
+        function [uDirect, uIterative] = compute(obj)
+            vL = obj.vL ;
+            vR = obj.vR
+            
+            KLL = KG(vL,vL) ;
+            KLR = KG(vL,vR) ;
+            KRL = KG(vR,vL) ;
+            KRR = KG(vR,vR) ;
+            Fext_L = Fext(vL,1) ;
+            Fext_R = Fext(vR,1) ;
+
+            uDirect = computeDirect(obj) ;
+            uIterative = computeIterative(obj) ;
+            
+        end
+    end
+
+    methods (Access = private)
+        function init(obj,cParams)
+            obj.vL = cParams.vL ;
+            obj.vR = cParams.vR ;
+            obj.uR = cParams.uR ;
+            obj.KG = cParams.KG ;
+            obj.Fext = cParams.Fext ;
+        end
+
+        function uDirect = computeDirect(obj)
+            
+            
+            %Direct Solver
+            solverDirect = Solver.chooseMode("Direct"); 
+            uLDirect = solverDirect.system((Fext_L-KLR*uR),KLL) ;
+            
+            RR = KRR*uR + KRL*uLDirect - Fext_R ;
+            
+            uDirect = zeros(size(vR,1)+size(vL,1),1) ; 
+            R = zeros(size(vR,1)+size(vL,1),1) ; 
+            
+            uDirect(vL,1) = uLDirect ;
+            uDirect(vR,1) = uR ; 
+            R(vR,1) = RR ; 
+        end
+
+        function uIterative = computeIterative(obj)
+                        
+            %Iterative Solver
+            solverDirect = Solver.chooseMode("Iterative"); 
+            uLIterative = solverDirect.system((Fext_L-KLR*uR),KLL) ;
+            
+            RR = KRR*uR + KRL*uLIterative - Fext_R ;
+            
+            uIterative = zeros(size(vR,1)+size(vL,1),1) ; 
+            R = zeros(size(vR,1)+size(vL,1),1) ; 
+            
+            uIterative(vL,1) = uLIterative ;
+            uIterative(vR,1) = uR ; 
+            R(vR,1) = RR ; 
+
+        end
+    end
+end
