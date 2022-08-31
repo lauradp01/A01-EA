@@ -107,7 +107,7 @@ s.n_el = n_el;
 s.n_nod = n_nod ;
 s.n_i = n_i ;
 s.Tn = Tn ;
-c = Connectivities(s);
+c = ConnectivitiesComputer(s);
 Td = c.compute();
 
 % Td = connectDOFs(n_el,n_nod,n_i,Tn);
