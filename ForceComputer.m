@@ -1,3 +1,4 @@
+
 classdef ForceComputer < handle
     
     properties (Access = private)
@@ -28,4 +29,5 @@ classdef ForceComputer < handle
             obj.Fdata = cParams.Fdata ;
         end
     end
+
 end

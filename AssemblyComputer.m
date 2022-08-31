@@ -45,4 +45,5 @@ classdef AssemblyComputer < handle
             obj.Kel = cParams.Kel ;
         end
     end
+
 end

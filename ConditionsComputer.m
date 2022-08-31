@@ -1,3 +1,4 @@
+
 classdef ConditionsComputer < handle
     properties (Access = private)
         n_dof
@@ -46,4 +47,5 @@ classdef ConditionsComputer < handle
             obj.fixNod = cParams.fixNod ;
         end
     end
+
 end
