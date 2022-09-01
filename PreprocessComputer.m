@@ -100,4 +100,5 @@ classdef PreprocessComputer < handle
             obj.Inertia = cParams.Inertia ;
         end
     end
+
 end
