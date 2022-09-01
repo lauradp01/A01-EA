@@ -173,19 +173,19 @@ s.Tn = Tn ;
 s.mat = mat ;
 s.Tmat = Tmat ;
 
-% c = StrainStressComputer(s) ;
-% [eps, sig] = c.compute() ;
+ c = StrainStressComputer(s) ;
+ [eps, sig] = c.compute() ;
 
 % [eps,sig] = computeStrainStressBar(deltaT,n_el,u,Td,x,Tn,mat,Tmat);
 % 
 %% POSTPROCESS
 
 % Plot displacements
-s.n_d = n_d ;
-s.n = n ;
-s.u = u ;
-s.x = Tn ;
-s.fact = 1 ;
+% s.n_d = n_d ;
+% s.n = n ;
+% s.u = u ;
+% s.x = Tn ;
+% s.fact = 1 ;
 
 %  c = DisplacementGraph(s) ;
 %  c.plot() ; %em queda super lleig
