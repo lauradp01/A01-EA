@@ -15,8 +15,8 @@ function plotDisp(n_d,n,u,x,Tn,fact)
 % Reshape matrices for plot
 U = reshape(u,n_d,n);
 for i = 1:n_d
-    X0{i} = reshape(x(Tn,i),size(Tn))'
-    X{i} = X0{i}+fact*reshape(U(i,Tn),size(Tn))'
+    X0{i} = reshape(x(Tn,i),size(Tn))' ;
+    X{i} = X0{i}+fact*reshape(U(i,Tn),size(Tn))' ;
 end
 D = reshape(sqrt(sum(U(:,Tn).^2,1)),size(Tn))';
 

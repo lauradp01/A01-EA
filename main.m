@@ -187,8 +187,8 @@ s.u = u ;
 s.x = Tn ;
 s.fact = 1 ;
 
-% c = DisplacementGraph(s) ;
-% c.plot() ; %em queda super lleig
+%  c = DisplacementGraph(s) ;
+%  c.plot() ; %em queda super lleig
 
 % plotDisp(n_d,n,u,x,Tn,1);
 
