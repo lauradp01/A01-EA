@@ -128,8 +128,6 @@ s.fact = 1 ;
 c = DisplacementGraph(s) ;
 c.plot() ; 
 
-
-
 % Plot strain
 s.n_d = n_d ;
 s.a = eps ;
@@ -138,7 +136,6 @@ s.Tn = Tn ;
 s.title_name = 'Strain' ;
 c = StrainStressGraph(s) ;
 c.plot() ;
-
 
 % Plot stress
 s.n_d = n_d ;
@@ -149,7 +146,6 @@ s.title_name = 'Stress' ;
 c = StrainStressGraph(s) ;
 c.plot() ;
 
-
 % Plot stress in defomed mesh
 s.x = x ;
 s.Tn = Tn ;
@@ -158,7 +154,6 @@ s.sig = sig ;
 s.scale = 10 ;
 c = StressDefGraph(s) ;
 c.plot() ;
-
  
 % Buckling
 s.n_el = n_el ;
@@ -168,7 +163,6 @@ s.Tn = Tn ;
 s.mat = mat ;
 c = BucklingComputer(s) ;
 sig_cr = c.compute() ;
-
 
 %% SOLVER MODE
 s.vL = vL ;
