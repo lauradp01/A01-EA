@@ -173,11 +173,10 @@ s.Tn = Tn ;
 s.mat = mat ;
 s.Tmat = Tmat ;
 
- c = StrainStressComputer(s) ;
- [eps, sig] = c.compute() ;
+c = StrainStressComputer(s) ;
+[eps, sig] = c.compute() ;
 
-% [eps,sig] = computeStrainStressBar(deltaT,n_el,u,Td,x,Tn,mat,Tmat);
-% 
+ 
 %% POSTPROCESS
 
 % Plot displacements
@@ -187,28 +186,51 @@ s.u = u ;
 s.x = x ;
 s.Tn = Tn;
 s.fact = 1 ;
- c = DisplacementGraph(s) ;
- c.plot() ; %em queda super lleig
-
-plotDisp(n_d,n,u,x,Tn,1);
+c = DisplacementGraph(s) ;
+c.plot() ; 
 
 
 
-% 
-% % Plot strains
-% plotStrainStress(n_d,eps,x,Tn,{'Strain'});
-% 
-% % Plot stress
-% plotStrainStress(n_d,sig,x,Tn,{'Stress';'(Pa)'});
-% 
-% % Plot stress in defomed mesh
-% plotBarStressDef(x,Tn,u,sig,1)
-% 
-% u_node4 = (u(7)^2+u(8)^2)^0.5 *1e3 ; %mm
-% sig_cr = buckling(n_el,Td,x,Tn,mat)  ; %Pa
-% 
-% sig_comparison = [sig sig_cr] ;
-% 
+% Plot strain
+s.n_d = n_d ;
+s.a = eps ;
+s.x = x ;
+s.Tn = Tn ;
+s.title_name = 'Strain' ;
+c = StrainStressGraph(s) ;
+c.plot() ;
+
+
+% Plot stress
+s.n_d = n_d ;
+s.a = sig ;
+s.x = x ;
+s.Tn = Tn ;
+s.title_name = 'Stress' ;
+c = StrainStressGraph(s) ;
+c.plot() ;
+
+
+% Plot stress in defomed mesh
+s.x = x ;
+s.Tn = Tn ;
+s.u = u ;
+s.sig = sig ;
+s.scale = 10 ;
+c = StressDefGraph(s) ;
+c.plot() ;
+
+ 
+% Buckling
+s.n_el = n_el ;
+s.Td = Td ;
+s.x = x ;
+s.Tn = Tn ;
+s.mat = mat ;
+c = BucklingComputer(s) ;
+sig_cr = c.compute() ;
+
+
 %% SOLVER MODE
 s.vL = vL ;
 s.vR = vR ;

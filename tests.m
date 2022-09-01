@@ -36,6 +36,24 @@ classdef tests < matlab.unittest.TestCase
             end
             testCase.verifyEqual(actualSolution,expectedSolution);
         end
+
+        function epsilon(testCase)
+            expectedSolution = load("Epsilon.mat").eps ;
+            actualSolution = evalin('base','eps') ;
+            testCase.verifyEqual(actualSolution,expectedSolution);
+        end
+
+        function sigma(testCase)
+            expectedSolution = load("Sigma.mat").sig ;
+            actualSolution = evalin('base','sig') ;
+            testCase.verifyEqual(actualSolution,expectedSolution);
+        end
+        
+        function sigmaCritica(testCase)
+            expectedSolution = load("Sigma_critica.mat").sig_cr ;
+            actualSolution = evalin('base','sig_cr') ;
+            testCase.verifyEqual(actualSolution,expectedSolution);
+        end
      end
 
 end
