@@ -24,7 +24,7 @@ classdef StrainStressComputer < handle
             connecDOFs = obj.Td ;
             coord = obj.x ;
             connec = obj.Tn ;
-            %material = obj.mat ;
+            material = obj.mat ;
             connecMaterial = obj.Tmat ;
 
             n_el_dof = size(connecDOFs,2) ;
@@ -53,10 +53,10 @@ classdef StrainStressComputer < handle
                 end
                 u_e_l = R*u_e ;
                 
-                material = connecMaterial(i) ; 
+                iMat = connecMaterial(i) ; 
                 
-                eps(i) = [-1 0 1 0] * u_e_l / l + incrementT*material(material,3);
-                sig(i) = material(material,1) * eps(i) ;
+                eps(i) = [-1 0 1 0] * u_e_l / l + incrementT*material(iMat,3);
+                sig(i) = material(iMat,1) * eps(i) ;
             
             end
         end

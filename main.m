@@ -181,16 +181,16 @@ s.Tmat = Tmat ;
 %% POSTPROCESS
 
 % Plot displacements
-% s.n_d = n_d ;
-% s.n = n ;
-% s.u = u ;
-% s.x = Tn ;
-% s.fact = 1 ;
+s.n_d = n_d ;
+s.n = n ;
+s.u = u ;
+s.x = x ;
+s.Tn = Tn;
+s.fact = 1 ;
+ c = DisplacementGraph(s) ;
+ c.plot() ; %em queda super lleig
 
-%  c = DisplacementGraph(s) ;
-%  c.plot() ; %em queda super lleig
-
-% plotDisp(n_d,n,u,x,Tn,1);
+plotDisp(n_d,n,u,x,Tn,1);
 
 
 
