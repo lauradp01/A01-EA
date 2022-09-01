@@ -64,4 +64,5 @@ classdef StressDefGraph < handle
             obj.scale = cParams.scale ;
         end
     end
+
 end

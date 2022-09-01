@@ -1,3 +1,4 @@
+
 classdef StrainStressGraph < handle
     properties (Access = private)
         n_d
@@ -57,4 +58,5 @@ classdef StrainStressGraph < handle
             obj.title_name = cParams.title_name ;
         end
     end
+
 end

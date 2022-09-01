@@ -45,4 +45,5 @@ classdef BucklingComputer < handle
             obj.mat = cParams.mat ;
         end
     end
+
 end
