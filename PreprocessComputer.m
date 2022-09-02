@@ -14,13 +14,56 @@ classdef PreprocessComputer < handle
         end
 
         function [x,Tn,Fdata,fixNod,mat,Tmat] = compute(obj)
+            x = obj.nodalCoordCreation() ;
+            Tn = obj.connectMatCreation() ;
+            Fdata = obj.extForceCreation() ;
+            fixNod = obj.fixNodesCreation() ;
+            mat = obj.materialData() ;
+            Tmat = obj.materialConnec() ;
+        end
+    end
+
+    methods (Access = private)
+        function init(obj,cParams)
+            obj.F = cParams.F ;
+            obj.Young = cParams.Young ;
+            obj.Area = cParams.Area ;
+            obj.thermal_coeff = cParams.thermal_coeff ;
+            obj.Inertia = cParams.Inertia ;
+        end
+        
+        function Fdata = extForceCreation(obj)
             Force = obj.F ;
+             % External force matrix creation
+            %  Fdata(k,1) = node at which the force is applied
+            %  Fdata(k,2) = DOF (direction) at which the force is applied
+            %  Fdata(k,3) = force magnitude in the corresponding DOF
+            Fdata = [%   Node        DOF  Magnitude   
+            2 4 3*Force ;
+            3 6 2*Force ;
+            4 8 Force ;
+            ];
+        end
+        
+        function mat = materialData(obj)
             ElasticMod = obj.Young ;
             Superf = obj.Area ;
             thermalCoef = obj.thermal_coeff ;
             Inercia = obj.Inertia ;
-                      
-            % Nodal coordinates matrix creation
+            % Material data
+            %  mat(m,1) = Young modulus of material m
+            %  mat(m,2) = Section area of material m
+            %  --more columns can be added for additional material properties--
+            mat = [% Young M.   Section A.   thermal_coeff   Inertia
+                     ElasticMod,   Superf,      thermalCoef,     Inercia;  % Material (1)
+            ];
+
+        end
+    end
+    methods(Access = private, Static)
+
+        function x = nodalCoordCreation()
+             % Nodal coordinates matrix creation
             %  x(a,j) = coordinate of node a in the dimension j
             x = [%  X       Y
             0 0 ;
@@ -32,8 +75,10 @@ classdef PreprocessComputer < handle
             1 0.7 ;
             1.5 0.8
             ];
-            
-            % Connectivities matrix ceation
+        end
+
+        function Tn = connectMatCreation()
+             % Connectivities matrix ceation
             %  Tn(e,a) = global nodal number associated to node a of element e
             Tn = [%     a      b
             1 2 ;
@@ -53,17 +98,9 @@ classdef PreprocessComputer < handle
             4 7 ;
             4 8 ;
             ];
-            
-            % External force matrix creation
-            %  Fdata(k,1) = node at which the force is applied
-            %  Fdata(k,2) = DOF (direction) at which the force is applied
-            %  Fdata(k,3) = force magnitude in the corresponding DOF
-            Fdata = [%   Node        DOF  Magnitude   
-            2 4 3*Force ;
-            3 6 2*Force ;
-            4 8 Force ;
-            ];
-            
+        end
+
+        function fixNod = fixNodesCreation()
             % Fix nodes matrix creation
             %  fixNod(k,1) = node at which some DOF is prescribed
             %  fixNod(k,2) = DOF prescribed
@@ -74,15 +111,9 @@ classdef PreprocessComputer < handle
             5 9 0 ;
             5 10 0 ;
             ];
-            
-            % Material data
-            %  mat(m,1) = Young modulus of material m
-            %  mat(m,2) = Section area of material m
-            %  --more columns can be added for additional material properties--
-            mat = [% Young M.   Section A.   thermal_coeff   Inertia
-                     ElasticMod,   Superf,      thermalCoef,     Inercia;  % Material (1)
-            ];
-            
+        end
+
+        function Tmat = materialConnec()
             % Material connectivities
             %  Tmat(e) = Row in mat corresponding to the material associated to element e 
             Tmat = [% Mat. index
@@ -91,14 +122,5 @@ classdef PreprocessComputer < handle
         end
     end
 
-    methods (Access = private)
-        function init(obj,cParams)
-            obj.F = cParams.F ;
-            obj.Young = cParams.Young ;
-            obj.Area = cParams.Area ;
-            obj.thermal_coeff = cParams.thermal_coeff ;
-            obj.Inertia = cParams.Inertia ;
-        end
-    end
-
+  
 end

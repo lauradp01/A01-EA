@@ -18,8 +18,8 @@ classdef DirectOrIterative < handle
         function [uDirect, uIterative] = compute(obj)
                    
             
-            uDirect = computeDirect(obj) ;
-            uIterative = computeIterative(obj) ;
+            uDirect = obj.computeDirect() ;
+            uIterative = obj.computeIterative() ;
             
         end
     end
@@ -33,6 +33,12 @@ classdef DirectOrIterative < handle
             obj.Fext = cParams.Fext ;
         end
 
+        function K = splitStiffnessMatrix(obj)
+            K.KLL = StiffMat(freeDOF,freeDOF) ;
+            K.KLR = StiffMat(freeDOF,prescribedDOF) ;
+            K.KRL = StiffMat(prescribedDOF,freeDOF) ;
+            K.KRR = StiffMat(prescribedDOF,prescribedDOF) ;
+        end
         function uDirect = computeDirect(obj)
             freeDOF = obj.vL ;
             prescribedDOF = obj.vR ;
@@ -40,10 +46,7 @@ classdef DirectOrIterative < handle
             StiffMat = obj.KG ;
             Forces = obj.Fext ;
 
-            KLL = StiffMat(freeDOF,freeDOF) ;
-            KLR = StiffMat(freeDOF,prescribedDOF) ;
-            KRL = StiffMat(prescribedDOF,freeDOF) ;
-            KRR = StiffMat(prescribedDOF,prescribedDOF) ;
+            K = obj.splitStiffnessMatrix() ;
             Fext_L = Forces(freeDOF,1) ;
             Fext_R = Forces(prescribedDOF,1) ;
 

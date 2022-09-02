@@ -15,22 +15,7 @@ classdef ConnectivitiesComputer < handle
         end
 
         function Td = compute(obj)
-            nElem = obj.n_el;
-            nNod = obj.n_nod;
-            nDim = obj.n_i;
-
-            Td = zeros(nElem,nNod*nDim) ;
-            for i = 1:nElem
-                for j = 1:nNod
-                    column = j*nDim ;
-                    dof = obj.computeDof(i,j);
-                    for a = 1:nDim
-                        Td(i,column) = dof ;
-                        column = column-1 ;
-                        dof = dof-1 ;
-                    end
-                end
-            end
+            Td = obj.computeTd() ;
         end
 
     end
@@ -49,6 +34,26 @@ classdef ConnectivitiesComputer < handle
             connec = obj.Tn;
             nDim   = obj.n_i;
             dof = nDim * connec(i,j);
+        end
+
+        function Td = computeTd(obj)
+            nElem = obj.n_el;
+            nNod = obj.n_nod;
+            nDim = obj.n_i;
+
+            Td = zeros(nElem,nNod*nDim) ;
+            for i = 1:nElem
+                for j = 1:nNod
+                    column = j*nDim ;
+                    dof = obj.computeDof(i,j);
+                    for a = 1:nDim
+                        Td(i,column) = dof ;
+                        column = column-1 ;
+                        dof = dof-1 ;
+                    end
+                end
+            end
+
         end
 
     end

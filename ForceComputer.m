@@ -12,6 +12,17 @@ classdef ForceComputer < handle
         end
 
         function Fext = compute(obj)
+            Fext = obj.computeFext() ;
+        end
+    end
+
+    methods (Access = private) 
+        function init(obj,cParams)
+            obj.n_dof = cParams.n_dof ;
+            obj.Fdata = cParams.Fdata ;
+        end
+
+        function Fext = computeFext(obj)
             nDim = obj.n_dof ;
             Forces = obj.Fdata ;
             
@@ -21,13 +32,7 @@ classdef ForceComputer < handle
                 Fext(Forces(i,2)) = Forces(i,3) ;
             end
         end
-    end
 
-    methods (Access = private) 
-        function init(obj,cParams)
-            obj.n_dof = cParams.n_dof ;
-            obj.Fdata = cParams.Fdata ;
-        end
     end
 
 end

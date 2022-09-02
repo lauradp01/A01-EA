@@ -1,5 +1,5 @@
 
-classdef Solver
+classdef Solver < handle
     properties
     end
 
