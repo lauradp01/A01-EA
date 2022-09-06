@@ -47,7 +47,7 @@ classdef DirectOrIterative < handle
             obj.uR = cParams.uR ;
             obj.KG = cParams.KG ;
             obj.Fext = cParams.Fext ;
-            obj.solverType = cParams.solverType
+            obj.solverType = cParams.solverType;
         end
 
         function K = splitStiffnessMatrix(obj)

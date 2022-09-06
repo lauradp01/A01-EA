@@ -32,10 +32,6 @@ classdef tests < matlab.unittest.TestCase
 
         function iterativeDisplacements(testCase)
             expectedSolution = load('Displacements.mat','u').u ;
-            s.solverType = 'Iterative';
-            str = StructuralComputer(s);
-            [u,K,F] = str.compute();
-
             actualSolution = evalin('base','uIterative') ;
             value = abs(actualSolution-expectedSolution) ;
             zero = 10^(-14) ;
