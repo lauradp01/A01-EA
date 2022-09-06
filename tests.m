@@ -57,11 +57,11 @@ classdef tests < matlab.unittest.TestCase
             testCase.verifyEqual(actualSolution,expectedSolution);
         end
         
-        function sigmaCritica(testCase)
-            expectedSolution = load("Sigma_critica.mat").sig_cr ;
-            actualSolution = evalin('base','sig_cr') ;
-            testCase.verifyEqual(actualSolution,expectedSolution);
-        end
+%         function sigmaCritica(testCase)
+%             expectedSolution = load("Sigma_critica.mat").sig_cr ;
+%             actualSolution = evalin('base','sig_cr') ;
+%             testCase.verifyEqual(actualSolution,expectedSolution);
+%         end
      end
 
 end

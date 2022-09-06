@@ -1,4 +1,4 @@
-classdef DirectOrIterative < handle
+classdef DisplacementsComputer < handle
     %UNTITLED11 Summary of this class goes here
     %   Detailed explanation goes here
 
@@ -12,31 +12,12 @@ classdef DirectOrIterative < handle
     end
 
     methods (Access = public)
-        function obj = DirectOrIterative(cParams)
+        function obj = DisplacementsComputer(cParams)
             obj.init(cParams) ;
         end
 
         function u = compute(obj)
-            freeDOF = obj.vL ;
-            prescribedDOF = obj.vR ;
-            prescribedDispl = obj.uR ;
-
-            K = obj.splitStiffnessMatrix() ;
-            F = obj.createFext() ;
-            
-
-
-            solverDirect = Solver.chooseMode(obj.solverType); 
-            uLDirect = solverDirect.system((F.Fext_L-K.KLR*prescribedDispl),K.KLL) ;
-            
-            RR = K.KRR*prescribedDispl + K.KRL*uLDirect - F.Fext_R ;
-            
-            u = zeros(size(prescribedDOF,1)+size(freeDOF,1),1) ; 
-            R = zeros(size(prescribedDOF,1)+size(freeDOF,1),1) ; 
-            
-            u(freeDOF,1) = uLDirect ;
-            u(prescribedDOF,1) = prescribedDispl ; 
-            R(prescribedDOF,1) = RR ; 
+            u = obj.computeDisp() ;
         end
     end
 
@@ -68,8 +49,21 @@ classdef DirectOrIterative < handle
             F.Fext_R = Forces(prescribedDOF,1) ;
         end
 
-        function uDirect = computeDirect(obj)
-     
+        function uL = computeFreeDisp(obj)
+            prescribedDispl = obj.uR ;
+            K = obj.splitStiffnessMatrix() ;
+            F = obj.createFext() ;
+            solver = Solver.chooseMode(obj.solverType);
+            uL = solver.system((F.Fext_L-K.KLR*prescribedDispl),K.KLL) ;
+        end
+
+        function u = computeDisp(obj)
+            freeDOF = obj.vL ;
+            prescribedDOF = obj.vR ;
+            u = zeros(size(prescribedDOF,1)+size(freeDOF,1),1) ;
+            uL = obj.computeFreeDisp() ;
+            u(freeDOF,1) = uL ;
+            u(prescribedDOF,1) = prescribedDispl ;
         end
 
 

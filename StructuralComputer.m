@@ -9,7 +9,7 @@ classdef StructuralComputer
             obj.solverType = cParams.solverType;
         end
 
-        function [u,KG,Fext] = compute(obj)
+        function [u,KG,Fext,eps,sig,sig_cr] = compute(obj)
             %-------------------------------------------------------------------------%
             % ASSIGNMENT 01
             %-------------------------------------------------------------------------%
@@ -183,7 +183,7 @@ classdef StructuralComputer
             s.Fext = Fext ;
             s.solverType = obj.solverType;
 
-            c = DirectOrIterative(s) ;
+            c = DisplacementsComputer(s) ;
             [u] = c.compute() ;
         end
     end

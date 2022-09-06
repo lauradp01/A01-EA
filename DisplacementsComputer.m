@@ -60,6 +60,7 @@ classdef DisplacementsComputer < handle
         function u = computeDisp(obj)
             freeDOF = obj.vL ;
             prescribedDOF = obj.vR ;
+            prescribedDispl = obj.uR ;
             u = zeros(size(prescribedDOF,1)+size(freeDOF,1),1) ;
             uL = obj.computeFreeDisp() ;
             u(freeDOF,1) = uL ;
