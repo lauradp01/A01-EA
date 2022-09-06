@@ -65,6 +65,8 @@ classdef StrainStressComputer < handle
         end
 
         function R = computeRotationMatrix(obj,iElem)
+            obj.computeCoordinates() ;
+            obj.computeLength() ;
             x1 = obj.coordinates.x1(iElem);
             x2 = obj.coordinates.x2(iElem);
             y1 = obj.coordinates.y1(iElem);
@@ -107,7 +109,7 @@ classdef StrainStressComputer < handle
             for iElem = 1:nElem
                 R = obj.computeRotationMatrix(iElem) ;
                 for j = 1:n_el_dof
-                    u_e = obj.computeGlobalDisp() ;
+                    u_e = obj.computeGlobalDisp(iElem,j) ;
                 end
             end
             u_e_l(iElem) = R*u_e ;
