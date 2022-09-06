@@ -9,9 +9,6 @@ classdef StrainStressComputer < handle
         Tn
         mat
         Tmat
-    end
-
-    properties (Access = private)
         coordinates
         length
     end
@@ -56,26 +53,23 @@ classdef StrainStressComputer < handle
 
         function computeLength(obj) 
             nElem = obj.n_el ;
-            co = obj.coordinates;
             for i = 1:nElem
                 l(i) = ((co.x2(i)-co.x1(i))^2+(co.y2(i)-co.y1(i))^2)^0.5 ;
             end
             obj.length = l;
         end
 
-        function R = computeRotationMatrix(obj,iElem)
-            x1 = obj.coordinates.x1(iElem);
-            x2 = obj.coordinates.x2(iElem);
-            y1 = obj.coordinates.y1(iElem);
-            y2 = obj.coordinates.y2(iElem);
-            l  = obj.length(iElem);
-            s = (y2-y1)/l;
-            c = (x2-x1)/l;
-            R = [c s 0 0 ;
-                -s c 0 0 ;
-                0 0 c s ;
-                0 0 -s c] ;
-        end
+%         function R = computeRotationMat(obj)
+%             nElem = obj.n_el ;
+%             [s,c] = obj.computeData() ;
+%             for i = nElem
+%                 R(:,:,i) = [c s 0 0 ;
+%                     -s c 0 0 ;
+%                     0 0 c s ;
+%                     0 0 -s c
+%                     ] ;
+%             end
+%         end
 
 
         function iMat = computeMaterial(obj)
@@ -102,18 +96,20 @@ classdef StrainStressComputer < handle
             obj.computeCoordinates() ;            
             obj.computeLength() ;
 
-            for iElem = 1:nElem
-                R = obj.computeRotationMatrix(iElem);
+            for i = 1:nElem
+                R = obj.computeRotationMatrix(c(i),s(i));
                 for j = 1:n_el_dof
-                    I = connecDOFs(iElem,j) ;
+                    I = connecDOFs(i,j) ;
                     u_e(j,1) = displacements(I) ;
                 end
                 u_e_l = R*u_e ;
-                l = obj.length;
-                eps(iElem) = [-1 0 1 0] * u_e_l / l(iElem) + incrementT*material(iMat,3);
+                eps(i) = [-1 0 1 0] * u_e_l / l(i) + incrementT*material(iMat,3);
             end
         end
 
+
+
+        
         function sig = computeSig(obj)
             nElem = obj.n_el ;
             material = obj.mat ;
@@ -129,7 +125,16 @@ classdef StrainStressComputer < handle
 
     methods (Access = private, Static)
 
-   
+        function R = computeRotationMatrix(c,s)
+            co = obj.coordinates;
+            l  = obj.length;
+            s(i) = (co.y2(i)-co.y1(i))/l(i) ;
+            c(i) = (co.x2(i)-co.x1(i))/l(i) ;
+            R = [c s 0 0 ;
+                -s c 0 0 ;
+                0 0 c s ;
+                0 0 -s c] ;
+        end
 
     end
 
