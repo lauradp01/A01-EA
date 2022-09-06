@@ -13,26 +13,7 @@ classdef BucklingComputer < handle
         end
 
         function sig_cr = compute(obj)
-            nElm = obj.n_el ;
-            connecDOF = obj.Td ;
-            coord = obj.x ;
-            connec = obj.Tn ;
-            material = obj.mat ;
-
-                     
-            
-            sig_cr = zeros(nElm,1) ;
-            
-            for i = 1:nElm 
-                x1 = coord(connec(i,1),1) ;
-                y1 = coord(connec(i,1),2) ;
-                x2 = coord(connec(i,2),1) ;
-                y2 = coord(connec(i,2),2) ;
-            
-                l = ((x2-x1)^2+(y2-y1)^2)^0.5 ;
-                sig_cr(i) = pi^2 * material(1) * material(4) / (l^2 * material(2)) ;
-            
-            end
+            sig_cr = obj.computeSig_cr() ;
         end
     end
 
@@ -43,6 +24,37 @@ classdef BucklingComputer < handle
             obj.x = cParams.x ;
             obj.Tn = cParams.Tn ;
             obj.mat = cParams.mat ;
+        end
+
+        function co = createCoordinates(obj) 
+            nElem = obj.n_el ;
+            connec = obj.Tn ;
+            coord = obj.x ;
+            for i = 1:nElem 
+                co.x1(i) = coord(connec(i,1),1) ;
+                co.y1(i) = coord(connec(i,1),2) ;
+                co.x2(i) = coord(connec(i,2),1) ;
+                co.y2(i) = coord(connec(i,2),2) ;
+            end
+        end
+
+        function l = calcLength(obj)
+            nElem = obj.n_el ;
+            co = obj.createCoordinates() ;
+            for i = 1:nElem
+                l(i) = ((co.x2(i)-co.x1(i))^2+(co.y2(i)-co.y1(i))^2)^0.5 ;
+            end
+        end
+
+        function sig_cr = computeSig_cr(obj)
+            material = obj.mat ;
+            nElem = obj.n_el ;
+            l = obj.calcLength() ;
+            sig_cr = zeros(nElem,1) ;
+
+            for i = 1:nElem
+                sig_cr(i) = pi^2 * material(1) * material(4) / (l(i)^2 * material(2)) ;
+            end
         end
     end
 

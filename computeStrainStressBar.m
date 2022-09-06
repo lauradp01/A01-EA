@@ -30,6 +30,7 @@ u_e = zeros(n_el_dof,1) ;
 eps = zeros(n_el,1) ;
 sig = zeros(n_el,1) ;
 
+
 for i = 1:n_el 
     x1 = x(Tn(i,1),1) ;
     y1 = x(Tn(i,1),2) ;
@@ -52,9 +53,10 @@ for i = 1:n_el
     
     material = Tmat(i) ; 
     
-    eps(i) = [-1 0 1 0] * u_e_l / l + deltaT*mat(material,3);
+    eps(i) = [-1 0 1 0] * u_e_l(i) / l + deltaT*mat(material,3);
     sig(i) = mat(material,1) * eps(i) ;
 
 end
+
 
 end

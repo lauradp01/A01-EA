@@ -91,33 +91,32 @@ c = ConditionsComputer(s) ;
 [vL,vR,uR] = c.compute() ;
 
 
-% % System resolution
-% s.vL = vL ;
-% s.vR = vR ;
-% s.uR = uR ;
-% s.KG = KG ;
-% s.Fext = Fext ;
-% 
-% c = SystemSolver(s) ;
-% [u,R] = c.compute() ;
-% 
-% 
-% % Compute strain and stresses
-% s.deltaT = deltaT ;
-% s.n_el = n_el ;
-% s.u = u ;
-% s.Td = Td ;
-% s.x = x ;
-% s.Tn = Tn ;
-% s.mat = mat ;
-% s.Tmat = Tmat ;
-% 
-% c = StrainStressComputer(s) ;
-% [eps, sig] = c.compute() ;
-% 
-%  
-% %% POSTPROCESS
-% 
+% System resolution
+s.vL = vL ;
+s.vR = vR ;
+s.uR = uR ;
+s.KG = KG ;
+s.Fext = Fext ;
+
+c = SystemSolver(s) ;
+[u,R] = c.compute() ;
+
+
+% Compute strain and stresses
+s.deltaT = deltaT ;
+s.n_el = n_el ;
+s.u = u ;
+s.Td = Td ;
+s.x = x ;
+s.Tn = Tn ;
+s.mat = mat ;
+s.Tmat = Tmat ;
+
+c = StrainStressComputer(s) ;
+[eps, sig] = c.compute() ;
+ 
+%% POSTPROCESS
+
 % % Plot displacements
 % s.n_d = n_d ;
 % s.n = n ;
@@ -127,7 +126,7 @@ c = ConditionsComputer(s) ;
 % s.fact = 1 ;
 % c = DisplacementGraph(s) ;
 % c.plot() ; 
-% 
+
 % % Plot strain
 % s.n_d = n_d ;
 % s.a = eps ;
@@ -155,24 +154,24 @@ c = ConditionsComputer(s) ;
 % c = StressDefGraph(s) ;
 % c.plot() ;
 %  
-% % Buckling
-% s.n_el = n_el ;
-% s.Td = Td ;
-% s.x = x ;
-% s.Tn = Tn ;
-% s.mat = mat ;
-% c = BucklingComputer(s) ;
-% sig_cr = c.compute() ;
-% 
-% %% SOLVER MODE
-% s.vL = vL ;
-% s.vR = vR ;
-% s.uR = uR ;
-% s.KG = KG ;
-% s.Fext = Fext ;
-% 
-% c = DirectOrIterative(s) ;
-% [uDirect,uIterative] = c.compute() ;
-% 
+% Buckling
+s.n_el = n_el ;
+s.Td = Td ;
+s.x = x ;
+s.Tn = Tn ;
+s.mat = mat ;
+c = BucklingComputer(s) ;
+sig_cr = c.compute() ;
+
+%% SOLVER MODE
+s.vL = vL ;
+s.vR = vR ;
+s.uR = uR ;
+s.KG = KG ;
+s.Fext = Fext ;
+
+c = DirectOrIterative(s) ;
+[uDirect,uIterative] = c.compute() ;
+
 % %% TESTS
 % results = runtests('tests.m') ;

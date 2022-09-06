@@ -40,7 +40,7 @@ classdef StiffnessComputer < handle
             Kel = zeros(n_el_dof,n_el_dof,nElem) ;
         end
 
-        function n = computeNodes(obj,i)
+        function n = computeNodes(obj)
             nElem = obj.n_el ;
             connec = obj.Tn ;
             for i = 1:nElem

@@ -15,6 +15,7 @@ classdef DisplacementGraph < handle
         end
 
         function plot(obj)
+       
             nDim = obj.n_d ;
             nodes = obj.n ;
             displacements = obj.u ;

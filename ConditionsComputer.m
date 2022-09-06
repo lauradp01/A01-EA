@@ -58,20 +58,13 @@ classdef ConditionsComputer < handle
             prescribed_dofs = obj.computePrescribed_dofs() ;
             vR = zeros(prescribed_dofs,1) ;
             
-            a = 0 ;
-            pos_vL = 1 ;
-
             for i = 1:nDim
                 for j = 1:prescribed_dofs
                     if i == fixedNodes(j,2)
-                        a = 1 ;
+
                         vR(j) = i ;
                     end
                 end
-                if a == 0
-                    pos_vL = pos_vL + 1 ; 
-                end
-                a = 0 ;
             end
         end
 
@@ -81,20 +74,12 @@ classdef ConditionsComputer < handle
             prescribed_dofs = obj.computePrescribed_dofs() ;
             uR = zeros(prescribed_dofs,1) ;
 
-            a = 0 ;
-            pos_vL = 1 ;
-
             for i = 1:nDim
                 for j = 1:prescribed_dofs
                     if i == fixedNodes(j,2)
-                        a = 1 ;
                         uR(j) = fixedNodes(j,3) ;
                     end
                 end
-                if a == 0
-                    pos_vL = pos_vL + 1 ; 
-                end
-                a = 0 ;
             end
         end
 

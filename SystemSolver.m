@@ -15,18 +15,8 @@ classdef SystemSolver < handle
         end 
 
         function [u,R] = compute(obj)
-            freeDOF = obj.vL ;
-            prescribedDOF = obj.vR ;
-            prescribedDispl = obj.uR ;
-            
-            [uL, RR] = computeVectors(obj) ;
-           
-            u = zeros(size(prescribedDOF,1)+size(freeDOF,1),1) ; 
-            R = zeros(size(prescribedDOF,1)+size(freeDOF,1),1) ; 
-            
-            u(freeDOF,1) = uL ;
-            u(prescribedDOF,1) = prescribedDispl ; 
-            R(prescribedDOF,1) = RR ; 
+            u = obj.computeDisplacements() ;
+            R = obj.computeReactions() ;    
         end
     end
 
@@ -39,23 +29,55 @@ classdef SystemSolver < handle
             obj.Fext = cParams.Fext ;
         end
 
-       
-        function [uL, RR] = computeVectors(obj)
-            freeDOF = obj.vL ;
-            prescribedDispl = obj.uR ;
-            prescribedDOF = obj.vR ;
+        function K = createK(obj) 
             stiffnessMat = obj.KG ;
+            freeDOF = obj.vL ;
+            prescribedDOF = obj.vR ;
+            K.KLL = stiffnessMat(freeDOF,freeDOF) ;
+            K.KLR = stiffnessMat(freeDOF,prescribedDOF) ;
+            K.KRL = stiffnessMat(prescribedDOF,freeDOF) ;
+            K.KRR = stiffnessMat(prescribedDOF,prescribedDOF) ;
+        end
+
+        function F = createFext(obj) 
             extForce = obj.Fext ;
+            freeDOF = obj.vL ;
+            prescribedDOF = obj.vR ;
+            F.Fext_L = extForce(freeDOF,1) ;
+            F.Fext_R = extForce(prescribedDOF,1) ;
+        end
+       
+        function uL = computeuL(obj)
+            prescribedDispl = obj.uR ;
+            K = obj.createK() ;
+            F = obj.createFext() ;
+            uL = K.KLL\(F.Fext_L-K.KLR*prescribedDispl) ;
+        end
 
-            KLL = stiffnessMat(freeDOF,freeDOF) ;
-            KLR = stiffnessMat(freeDOF,prescribedDOF) ;
-            KRL = stiffnessMat(prescribedDOF,freeDOF) ;
-            KRR = stiffnessMat(prescribedDOF,prescribedDOF) ;
-            Fext_L = extForce(freeDOF,1) ;
-            Fext_R = extForce(prescribedDOF,1) ;
+        function RR = computeRR(obj)
+            prescribedDispl = obj.uR ;
+            uL = obj.computeuL() ;
+            K = obj.createK() ;
+            F = obj.createFext() ;
+            RR = K.KRR*prescribedDispl + K.KRL*uL - F.Fext_R ;
+        end
 
-            uL = KLL\(Fext_L-KLR*prescribedDispl) ;
-            RR = KRR*prescribedDispl + KRL*uL - Fext_R ;
+        function u = computeDisplacements(obj)
+            freeDOF = obj.vL ;
+            prescribedDOF = obj.vR ;
+            prescribedDispl = obj.uR ;
+            uL = obj.computeuL() ;
+            u = zeros(size(prescribedDOF,1)+size(freeDOF,1),1) ; 
+            u(freeDOF,1) = uL ;
+            u(prescribedDOF,1) = prescribedDispl ; 
+        end
+
+        function R = computeReactions(obj)
+            freeDOF = obj.vL ;
+            prescribedDOF = obj.vR ;
+            RR = obj.computeRR() ;
+            R = zeros(size(prescribedDOF,1)+size(freeDOF,1),1) ; 
+            R(prescribedDOF,1) = RR ;
         end
     end
 end
