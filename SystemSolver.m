@@ -29,7 +29,7 @@ classdef SystemSolver < handle
             obj.Fext = cParams.Fext ;
         end
 
-        function K = createK(obj) 
+        function K = splitStiffnessMatrix(obj) 
             stiffnessMat = obj.KG ;
             freeDOF = obj.vL ;
             prescribedDOF = obj.vR ;
@@ -49,7 +49,7 @@ classdef SystemSolver < handle
        
         function uL = computeuL(obj)
             prescribedDispl = obj.uR ;
-            K = obj.createK() ;
+            K = obj.splitStiffnessMatrix() ;
             F = obj.createFext() ;
             uL = K.KLL\(F.Fext_L-K.KLR*prescribedDispl) ;
         end
@@ -57,7 +57,7 @@ classdef SystemSolver < handle
         function RR = computeRR(obj)
             prescribedDispl = obj.uR ;
             uL = obj.computeuL() ;
-            K = obj.createK() ;
+            K = obj.splitStiffnessMatrix() ;
             F = obj.createFext() ;
             RR = K.KRR*prescribedDispl + K.KRL*uL - F.Fext_R ;
         end

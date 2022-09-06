@@ -16,11 +16,8 @@ classdef DirectOrIterative < handle
         end
 
         function [uDirect, uIterative] = compute(obj)
-                   
-            
             uDirect = obj.computeDirect() ;
             uIterative = obj.computeIterative() ;
-            
         end
     end
 
@@ -34,27 +31,35 @@ classdef DirectOrIterative < handle
         end
 
         function K = splitStiffnessMatrix(obj)
+            freeDOF = obj.vL ;
+            prescribedDOF = obj.vR ;
             K.KLL = StiffMat(freeDOF,freeDOF) ;
             K.KLR = StiffMat(freeDOF,prescribedDOF) ;
             K.KRL = StiffMat(prescribedDOF,freeDOF) ;
             K.KRR = StiffMat(prescribedDOF,prescribedDOF) ;
         end
+
+        function F = createFext(obj)
+            freeDOF = obj.vL ;
+            prescribedDOF = obj.vR ;
+            F.Fext_L = Forces(freeDOF,1) ;
+            F.Fext_R = Forces(prescribedDOF,1) ;
+        end
+
         function uDirect = computeDirect(obj)
             freeDOF = obj.vL ;
             prescribedDOF = obj.vR ;
-            prescribedDispl = obj.uR ;
-            StiffMat = obj.KG ;
-            Forces = obj.Fext ;
+            prescribedDispl = obj.uR ;sii
 
             K = obj.splitStiffnessMatrix() ;
-            Fext_L = Forces(freeDOF,1) ;
-            Fext_R = Forces(prescribedDOF,1) ;
+            F = obj.createFext() ;
+            
 
 
             solverDirect = Solver.chooseMode("Direct"); 
-            uLDirect = solverDirect.system((Fext_L-KLR*prescribedDispl),KLL) ;
+            uLDirect = solverDirect.system((F.Fext_L-K.KLR*prescribedDispl),K.KLL) ;
             
-            RR = KRR*prescribedDispl + KRL*uLDirect - Fext_R ;
+            RR = K.KRR*prescribedDispl + K.KRL*uLDirect - F.Fext_R ;
             
             uDirect = zeros(size(prescribedDOF,1)+size(freeDOF,1),1) ; 
             R = zeros(size(prescribedDOF,1)+size(freeDOF,1),1) ; 
@@ -71,13 +76,9 @@ classdef DirectOrIterative < handle
             StiffMat = obj.KG ;
             Forces = obj.Fext ;
 
+            K = obj.splitStiffnessMatrix() ;
+            F = obj.createFext() ;
             
-            KLL = StiffMat(freeDOF,freeDOF) ;
-            KLR = StiffMat(freeDOF,prescribedDOF) ;
-            KRL = StiffMat(prescribedDOF,freeDOF) ;
-            KRR = StiffMat(prescribedDOF,prescribedDOF) ;
-            Fext_L = Forces(freeDOF,1) ;
-            Fext_R = Forces(prescribedDOF,1) ;
 
 
             solverDirect = Solver.chooseMode("Iterative"); 
