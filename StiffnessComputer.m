@@ -52,9 +52,8 @@ classdef StiffnessComputer < handle
         function co = computeCoordinates(obj)
             nElem = obj.n_el ;
             coord = obj.x ;
-              n = obj.computeNodes() ;
+            n = obj.computeNodes() ;
              for i = 1:nElem
-                
                 co.x1(i) = coord(n.node1(i),1) ;
                 co.y1(i) = coord(n.node1(i),2) ;
                 co.x2(i) = coord(n.node2(i),1) ;

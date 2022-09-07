@@ -27,13 +27,11 @@ classdef StructuralComputer < handle
             obj.solverType = cParams.solverType;
         end
 
-        function [u,R,KG,Fext,eps,sig] = compute(obj)
+        function [u,R,KG,Fext,eps,sig,sig_cr] = compute(obj)
             close all ;
             u = obj.computeDisplacements() ;
             R = obj.computeReactions() ;
-            KG = obj.computeMatrixAssembly ;
-            Fext = obj.computeForceVectorAssembly ;
-            [eps,sig] = obj.computeStrainStress() ;
+            Fext = obj.computeF
 %             %% INPUT DATA
 % 
 %             F = 920 ; %N
@@ -245,18 +243,17 @@ classdef StructuralComputer < handle
             Tn = obj.connec ;
             % Dimensions
             dim.n_d = size(x,2) ;              % Number of dimensions
-            dim.n_i = dim.n_d ;                    % Number of DOFs for each node
+            dim.n_i = n_d ;                    % Number of DOFs for each node
             dim.n = size(x,1) ;                % Total number of nodes
-            dim.n_dof = dim.n_i*dim.n ;                % Total number of degrees of freedom
+            dim.n_dof = n_i*n ;                % Total number of degrees of freedom
             dim.n_el = size(Tn,1) ;            % Total number of elements
             dim.n_nod = size(Tn,2) ;           % Number of nodes for each element
-            dim.n_el_dof = dim.n_i*dim.n_nod ;         % Number of DOFs for each element
-            obj.dimensions = dim ;
+            dim.n_el_dof = n_i*n_nod ;         % Number of DOFs for each element
+            dim = obj.dimensions ;
 
         end
 
         function Td = computeDofConnectivities(obj)
-            obj.createDimensions() ;
             % Computation of the DOFs connectivities
             s.n_el = obj.dimensions.n_el ;
             s.n_nod = obj.dimensions.n_nod ;
@@ -268,7 +265,6 @@ classdef StructuralComputer < handle
         end
 
         function Kel = computeElementStiffnessMatrix(obj)
-            obj.createDimensions() ;
             % Computation of element stiffness matrices
             s.n_d = obj.dimensions.n_d ;
             s.n_el = obj.dimensions.n_el ;
@@ -282,7 +278,6 @@ classdef StructuralComputer < handle
         end
 
         function KG = computeMatrixAssembly(obj)
-            obj.createDimensions() ;
             Td = obj.computeDofConnectivities() ;
             Kel = obj.computeElementStiffnessMatrix() ;
             % Global matrix assembly
@@ -297,7 +292,6 @@ classdef StructuralComputer < handle
         end
 
         function Fext = computeForceVectorAssembly(obj)
-            obj.createDimensions() ;
             % Global force vector assembly
             s.n_dof = obj.dimensions.n_dof ;
             s.Fdata = obj.dataForce ;
@@ -308,7 +302,6 @@ classdef StructuralComputer < handle
         end
 
         function [vL,vR,uR] = computeConditions(obj)
-            obj.createDimensions() ;
             % Apply conditions
             s.n_dof = obj.dimensions.n_dof ;
             s.fixNod = obj.fixNodes ;
@@ -334,7 +327,7 @@ classdef StructuralComputer < handle
         end
 
         function R = computeReactions(obj)
-            [vL,vR,uR] = obj.computeConditions() ;
+            vL,vR,uR] = obj.computeConditions() ;
             KG = obj.computeMatrixAssembly() ;
             Fext = obj.computeForceVectorAssembly() ;
             % Reactions
@@ -349,7 +342,6 @@ classdef StructuralComputer < handle
         end
 
         function [eps,sig] = computeStrainStress(obj)
-            obj.createDimensions() ;
             Td = obj.computeDofConnectivities ;
             u = obj.computeDisplacements() ;
             % Compute strain and stresses
