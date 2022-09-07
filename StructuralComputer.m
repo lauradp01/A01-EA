@@ -29,6 +29,10 @@ classdef StructuralComputer < handle
 
         function [u,R,KG,Fext,eps,sig] = compute(obj)
             close all ;
+            obj.createData();
+            obj.computePreprocess();
+            obj.createDimensions() ;
+
             u = obj.computeDisplacements() ;
             R = obj.computeReactions() ;
             KG = obj.computeMatrixAssembly ;
@@ -204,6 +208,7 @@ classdef StructuralComputer < handle
     end
 
     methods (Access = private)
+
         function createData(obj)
             % INPUT DATA
             F = 920 ; %N
@@ -256,7 +261,6 @@ classdef StructuralComputer < handle
         end
 
         function Td = computeDofConnectivities(obj)
-            obj.createDimensions() ;
             % Computation of the DOFs connectivities
             s.n_el = obj.dimensions.n_el ;
             s.n_nod = obj.dimensions.n_nod ;
@@ -268,7 +272,6 @@ classdef StructuralComputer < handle
         end
 
         function Kel = computeElementStiffnessMatrix(obj)
-            obj.createDimensions() ;
             % Computation of element stiffness matrices
             s.n_d = obj.dimensions.n_d ;
             s.n_el = obj.dimensions.n_el ;
@@ -282,7 +285,6 @@ classdef StructuralComputer < handle
         end
 
         function KG = computeMatrixAssembly(obj)
-            obj.createDimensions() ;
             Td = obj.computeDofConnectivities() ;
             Kel = obj.computeElementStiffnessMatrix() ;
             % Global matrix assembly
@@ -297,7 +299,6 @@ classdef StructuralComputer < handle
         end
 
         function Fext = computeForceVectorAssembly(obj)
-            obj.createDimensions() ;
             % Global force vector assembly
             s.n_dof = obj.dimensions.n_dof ;
             s.Fdata = obj.dataForce ;
@@ -308,7 +309,6 @@ classdef StructuralComputer < handle
         end
 
         function [vL,vR,uR] = computeConditions(obj)
-            obj.createDimensions() ;
             % Apply conditions
             s.n_dof = obj.dimensions.n_dof ;
             s.fixNod = obj.fixNodes ;
