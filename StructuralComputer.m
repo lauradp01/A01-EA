@@ -38,6 +38,8 @@ classdef StructuralComputer < handle
             KG = obj.computeMatrixAssembly ;
             Fext = obj.computeForceVectorAssembly ;
             [eps,sig] = obj.computeStrainStress() ;
+           % obj.plotDisplacements();
+
 %             %% INPUT DATA
 % 
 %             F = 920 ; %N
