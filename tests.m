@@ -45,6 +45,12 @@ classdef tests < matlab.unittest.TestCase
             testCase.verifyEqual(actualSolution,expectedSolution);
         end
 
+        function reactions(testCase)
+            expectedSolution = load("Reactions.mat").R ;
+            actualSolution = evalin('base','R') ;
+            testCase.verifyEqual(actualSolution,expectedSolution);
+        end
+
         function epsilon(testCase)
             expectedSolution = load("Epsilon.mat").eps ;
             actualSolution = evalin('base','eps') ;

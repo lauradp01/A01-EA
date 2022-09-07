@@ -14,8 +14,7 @@ classdef SystemSolver < handle
             obj.init(cParams) ;
         end 
 
-        function [u,R] = compute(obj)
-            u = obj.computeDisplacements() ;
+        function R = compute(obj)
             R = obj.computeReactions() ;    
         end
     end
@@ -60,16 +59,6 @@ classdef SystemSolver < handle
             K = obj.splitStiffnessMatrix() ;
             F = obj.createFext() ;
             RR = K.KRR*prescribedDispl + K.KRL*uL - F.Fext_R ;
-        end
-
-        function u = computeDisplacements(obj)
-            freeDOF = obj.vL ;
-            prescribedDOF = obj.vR ;
-            prescribedDispl = obj.uR ;
-            uL = obj.computeuL() ;
-            u = zeros(size(prescribedDOF,1)+size(freeDOF,1),1) ; 
-            u(freeDOF,1) = uL ;
-            u(prescribedDOF,1) = prescribedDispl ; 
         end
 
         function R = computeReactions(obj)

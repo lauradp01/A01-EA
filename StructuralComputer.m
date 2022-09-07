@@ -9,7 +9,7 @@ classdef StructuralComputer
             obj.solverType = cParams.solverType;
         end
 
-        function [u,KG,Fext,eps,sig,sig_cr] = compute(obj)
+        function [u,R,KG,Fext,eps,sig,sig_cr] = compute(obj)
             close all ;
 
             %% INPUT DATA
@@ -93,8 +93,19 @@ classdef StructuralComputer
             c = ConditionsComputer(s) ;
             [vL,vR,uR] = c.compute() ;
 
+            % Displacements
+            s.vL = vL ;
+            s.vR = vR ;
+            s.uR = uR ;
+            s.KG = KG ;
+            s.Fext = Fext ;
+            s.solverType = obj.solverType;
 
-            % System resolution
+            c = DisplacementsComputer(s) ;
+            [u] = c.compute() ;
+
+
+            % Reactions
             s.vL = vL ;
             s.vR = vR ;
             s.uR = uR ;
@@ -102,7 +113,7 @@ classdef StructuralComputer
             s.Fext = Fext ;
 
             c = SystemSolver(s) ;
-            [u,R] = c.compute() ;
+            R = c.compute() ;
 
 
             % Compute strain and stresses
@@ -166,16 +177,7 @@ classdef StructuralComputer
             c = BucklingComputer(s) ;
             sig_cr = c.compute() ;
 
-            %% SOLVER MODE
-            s.vL = vL ;
-            s.vR = vR ;
-            s.uR = uR ;
-            s.KG = KG ;
-            s.Fext = Fext ;
-            s.solverType = obj.solverType;
-
-            c = DisplacementsComputer(s) ;
-            [u] = c.compute() ;
+           
         end
     end
 end
