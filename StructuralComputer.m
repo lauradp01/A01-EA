@@ -10,16 +10,7 @@ classdef StructuralComputer
         end
 
         function [u,KG,Fext,eps,sig,sig_cr] = compute(obj)
-            %-------------------------------------------------------------------------%
-            % ASSIGNMENT 01
-            %-------------------------------------------------------------------------%
-            % Date: 28/02/2022
-            % Author/s: Laura Domínguez Pérez and Marc Garcia Poyos
-            %
-
-            
-
-            close all;
+            close all ;
 
             %% INPUT DATA
 
@@ -125,7 +116,7 @@ classdef StructuralComputer
             s.Tmat = Tmat ;
 
             c = StrainStressComputer(s) ;
-            [eps, sig] = c.compute() ;
+            [eps,sig] = c.compute() ;
 
             %% POSTPROCESS
 

@@ -29,7 +29,7 @@ u_e = zeros(n_el_dof,1) ;
 
 eps = zeros(n_el,1) ;
 sig = zeros(n_el,1) ;
-
+u_e_l = zeros(n_el_dof,n_el) ;
 
 for i = 1:n_el 
     x1 = x(Tn(i,1),1) ;
@@ -49,7 +49,7 @@ for i = 1:n_el
         I = Td(i,j) ;
         u_e(j,1) = u(I) ;
     end
-    u_e_l = R*u_e ;
+    u_e_l(:,i) = R*u_e ;
     
     material = Tmat(i) ; 
     
