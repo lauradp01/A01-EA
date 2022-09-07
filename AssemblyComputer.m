@@ -15,6 +15,7 @@ classdef AssemblyComputer < handle
         end
 
         function KG = compute(obj)
+            
             KG = obj.computeKG() ;
             
         end
