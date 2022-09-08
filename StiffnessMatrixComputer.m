@@ -20,6 +20,7 @@ classdef StiffnessMatrixComputer < handle
         end
 
         function KG = compute(obj)
+            obj.computeMatrixAssembly() ;
             KG = obj.stiffnessMatrix ;
         end
     end
