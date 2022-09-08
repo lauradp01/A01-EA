@@ -26,6 +26,11 @@ classdef StructuralComputer < handle
         elemStiffnessMat
 
         stiffnessMatrix
+
+        externalForce
+
+        displacements
+        reactions
     end
 
     methods (Access = public)
@@ -39,10 +44,10 @@ classdef StructuralComputer < handle
             obj.computePreprocess();
             obj.createDimensions() ;
 
-            u = obj.computeDisplacements() ;
-            R = obj.computeReactions() ;
+            u = obj.displacements ;
+            R = obj.reactions ;
             KG = obj.stiffnessMatrix ;
-            Fext = obj.computeForceVectorAssembly ;
+            Fext = obj.externalForce ;
             [eps,sig] = obj.computeStrainStress() ;
             sig_cr = obj.computeBuckling() ;
 
@@ -178,88 +183,76 @@ classdef StructuralComputer < handle
              
         end
 
-%         function computeElementStiffnessMatrix(obj)
-%             % Computation of element stiffness matrices
-%             s.n_d = obj.dimensions.n_d ;
-%             s.n_el = obj.dimensions.n_el ;
-%             s.x = obj.coord ;
-%             s.Tn = obj.connec ;
-%             s.mat = obj.material ;
-%             s.Tmat = obj.connecMaterial ;
-% 
-%             c = StiffnessComputer(s) ;
-%             Kel = c.compute() ;
-%             obj.elemStiffnessMat = Kel ;
-%         end
-% 
-%         function computeMatrixAssembly(obj)
-%             obj.computeDofConnectivities() ;
-%             obj.computeElementStiffnessMatrix() ;
-%             % Global matrix assembly
-%             s.n_el = obj.dimensions.n_el ;
-%             s.n_el_dof = obj.dimensions.n_el_dof ;
-%             s.n_dof = obj.dimensions.n_dof ;
-%             s.Td = obj.connecDofs ;
-%             s.Kel = obj.elemStiffnessMat ;
-% 
-%             c = AssemblyComputer(s) ;
-%             KG = c.compute() ;
-%             obj.stiffnessMatrix = KG ;
-%         end
-
-        function Fext = computeForceVectorAssembly(obj)
+        function computeForceVectorAssembly(obj)
             % Global force vector assembly
             s.n_dof = obj.dimensions.n_dof ;
             s.Fdata = obj.dataForce ;
 
             c = ForceComputer(s) ;
             Fext = c.compute() ;
+            obj.externalForce =  Fext ;
 
         end
 
-        function [vL,vR,uR] = computeConditions(obj)
-            % Apply conditions
-            s.n_dof = obj.dimensions.n_dof ;
-            s.fixNod = obj.fixNodes ;
-
-            c = ConditionsComputer(s) ;
-            [vL,vR,uR] = c.compute() ;
-        end
-        
-        function u = computeDisplacements(obj)
-            [vL,vR,uR] = obj.computeConditions() ;
+        function computeDisplacementsAndReactions(obj)
             obj.computeStiffnessMatrix() ;
-            Fext = obj.computeForceVectorAssembly() ;
-            % Displacements
-            s.vL = vL ;
-            s.vR = vR ;
-            s.uR = uR ;
-            s.KG = obj.stiffnessMatrix ;
-            s.Fext = Fext ;
-            s.solverType = obj.solverType;
+            obj.computeForceVectorAssembly() ;
 
-            c = DisplacementsComputer(s) ;
-            [u] = c.compute() ;
+            s.dimensions = obj.dimensions ;
+            s.fixNodes = obj.fixNodes ;
+            s.stiffnessMatrix = obj.stiffnessMatrix ;
+            s.externalForce = obj.externalForce ;
+            s.solverType = obj.solverType ;
+
+            c = SystemSolverComputer(s) ;
+            [u,R] = c.compute() ;
+            obj.displacements = u ;
+            obj.reactions = R ;
         end
 
-        function R = computeReactions(obj)
-            [vL,vR,uR] = obj.computeConditions() ;
-            obj.computeStiffnessMatrix() ;
-            Fext = obj.computeForceVectorAssembly() ;
-            % Reactions
-            s.vL = vL ;
-            s.vR = vR ;
-            s.uR = uR ;
-            s.KG = obj.stiffnessMatrix ;
-            s.Fext = Fext ;
-
-            c = SystemSolver(s) ;
-            R = c.compute() ;
-        end
+%         function [vL,vR,uR] = computeConditions(obj)
+%             % Apply conditions
+%             s.n_dof = obj.dimensions.n_dof ;
+%             s.fixNod = obj.fixNodes ;
+% 
+%             c = ConditionsComputer(s) ;
+%             [vL,vR,uR] = c.compute() ;
+%         end
+%         
+%         function u = computeDisplacements(obj)
+%             [vL,vR,uR] = obj.computeConditions() ;
+%             obj.computeStiffnessMatrix() ;
+%             obj.computeForceVectorAssembly()            
+%             % Displacements
+%             s.vL = vL ;
+%             s.vR = vR ;
+%             s.uR = uR ;
+%             s.KG = obj.stiffnessMatrix ;
+%             s.Fext = obj.externalForce ;
+%             s.solverType = obj.solverType;
+% 
+%             c = DisplacementsComputer(s) ;
+%             [u] = c.compute() ;
+%         end
+% 
+%         function R = computeReactions(obj)
+%             [vL,vR,uR] = obj.computeConditions() ;
+%             obj.computeStiffnessMatrix() ;
+%             obj.computeForceVectorAssembly() ;
+%             % Reactions
+%             s.vL = vL ;
+%             s.vR = vR ;
+%             s.uR = uR ;
+%             s.KG = obj.stiffnessMatrix ;
+%             s.Fext = obj.externalForce ;
+% 
+%             c = SystemSolver(s) ;
+%             R = c.compute() ;
+%         end
 
         function [eps,sig] = computeStrainStress(obj)
             obj.computeDofConnectivities ;
-            u = obj.computeDisplacements() ;
+            u = obj.displacements ;
             % Compute strain and stresses
             s.deltaT = obj.incrementT ;
             s.n_el = obj.dimensions.n_el ;
