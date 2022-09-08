@@ -21,13 +21,11 @@ classdef StressDefGraph < handle
         end
 
         function plot(obj)
-            obj.precompute() ;
-            obj.computeInitializeFigure() ;
-            obj.plotUndefStructure() ;
-            obj.plotDefStructure() ;
-            obj.addAxes() ;
-            obj.addTitle() ;
-            obj.setColorBar() ;
+            coord = obj.x ;
+            connec = obj.Tn ;
+            displacement = obj.u ;
+            sigma = obj.sig ;
+            scale = obj.scale ;
 
 %             % Precomputations
 %             n_d = size(coord,2);
@@ -49,18 +47,18 @@ classdef StressDefGraph < handle
 %             % Plot deformed structure with stress colormapped
 %             patch(X(connec)'+scale*ux(connec)',Y(connec)'+scale*uy(connec)',[sigma';sigma'],'edgecolor','flat','linewidth',2);
 %             
-%             % Add axes labels
-%             xlabel('x (m)')
-%             ylabel('y (m)')
+            % Add axes labels
+            xlabel('x (m)')
+            ylabel('y (m)')
             
-%             % Add title
-%             title(sprintf('Deformed structure (scale = %g)',scale));
+            % Add title
+            title(sprintf('Deformed structure (scale = %g)',scale));
             
-%             % Add colorbar
-%             caxis([min(sigma(:)),max(sigma(:))]);
-%             cbar = colorbar;
-%             set(cbar,'Ticks',linspace(min(sigma(:)),max(sigma(:)),5));
-%             title(cbar,{'Stress';'(Pa)'});
+            % Add colorbar
+            caxis([min(sigma(:)),max(sigma(:))]);
+            cbar = colorbar;
+            set(cbar,'Ticks',linspace(min(sigma(:)),max(sigma(:)),5));
+            title(cbar,{'Stress';'(Pa)'});
         end
     end
 
@@ -90,7 +88,6 @@ classdef StressDefGraph < handle
         end
 
         function plotUndefStructure(obj)
-            connec = obj.Tn ;
             X = obj.horizCoord ;
             Y = obj.verticCoord ;
             % Plot undeformed structure
@@ -98,30 +95,11 @@ classdef StressDefGraph < handle
         end
 
         function plotDefStructure(obj)
-            connec = obj.Tn ;
             X = obj.horizCoord ;
             Y = obj.verticCoord ;
-            ux = obj.horizDisp ;
-            uy = obj.verticDisp ;
-            escala = obj.scale ;
-            sigma = obj.sig ;
+            scale 
             % Plot deformed structure with stress colormapped
-            patch(X(connec)'+escala*ux(connec)',Y(connec)'+escala*uy(connec)',[sigma';sigma'],'edgecolor','flat','linewidth',2);
-        end
-
-        function addTitle(obj)
-            escala = obj.scale ;
-            % Add title
-            title(sprintf('Deformed structure (scale = %g)',escala));
-        end
-
-        function setColorBar(obj)
-            sigma = obj.sig ;
-            % Add colorbar
-            caxis([min(sigma(:)),max(sigma(:))]);
-            cbar = colorbar;
-            set(cbar,'Ticks',linspace(min(sigma(:)),max(sigma(:)),5));
-            title(cbar,{'Stress';'(Pa)'});
+            patch(X(connec)'+scale*ux(connec)',Y(connec)'+scale*uy(connec)',[sigma';sigma'],'edgecolor','flat','linewidth',2);
         end
     end
 
@@ -133,12 +111,6 @@ classdef StressDefGraph < handle
             box on
             axis equal;
             colormap jet;
-        end
-
-        function addAxes()
-            % Add axes labels
-            xlabel('x (m)')
-            ylabel('y (m)')
         end
     end
 

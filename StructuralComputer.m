@@ -72,33 +72,33 @@ classdef StructuralComputer < handle
             c = DisplacementGraph(s) ;
             c.plot() ;
 
-%             % Plot strain
-%             s.n_d = n_d ;
-%             s.a = eps ;
-%             s.x = x ;
-%             s.Tn = Tn ;
-%             s.title_name = 'Strain' ;
-%             c = StrainStressGraph(s) ;
-%             c.plot() ;
-%             
-%             % Plot stress
-%             s.n_d = n_d ;
-%             s.a = sig ;
-%             s.x = x ;
-%             s.Tn = Tn ;
-%             s.title_name = 'Stress' ;
-%             c = StrainStressGraph(s) ;
-%             c.plot() ;
-%             
-%             % Plot stress in defomed mesh
-%             s.x = x ;
-%             s.Tn = Tn ;
-%             s.u = u ;
-%             s.sig = sig ;
-%             s.scale = 10 ;
-%             c = StressDefGraph(s) ;
-%             c.plot() ;
-%             
+            % Plot strain
+            s.n_d = obj.dimensions.n_d ;
+            s.a = obj.epsilon ;
+            s.x = obj.coord ;
+            s.Tn = obj.connec ;
+            s.title_name = 'Strain' ;
+            c = StrainStressGraph(s) ;
+            c.plot() ;
+            
+            % Plot stress
+            s.n_d = obj.dimensions.n_d ;
+            s.a = obj.sigma ;
+            s.x = obj.coord ;
+            s.Tn = obj.connec ;
+            s.title_name = 'Stress' ;
+            c = StrainStressGraph(s) ;
+            c.plot() ;
+            
+            % Plot stress in defomed mesh
+            s.x = obj.coord ;
+            s.Tn = obj.connec ;
+            s.u = obj.displacements ;
+            s.sig = obj.sigma ;
+            s.scale = 10 ;
+            c = StressDefGraph(s) ;
+            c.plot() ;
+            
 
 
            
