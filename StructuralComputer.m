@@ -51,7 +51,6 @@ classdef StructuralComputer < handle
             obj.computeCriticalStress() ;
             obj.computePlots() ;
 
-
             u = obj.displacements ;
             R = obj.reactions ;
             KG = obj.stiffnessMatrix ;
@@ -60,49 +59,6 @@ classdef StructuralComputer < handle
             sig = obj.sigma ;
             sig_cr = obj.sigma_cr ;
 
-
-           
-
-%             % Plot displacements
-%             s.n_d = obj.dimensions.n_d ;
-%             s.n = obj.dimensions.n ;
-%             s.u = obj.displacements ;
-%             s.x = obj.coord ;
-%             s.Tn = obj.connec;
-%             s.fact = 1 ;
-%             c = DisplacementGraph(s) ;
-%             c.plot() ;
-% 
-%             % Plot strain
-%             s.n_d = obj.dimensions.n_d ;
-%             s.a = obj.epsilon ;
-%             s.x = obj.coord ;
-%             s.Tn = obj.connec ;
-%             s.title_name = 'Strain' ;
-%             c = StrainStressGraph(s) ;
-%             c.plot() ;
-%             
-%             % Plot stress
-%             s.n_d = obj.dimensions.n_d ;
-%             s.a = obj.sigma ;
-%             s.x = obj.coord ;
-%             s.Tn = obj.connec ;
-%             s.title_name = 'Stress' ;
-%             c = StrainStressGraph(s) ;
-%             c.plot() ;
-%             
-%             % Plot stress in defomed mesh
-%             s.x = obj.coord ;
-%             s.Tn = obj.connec ;
-%             s.u = obj.displacements ;
-%             s.sig = obj.sigma ;
-%             s.scale = 10 ;
-%             c = StressDefGraph(s) ;
-%             c.plot() ;
-            
-
-
-           
         end
     end
 
