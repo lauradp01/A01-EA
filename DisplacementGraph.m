@@ -24,11 +24,11 @@ classdef DisplacementGraph < handle
         function plot(obj)
        
             obj.computeReshape() ;
-            computeInitializeFigure() ;
-            addAxes() ;
+            computeInitializeFigure ;
+            addAxes ;
             obj.plotUndefStructure() ;
             obj.plotDefStructure() ;
-            setColorBar() ;
+            setColorBar ;
            
 %             % Reshape matrices for plot
 %             U = reshape(displacements,nDim,nodes);

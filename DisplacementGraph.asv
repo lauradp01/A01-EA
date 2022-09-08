@@ -96,6 +96,7 @@ classdef DisplacementGraph < handle
 
         function plotUndefStructure(obj)
             X0 = obj.undefStruc ;
+            D = obj.reshapedD ;
 
             % Plot undeformed structure
             patch(X0{:},zeros(size(D)),'edgecolor',[0.5,0.5,0.5],'linewidth',2);
@@ -103,6 +104,7 @@ classdef DisplacementGraph < handle
 
         function plotDefStructure(obj)
             X = obj.defStruc ;
+            D = obj.reshapedD ;
             % Plot deformed structure with displacement magnitude coloring
             patch(X{:},D,'edgecolor','interp','linewidth',2);
         end
