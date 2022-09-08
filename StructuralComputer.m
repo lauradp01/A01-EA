@@ -43,6 +43,8 @@ classdef StructuralComputer < handle
             obj.createData();
             obj.computePreprocess();
             obj.createDimensions() ;
+            obj.computeDisplacementsAndReactions() ;
+
 
             u = obj.displacements ;
             R = obj.reactions ;
@@ -91,14 +93,7 @@ classdef StructuralComputer < handle
 %             c = StressDefGraph(s) ;
 %             c.plot() ;
 %             
-%             % Buckling
-%             s.n_el = n_el ;
-%             s.Td = Td ;
-%             s.x = x ;
-%             s.Tn = Tn ;
-%             s.mat = mat ;
-%             c = BucklingComputer(s) ;
-%             sig_cr = c.compute() ;
+
 
            
         end
@@ -210,45 +205,7 @@ classdef StructuralComputer < handle
             obj.reactions = R ;
         end
 
-%         function [vL,vR,uR] = computeConditions(obj)
-%             % Apply conditions
-%             s.n_dof = obj.dimensions.n_dof ;
-%             s.fixNod = obj.fixNodes ;
-% 
-%             c = ConditionsComputer(s) ;
-%             [vL,vR,uR] = c.compute() ;
-%         end
-%         
-%         function u = computeDisplacements(obj)
-%             [vL,vR,uR] = obj.computeConditions() ;
-%             obj.computeStiffnessMatrix() ;
-%             obj.computeForceVectorAssembly()            
-%             % Displacements
-%             s.vL = vL ;
-%             s.vR = vR ;
-%             s.uR = uR ;
-%             s.KG = obj.stiffnessMatrix ;
-%             s.Fext = obj.externalForce ;
-%             s.solverType = obj.solverType;
-% 
-%             c = DisplacementsComputer(s) ;
-%             [u] = c.compute() ;
-%         end
-% 
-%         function R = computeReactions(obj)
-%             [vL,vR,uR] = obj.computeConditions() ;
-%             obj.computeStiffnessMatrix() ;
-%             obj.computeForceVectorAssembly() ;
-%             % Reactions
-%             s.vL = vL ;
-%             s.vR = vR ;
-%             s.uR = uR ;
-%             s.KG = obj.stiffnessMatrix ;
-%             s.Fext = obj.externalForce ;
-% 
-%             c = SystemSolver(s) ;
-%             R = c.compute() ;
-%         end
+
 
         function [eps,sig] = computeStrainStress(obj)
             obj.computeDofConnectivities ;
@@ -268,6 +225,7 @@ classdef StructuralComputer < handle
         end
 
         function sig_cr = computeBuckling(obj)
+            
             obj.computeDofConnectivities() ;
             % Buckling
             s.n_el = obj.dimensions.n_el ;

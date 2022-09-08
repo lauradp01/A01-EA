@@ -23,6 +23,7 @@ classdef SystemSolverComputer < handle
         end
 
         function [u,R] = compute(obj)
+            obj.computeConditions() ;
             obj.computeDisplacements() ;
             obj.computeReactions() ;
             u = obj.displacements ;
@@ -52,7 +53,6 @@ classdef SystemSolverComputer < handle
         end
 
         function u = computeDisplacements(obj)
-            obj.computeConditions() ;           
             % Displacements
             s.vL = obj.freeDof ;
             s.vR = obj.prescribedDof ;
@@ -67,7 +67,6 @@ classdef SystemSolverComputer < handle
         end
 
         function R = computeReactions(obj)
-            obj.computeConditions() ;
             % Reactions
             s.vL = obj.freeDof ;
             s.vR = obj.prescribedDof ;
