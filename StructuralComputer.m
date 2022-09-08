@@ -31,6 +31,10 @@ classdef StructuralComputer < handle
 
         displacements
         reactions
+
+        epsilon
+        sigma
+        sigma_cr
     end
 
     methods (Access = public)
@@ -44,14 +48,16 @@ classdef StructuralComputer < handle
             obj.computePreprocess();
             obj.createDimensions() ;
             obj.computeDisplacementsAndReactions() ;
+            obj.computeCriticalStress() ;
 
 
             u = obj.displacements ;
             R = obj.reactions ;
             KG = obj.stiffnessMatrix ;
             Fext = obj.externalForce ;
-            [eps,sig] = obj.computeStrainStress() ;
-            sig_cr = obj.computeBuckling() ;
+            eps = obj.epsilon ;
+            sig = obj.sigma ;
+            sig_cr = obj.sigma_cr ;
 
 
 %             %% POSTPROCESS
@@ -142,12 +148,12 @@ classdef StructuralComputer < handle
             Tn = obj.connec ;
             % Dimensions
             dim.n_d = size(x,2) ;              % Number of dimensions
-            dim.n_i = dim.n_d ;                    % Number of DOFs for each node
+            dim.n_i = dim.n_d ;                % Number of DOFs for each node
             dim.n = size(x,1) ;                % Total number of nodes
-            dim.n_dof = dim.n_i*dim.n ;                % Total number of degrees of freedom
+            dim.n_dof = dim.n_i*dim.n ;        % Total number of degrees of freedom
             dim.n_el = size(Tn,1) ;            % Total number of elements
             dim.n_nod = size(Tn,2) ;           % Number of nodes for each element
-            dim.n_el_dof = dim.n_i*dim.n_nod ;         % Number of DOFs for each element
+            dim.n_el_dof = dim.n_i*dim.n_nod ; % Number of DOFs for each element
             obj.dimensions = dim ;
 
         end
@@ -205,36 +211,23 @@ classdef StructuralComputer < handle
             obj.reactions = R ;
         end
 
-
-
-        function [eps,sig] = computeStrainStress(obj)
+        function computeCriticalStress(obj)
             obj.computeDofConnectivities ;
-            u = obj.displacements ;
-            % Compute strain and stresses
-            s.deltaT = obj.incrementT ;
-            s.n_el = obj.dimensions.n_el ;
-            s.u = u ;
-            s.Td = obj.connecDofs ;
-            s.x = obj.coord ;
-            s.Tn = obj.connec ;
-            s.mat = obj.material ;
-            s.Tmat = obj.connecMaterial ;
+            s.displacements = obj.displacements ;
+            s.incrementT = obj.incrementT ;
+            s.dimensions = obj.dimensions ;
+            s.connecDofs = obj.connecDofs ;
+            s.coord = obj.coord ;
+            s.connec = obj.connec ;
+            s.material = obj.material ;
+            s.connecMaterial = obj.connecMaterial ;
 
-            c = StrainStressComputer(s) ;
-            [eps,sig] = c.compute() ;
-        end
+            c = CriticalStressComputer(s) ;
+            [eps,sig,sig_cr] = c.compute() ;
 
-        function sig_cr = computeBuckling(obj)
-            
-            obj.computeDofConnectivities() ;
-            % Buckling
-            s.n_el = obj.dimensions.n_el ;
-            s.Td = obj.connecDofs ;
-            s.x = obj.coord ;
-            s.Tn = obj.connec ;
-            s.mat = obj.material ;
-            c = BucklingComputer(s) ;
-            sig_cr = c.compute() ;
+            obj.epsilon = eps ;
+            obj.sigma = sig ;
+            obj.sigma_cr = sig_cr ;
         end
 
     end
