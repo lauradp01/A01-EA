@@ -60,18 +60,18 @@ classdef StructuralComputer < handle
             sig_cr = obj.sigma_cr ;
 
 
-%             %% POSTPROCESS
-% 
-%             % Plot displacements
-%             s.n_d = n_d ;
-%             s.n = n ;
-%             s.u = u ;
-%             s.x = x ;
-%             s.Tn = Tn;
-%             s.fact = 1 ;
-%             c = DisplacementGraph(s) ;
-%             c.plot() ;
-% 
+            % POSTPROCESS
+
+            % Plot displacements
+            s.n_d = obj.dimensions.n_d ;
+            s.n = obj.dimensions.n ;
+            s.u = obj.displacements ;
+            s.x = obj.coord ;
+            s.Tn = obj.connec;
+            s.fact = 1 ;
+            c = DisplacementGraph(s) ;
+            c.plot() ;
+
 %             % Plot strain
 %             s.n_d = n_d ;
 %             s.a = eps ;
