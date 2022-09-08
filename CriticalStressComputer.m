@@ -1,3 +1,4 @@
+
 classdef CriticalStressComputer < handle
     properties (Access = private)
         displacements
@@ -74,4 +75,5 @@ classdef CriticalStressComputer < handle
         end
 
     end
+
 end
