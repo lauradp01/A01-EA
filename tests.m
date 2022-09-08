@@ -22,7 +22,7 @@ classdef tests < matlab.unittest.TestCase
             str = StructuralComputer(s);
             uSolver = str.compute();
             actualSolution = uSolver ;
-            value = abs(actualSolution-expectedSolution) ;
+            value = abs((actualSolution-expectedSolution)/expectedSolution) ;
             zero = 10^(-14) ;
             if value < zero
                 actualSolution = expectedSolution ;
@@ -37,7 +37,7 @@ classdef tests < matlab.unittest.TestCase
             uSolver = str.compute();
 
             actualSolution = uSolver ;
-            value = abs(actualSolution-expectedSolution) ;
+            value = abs((actualSolution-expectedSolution)/expectedSolution) ;
             zero = 10^(-14) ;
             if value < zero
                 actualSolution = expectedSolution ;
@@ -54,7 +54,7 @@ classdef tests < matlab.unittest.TestCase
         function epsilon(testCase)
             expectedSolution = load("Epsilon.mat").eps ;
             actualSolution = evalin('base','eps') ;
-            value = abs(actualSolution-expectedSolution) ;
+            value = abs((actualSolution-expectedSolution)/expectedSolution) ;
             zero = 10^(-14) ;
             if value < zero
                 actualSolution = expectedSolution ;
@@ -65,7 +65,7 @@ classdef tests < matlab.unittest.TestCase
         function sigma(testCase)
             expectedSolution = load("Sigma.mat").sig ;
             actualSolution = evalin('base','sig') ;
-            value = abs(actualSolution-expectedSolution) ;
+            value = abs((actualSolution-expectedSolution)/expectedSolution) ;
             zero = 10^(-14) ;
             if value < zero
                 actualSolution = expectedSolution ;
@@ -76,7 +76,7 @@ classdef tests < matlab.unittest.TestCase
         function sigmaCritica(testCase)
             expectedSolution = load("Sigma_critica.mat").sig_cr ;
             actualSolution = evalin('base','sig_cr') ;
-            value = abs(actualSolution-expectedSolution) ;
+            value = abs((actualSolution-expectedSolution)/expectedSolution) ;
             zero = 10^(-14) ;
             if value < zero
                 actualSolution = expectedSolution ;
