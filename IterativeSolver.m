@@ -5,7 +5,7 @@ classdef IterativeSolver < Solver
 
     methods (Static)
         function solution = system(LHS,RHS)
-            solution = pcg(RHS,LHS) ; 
+            solution = pcg(RHS,LHS,1e-15) ; 
         end
     end
 

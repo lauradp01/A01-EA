@@ -1,10 +1,6 @@
 
 classdef tests < matlab.unittest.TestCase
 
-    properties (Access = private)
-        TOL = 1e-9;
-    end
-
     methods(Test)
 
         function stiffnessMatrix(testCase)
@@ -26,8 +22,8 @@ classdef tests < matlab.unittest.TestCase
             uSolver = str.compute();
             actualSolution = uSolver ;
             error = testCase.computeRealitveError(actualSolution,expectedSolution);
-
-            if error < testCase.TOL
+            TOL = 10^(-14) ;            
+            if error < TOL
                 actualSolution = expectedSolution ;
             end
             testCase.verifyEqual(actualSolution,expectedSolution);
@@ -40,7 +36,8 @@ classdef tests < matlab.unittest.TestCase
             uSolver = str.compute();
             actualSolution = uSolver ;
             error = testCase.computeRealitveError(actualSolution,expectedSolution);
-            if error < testCase.TOL
+            TOL = 10^(-14) ;
+            if error < TOL
                 actualSolution = expectedSolution ;
             end
             testCase.verifyEqual(actualSolution,expectedSolution);
@@ -56,7 +53,8 @@ classdef tests < matlab.unittest.TestCase
             expectedSolution = load("Epsilon.mat").eps ;
             actualSolution = evalin('base','eps') ;
             error = testCase.computeRealitveError(actualSolution,expectedSolution);
-            if error < testCase.TOL
+            TOL = 10^(-14) ;
+            if error < TOL
                 actualSolution = expectedSolution ;
             end
             testCase.verifyEqual(actualSolution,expectedSolution);
@@ -66,7 +64,8 @@ classdef tests < matlab.unittest.TestCase
             expectedSolution = load("Sigma.mat").sig ;
             actualSolution = evalin('base','sig') ;
             error = testCase.computeRealitveError(actualSolution,expectedSolution);
-            if error < testCase.TOL
+            TOL = 10^(-14) ;
+            if error < TOL
                 actualSolution = expectedSolution ;
             end
             testCase.verifyEqual(actualSolution,expectedSolution);
@@ -77,8 +76,9 @@ classdef tests < matlab.unittest.TestCase
         function sigmaCritica(testCase)
             expectedSolution = load("Sigma_critica.mat").sig_cr ;
             actualSolution = evalin('base','sig_cr') ;
-            error = testCase.computeRealitveError(actualSolution,expectedSolution);
-            if error < testCase.TOL
+            error = testCase.computeRealitveError(actualSolution,expectedSolution)
+            TOL = 10^(-14) ;
+            if error < TOL
                 actualSolution = expectedSolution ;
             end
             testCase.verifyEqual(actualSolution,expectedSolution);
