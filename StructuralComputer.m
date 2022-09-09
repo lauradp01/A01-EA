@@ -35,6 +35,7 @@ classdef StructuralComputer < handle
         epsilon
         sigma
         sigma_cr
+        
     end
 
     methods (Access = public)
