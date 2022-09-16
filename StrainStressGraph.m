@@ -25,32 +25,6 @@ classdef StrainStressGraph < handle
             obj.plotUndeformedStructure() ;
             obj.setColorBar() ;
 
-%             % Reshape matrices for plot
-%             for i = 1:nDim
-%                 X0{i} = reshape(coord(connec,i),size(connec))' ;
-%             end
-%             S = repmat(vectRepresented',size(connec,2),1);
-            
-%             % Open and initialize figure
-%             figure('color','w');
-%             hold on;       % Allow multiple plots on same axes
-%             box on;        % Closed box axes
-%             axis equal;    % Keep aspect ratio to 1
-%             colormap jet;  % Set colormap colors
-            
-%             % Add axes labels
-%             xlabel('x (m)')
-%             ylabel('y (m)')
-%             title(titleName);
-            
-%             % Plot undeformed structure
-%             patch(X0{:},S,'edgecolor','flat','linewidth',2);
-            
-%             % Set colorbar properties
-%             caxis([min(S(:)),max(S(:))]);
-%             cbar = colorbar;
-%             set(cbar,'Ticks',linspace(min(S(:)),max(S(:)),5));
-%             title(cbar,titleName);
         end
     end
 
