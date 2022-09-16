@@ -74,7 +74,7 @@ classdef SystemSolverComputer < handle
             s.KG = obj.stiffnessMatrix ;
             s.Fext = obj.externalForce ;
 
-            c = SystemSolver(s) ;
+            c = ReactionsComputer(s) ;
             R = c.compute() ;
             obj.reactions = R ;
         end
