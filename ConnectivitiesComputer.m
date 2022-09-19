@@ -3,7 +3,7 @@ classdef ConnectivitiesComputer < handle
 
     properties (Access = private)
         dimensions
-        Tn
+        connec
     end
 
     methods (Access = public)
@@ -22,13 +22,13 @@ classdef ConnectivitiesComputer < handle
 
         function init(obj,cParams)
             obj.dimensions = cParams.dimensions ;
-            obj.Tn = cParams.Tn ;
+            obj.connec = cParams.connec ;
         end
 
         function dof = computeDof(obj,i,j)
-            connec = obj.Tn;
+            Tn = obj.connec;
             nDim   = obj.dimensions.n_i;
-            dof = nDim * connec(i,j);
+            dof = nDim * Tn(i,j);
         end
 
         function Td = computeTd(obj)

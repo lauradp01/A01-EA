@@ -96,7 +96,7 @@ classdef StructuralComputer < handle
         function computeDofConnectivities(obj)
             % Computation of the DOFs connectivities
             s.dimensions = obj.dimensions;
-            s.Tn = obj.preprocessData.connec ;
+            s.connec = obj.preprocessData.connec ;
             c = ConnectivitiesComputer(s);
             Td = c.compute();
             obj.connecDofs = Td ;
