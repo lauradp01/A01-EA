@@ -2,10 +2,8 @@
 classdef ConnectivitiesComputer < handle
 
     properties (Access = private)
-        n_el
-        n_nod
-        n_i
-        Tn
+        dimensions
+        preprocessData
     end
 
     methods (Access = public)
@@ -19,27 +17,26 @@ classdef ConnectivitiesComputer < handle
         end
 
     end
-    
-
+  
     methods (Access = private)
 
         function init(obj,cParams)
-            obj.n_el = cParams.n_el;
-            obj.n_nod = cParams.n_nod ;
-            obj.n_i = cParams.n_i ;
-            obj.Tn = cParams.Tn ;
+            obj.dimensions.n_el = cParams.n_el;
+            obj.dimensions.n_nod = cParams.n_nod ;
+            obj.dimensions.n_i = cParams.n_i ;
+            obj.preprocessData.Tn = cParams.Tn ;
         end
 
         function dof = computeDof(obj,i,j)
-            connec = obj.Tn;
-            nDim   = obj.n_i;
+            connec = obj.preprocessData.Tn;
+            nDim   = obj.dimensions.n_i;
             dof = nDim * connec(i,j);
         end
 
         function Td = computeTd(obj)
-            nElem = obj.n_el;
-            nNod = obj.n_nod;
-            nDim = obj.n_i;
+            nElem = obj.dimensions.n_el;
+            nNod = obj.dimensions.n_nod;
+            nDim = obj.dimensions.n_i;
 
             Td = zeros(nElem,nNod*nDim) ;
             for i = 1:nElem
@@ -53,9 +50,7 @@ classdef ConnectivitiesComputer < handle
                     end
                 end
             end
-
         end
-
     end
 
 end

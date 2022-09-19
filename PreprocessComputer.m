@@ -1,11 +1,7 @@
 classdef PreprocessComputer < handle
     
     properties (Access = private)
-        F 
-        Young 
-        Area
-        thermal_coeff
-        Inertia
+        barProperties
     end
 
     methods (Access = public)
@@ -25,19 +21,15 @@ classdef PreprocessComputer < handle
 
     methods (Access = private)
         function init(obj,cParams)
-            obj.F = cParams.F ;
-            obj.Young = cParams.Young ;
-            obj.Area = cParams.Area ;
-            obj.thermal_coeff = cParams.thermal_coeff ;
-            obj.Inertia = cParams.Inertia ;
+            obj.barProperties.F = cParams.F ;
+            obj.barProperties.Young = cParams.Young ;
+            obj.barProperties.Area = cParams.Area ;
+            obj.barProperties.thermal_coeff = cParams.thermal_coeff ;
+            obj.barProperties.Inertia = cParams.Inertia ;
         end
         
         function Fdata = extForceCreation(obj)
-            Force = obj.F ;
-             % External force matrix creation
-            %  Fdata(k,1) = node at which the force is applied
-            %  Fdata(k,2) = DOF (direction) at which the force is applied
-            %  Fdata(k,3) = force magnitude in the corresponding DOF
+            Force = obj.barProperties.F ;
             Fdata = [%   Node        DOF  Magnitude   
             2 4 3*Force ;
             3 6 2*Force ;
@@ -46,14 +38,10 @@ classdef PreprocessComputer < handle
         end
         
         function mat = materialData(obj)
-            ElasticMod = obj.Young ;
-            Superf = obj.Area ;
-            thermalCoef = obj.thermal_coeff ;
-            Inercia = obj.Inertia ;
-            % Material data
-            %  mat(m,1) = Young modulus of material m
-            %  mat(m,2) = Section area of material m
-            %  --more columns can be added for additional material properties--
+            ElasticMod = obj.barProperties.Young ;
+            Superf = obj.barProperties.Area ;
+            thermalCoef = obj.barProperties.thermal_coeff ;
+            Inercia = obj.barProperties.Inertia ;
             mat = [% Young M.   Section A.   thermal_coeff   Inertia
                      ElasticMod,   Superf,      thermalCoef,     Inercia;  % Material (1)
             ];
@@ -63,8 +51,6 @@ classdef PreprocessComputer < handle
     methods(Access = private, Static)
 
         function x = nodalCoordCreation()
-             % Nodal coordinates matrix creation
-            %  x(a,j) = coordinate of node a in the dimension j
             x = [%  X       Y
             0 0 ;
             0.5 0.2 ;
@@ -78,8 +64,6 @@ classdef PreprocessComputer < handle
         end
 
         function Tn = connectMatCreation()
-             % Connectivities matrix ceation
-            %  Tn(e,a) = global nodal number associated to node a of element e
             Tn = [%     a      b
             1 2 ;
             2 3 ;
@@ -101,10 +85,6 @@ classdef PreprocessComputer < handle
         end
 
         function fixNod = fixNodesCreation()
-            % Fix nodes matrix creation
-            %  fixNod(k,1) = node at which some DOF is prescribed
-            %  fixNod(k,2) = DOF prescribed
-            %  fixNod(k,3) = prescribed displacement in the corresponding DOF (0 for fixed)
             fixNod = [% Node        DOF  Magnitude
             1 1 0 ;
             1 2 0 ;
@@ -114,13 +94,9 @@ classdef PreprocessComputer < handle
         end
 
         function Tmat = materialConnec()
-            % Material connectivities
-            %  Tmat(e) = Row in mat corresponding to the material associated to element e 
             Tmat = [% Mat. index
             1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1  
             ];
         end
     end
-
-  
 end

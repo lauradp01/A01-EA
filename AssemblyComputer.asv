@@ -26,7 +26,6 @@ classdef AssemblyComputer < handle
             obj.dimensions.n_el = cParams.n_el ;
             obj.dimensions.n_el_dof = cParams.n_el_dof ;
             obj.dimensions.n_dof = cParams.n_dof ;
-            obj.dimensions.n_nod = cParams.n_nod ;
             obj.Kel = cParams.Kel ;
         end
 
