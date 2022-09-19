@@ -1,9 +1,8 @@
-
 classdef ForceComputer < handle
     
     properties (Access = private)
-        n_dof
-        Fdata
+        nDof
+        dataForce
     end
 
     methods (Access = public)
@@ -18,13 +17,13 @@ classdef ForceComputer < handle
 
     methods (Access = private) 
         function init(obj,cParams)
-            obj.n_dof = cParams.n_dof ;
-            obj.Fdata = cParams.Fdata ;
+            obj.nDof = cParams.nDof ;
+            obj.dataForce = cParams.dataForce ;
         end
 
         function Fext = computeFext(obj)
-            nDim = obj.n_dof ;
-            Forces = obj.Fdata ;
+            nDim = obj.nDof ;
+            Forces = obj.dataForce ;
             
             Fext = zeros(nDim,1) ;
 

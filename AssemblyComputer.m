@@ -1,6 +1,4 @@
 classdef AssemblyComputer < handle
-    
-
     properties (Access = private)
         dimensions
         preprocessData
@@ -20,9 +18,7 @@ classdef AssemblyComputer < handle
 
     methods (Access = private)
         function init(obj,cParams)
-            obj.dimensions.n_el = cParams.n_el ;
-            obj.dimensions.n_el_dof = cParams.n_el_dof ;
-            obj.dimensions.n_dof = cParams.n_dof ; 
+            obj.dimensions = cParams.dimensions ;
             obj.Kel = cParams.Kel ;
             obj.Td = cParams.Td ;
         end

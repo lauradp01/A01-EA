@@ -97,11 +97,6 @@ classdef StructuralComputer < handle
             % Computation of the DOFs connectivities
             s.dimensions = obj.dimensions;
             s.Tn = obj.preprocessData.connec ;
-%             s.n_el = obj.dimensions.n_el ;
-%             s.n_nod = obj.dimensions.n_nod ;
-%             s.n_i = obj.dimensions.n_i ;
-%             s.Tn = obj.preprocessData.connec ;
-
             c = ConnectivitiesComputer(s);
             Td = c.compute();
             obj.connecDofs = Td ;
@@ -111,10 +106,7 @@ classdef StructuralComputer < handle
             obj.computeDofConnectivities() ;
             s.connecDofs = obj.connecDofs ;
             s.dimensions = obj.dimensions ;
-            s.coord = obj.preprocessData.coord ;
-            s.connec = obj.preprocessData.connec ;
-            s.material = obj.preprocessData.material ;
-            s.connecMaterial = obj.preprocessData.connecMaterial ;
+            s.preprocessData = obj.preprocessData ;
             c = StiffnessMatrixComputer(s) ;
             KG = c.compute() ;
             obj.stiffnessMatrix = KG ;
@@ -123,9 +115,8 @@ classdef StructuralComputer < handle
 
         function computeForceVectorAssembly(obj)
             % Global force vector assembly
-            s.n_dof = obj.dimensions.n_dof ;
-            s.Fdata = obj.preprocessData.dataForce ;
-
+            s.nDof = obj.dimensions.n_dof ;
+            s.dataForce = obj.preprocessData.dataForce ;
             c = ForceComputer(s) ;
             Fext = c.compute() ;
             obj.externalForce =  Fext ;

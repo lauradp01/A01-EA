@@ -1,4 +1,3 @@
-
 classdef StiffnessComputer < handle
    
     properties (Access = private)
@@ -18,18 +17,14 @@ classdef StiffnessComputer < handle
 
     methods (Access = private)
         function init(obj,cParams)
-            obj.dimensions.n_d = cParams.n_d ;
-            obj.dimensions.n_el = cParams.n_el ;
-            obj.preprocessData.x = cParams.x ;
-            obj.preprocessData.Tn = cParams.Tn ;
-            obj.preprocessData.mat = cParams.mat ;
-            obj.preprocessData.Tmat = cParams.Tmat ;
+            obj.dimensions = cParams.dimensions ;
+            obj.preprocessData = cParams.preprocessData ;
         end
 
         function Kel = createKel(obj)
             nDim = obj.dimensions.n_d ;
             nElem = obj.dimensions.n_el ;
-            connec = obj.preprocessData.Tn ;
+            connec = obj.preprocessData.connec ;
 
             n_nod = size(connec,2) ;  
             n_el_dof = nDim*n_nod ;
@@ -38,7 +33,7 @@ classdef StiffnessComputer < handle
 
         function n = computeNodes(obj)
             nElem = obj.dimensions.n_el ;
-            connec = obj.preprocessData.Tn ;
+            connec = obj.preprocessData.connec ;
             for i = 1:nElem
                 n.node1(i) = connec(i,1) ;
                 n.node2(i) = connec(i,2) ;
@@ -47,7 +42,7 @@ classdef StiffnessComputer < handle
 
         function co = computeCoordinates(obj)
             nElem = obj.dimensions.n_el ;
-            coord = obj.preprocessData.x ;
+            coord = obj.preprocessData.coord ;
             n = obj.computeNodes() ;
              for i = 1:nElem
                 co.x1(i) = coord(n.node1(i),1) ;
@@ -67,33 +62,28 @@ classdef StiffnessComputer < handle
             end
         end
 
-        function material = computeMaterial(obj)
+        function iMat = computeMaterial(obj)
             nElem = obj.dimensions.n_el ;
-            materialConnec = obj.preprocessData.Tmat ;
+            materialConnec = obj.preprocessData.connecMaterial ;
             for i = 1:nElem
-                material(i) = materialConnec(i) ;
+                iMat(i) = materialConnec(i) ;
             end
         end
 
         function Kel = computeKel(obj)
             nElem = obj.dimensions.n_el ;
             Kel = obj.createKel() ;
-            materialData = obj.preprocessData.mat ;
+            materialData = obj.preprocessData.material ;
             [l,s,c] = obj.computeData() ;
-            material = obj.computeMaterial() ;
+            iMat = obj.computeMaterial() ;
             for i = 1:nElem
                 Kel(:,:,i) = [
                     c(i)^2 c(i)*s(i) -(c(i)^2) -c(i)*s(i) ;
                     c(i)*s(i) s(i)^2 -c(i)*s(i) -(s(i)^2) ;
                     -(c(i)^2) -c(i)*s(i) c(i)^2 c(i)*s(i) ;
                     -c(i)*s(i) -(s(i)^2) c(i)*s(i) s(i)^2
-                    ] * materialData(material(i),2) * materialData(material(i),1) / l(i) ;
+                    ] * materialData(iMat(i),2) * materialData(iMat(i),1) / l(i) ;
             end
-
          end
-       
-        
-  
     end
-    
 end

@@ -5,27 +5,12 @@ classdef StructuralComputer < handle
     end
 
     properties (Access = private)
-%         force 
-%         elasticModule
-%         superf 
-%         alpha 
-%         inercia 
-%         incrementT 
         barProperties
-
-%         coord
-%         connec
-%         dataForce
-%         fixNodes
-%         material
-%         connecMaterial
         preprocessData
 
         dimensions
 
         connecDofs
-
-        elemStiffnessMat
 
         stiffnessMatrix
 
@@ -76,23 +61,11 @@ classdef StructuralComputer < handle
             prop.Inertia = 1400e-12 ; %m^4
             prop.deltaT = 0 ; %K
             obj.barProperties = prop ;
-%             obj.force = F ;
-%             obj.elasticModule = Young ;
-%             obj.superf = Area ;
-%             obj.alpha = thermal_coeff ;
-%             obj.inercia = Inertia ;
-%             obj.incrementT = deltaT ;
-
         end
 
         function computePreprocess(obj)
             % PREPROCESS
             s = obj.barProperties ;
-%             s.F = obj.barProperties.F ;
-%             s.Young = obj.barProperties.Young ;
-%             s.Area = obj.barProperties.Area ;
-%             s.thermal_coeff = obj.barProperties.thermal_coeff ;
-%             s.Inertia = obj.barProperties.Inertia ;
             c = PreprocessComputer(s) ;
             [x,Tn,Fdata,fixNod,mat,Tmat] = c.compute() ;
             prepComp.coord = x ;
@@ -122,13 +95,8 @@ classdef StructuralComputer < handle
 
         function computeDofConnectivities(obj)
             % Computation of the DOFs connectivities
-            s.dimensions = obj.dimensions ;
-            s.
-            s.n_el = obj.dimensions.n_el ;
-            s.n_nod = obj.dimensions.n_nod ;
-            s.n_i = obj.dimensions.n_i ;
+            s.dimensions = obj.dimensions;
             s.Tn = obj.preprocessData.connec ;
-
             c = ConnectivitiesComputer(s);
             Td = c.compute();
             obj.connecDofs = Td ;
@@ -138,10 +106,7 @@ classdef StructuralComputer < handle
             obj.computeDofConnectivities() ;
             s.connecDofs = obj.connecDofs ;
             s.dimensions = obj.dimensions ;
-            s.coord = obj.preprocessData.coord ;
-            s.connec = obj.preprocessData.connec ;
-            s.material = obj.preprocessData.material ;
-            s.connecMaterial = obj.preprocessData.connecMaterial ;
+            s.preprocessData = obj.preprocessData ;
             c = StiffnessMatrixComputer(s) ;
             KG = c.compute() ;
             obj.stiffnessMatrix = KG ;
