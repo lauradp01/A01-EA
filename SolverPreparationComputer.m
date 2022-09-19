@@ -1,4 +1,4 @@
-classdef SplitStiffnessMatrixComputer < handle
+classdef SolverPreparationComputer < handle
     properties
         Property1
     end
