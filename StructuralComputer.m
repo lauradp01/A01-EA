@@ -87,11 +87,12 @@ classdef StructuralComputer < handle
 
         function computePreprocess(obj)
             % PREPROCESS
-            s.F = obj.barProperties.F ;
-            s.Young = obj.barProperties.Young ;
-            s.Area = obj.barProperties.Area ;
-            s.thermal_coeff = obj.barProperties.thermal_coeff ;
-            s.Inertia = obj.barProperties.Inertia ;
+            s = obj.barProperties ;
+%             s.F = obj.barProperties.F ;
+%             s.Young = obj.barProperties.Young ;
+%             s.Area = obj.barProperties.Area ;
+%             s.thermal_coeff = obj.barProperties.thermal_coeff ;
+%             s.Inertia = obj.barProperties.Inertia ;
             c = PreprocessComputer(s) ;
             [x,Tn,Fdata,fixNod,mat,Tmat] = c.compute() ;
             prepComp.coord = x ;
@@ -119,21 +120,21 @@ classdef StructuralComputer < handle
 
         end
 
-%         function computeDofConnectivities(obj)
-%             % Computation of the DOFs connectivities
-%             s.n_el = obj.dimensions.n_el ;
-%             s.n_nod = obj.dimensions.n_nod ;
-%             s.n_i = obj.dimensions.n_i ;
-%             s.Tn = obj.preprocessData.connec ;
-% 
-%             c = ConnectivitiesComputer(s);
-%             Td = c.compute();
-%             obj.connecDofs = Td ;
-%         end
+        function computeDofConnectivities(obj)
+            % Computation of the DOFs connectivities
+            s.n_el = obj.dimensions.n_el ;
+            s.n_nod = obj.dimensions.n_nod ;
+            s.n_i = obj.dimensions.n_i ;
+            s.Tn = obj.preprocessData.connec ;
+
+            c = ConnectivitiesComputer(s);
+            Td = c.compute();
+            obj.connecDofs = Td ;
+        end
 
         function computeStiffnessMatrix(obj)
-%             obj.computeDofConnectivities() ;
-%             s.connecDofs = obj.connecDofs ;
+            obj.computeDofConnectivities() ;
+            s.connecDofs = obj.connecDofs ;
             s.dimensions = obj.dimensions ;
             s.coord = obj.preprocessData.coord ;
             s.connec = obj.preprocessData.connec ;

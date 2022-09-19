@@ -3,6 +3,7 @@ classdef StiffnessMatrixComputer < handle
     properties (Access = private)
         dimensions
         preprocessData
+        connecDofs
     end
     
     properties (Access = private)
@@ -28,6 +29,7 @@ classdef StiffnessMatrixComputer < handle
             obj.preprocessData.connec = cParams.connec ;
             obj.preprocessData.material = cParams.material ;
             obj.preprocessData.connecMaterial = cParams.connecMaterial ;
+            obj.connecDofs = cParams.connecDofs ;
             
         end
 
@@ -52,7 +54,7 @@ classdef StiffnessMatrixComputer < handle
             s.n_el = obj.dimensions.n_el ;
             s.n_el_dof = obj.dimensions.n_el_dof ;
             s.n_dof = obj.dimensions.n_dof ;
-%             s.Td = obj.connecDofs ;
+            s.Td = obj.connecDofs ;
             s.Kel = obj.elemStiffnessMat ;
 
             c = AssemblyComputer(s) ;

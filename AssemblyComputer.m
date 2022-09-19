@@ -5,9 +5,7 @@ classdef AssemblyComputer < handle
         dimensions
         preprocessData
         Kel
-    end
-    properties (Access = private)
-        connecDofs
+        Td
     end
 
     methods (Access = public)
@@ -16,7 +14,6 @@ classdef AssemblyComputer < handle
         end
 
         function KG = compute(obj)      
-            obj.computeDofConnectivities() ;
             KG = obj.computeKG() ;            
         end
     end
@@ -25,33 +22,21 @@ classdef AssemblyComputer < handle
         function init(obj,cParams)
             obj.dimensions.n_el = cParams.n_el ;
             obj.dimensions.n_el_dof = cParams.n_el_dof ;
-            obj.dimensions.n_dof = cParams.n_dof ;
-            obj.dimensions.n_nod = cParams.n_nod ;
+            obj.dimensions.n_dof = cParams.n_dof ; 
             obj.Kel = cParams.Kel ;
-        end
-
-        function computeDofConnectivities(obj)
-            % Computation of the DOFs connectivities
-            s.n_el = obj.dimensions.n_el ;
-            s.n_nod = obj.dimensions.n_nod ;
-            s.n_i = obj.dimensions.n_i ;
-            s.Tn = obj.preprocessData.connec ;
-            c = ConnectivitiesComputer(s);
-            Td = c.compute();
-            obj.connecDofs = Td ;
-            
+            obj.Td = cParams.Td ;
         end
 
         function [I, J] = computeSizeKG(obj)
             nElem = obj.dimensions.n_el ;
             nDofElem = obj.dimensions.n_el_dof ;
-            Td = obj.connecDofs ;
+            connecDofs = obj.Td ;
 
             for i = 1:nElem
                 for j = 1:nDofElem
-                    I(i,j) = Td(i,j) ;
+                    I(i,j) = connecDofs(i,j) ;
                     for a = 1:nDofElem
-                        J(i,a) = Td(i,a) ;
+                        J(i,a) = connecDofs(i,a) ;
                     end
                 end
             end
