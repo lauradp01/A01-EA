@@ -5,20 +5,7 @@ classdef StructuralComputer < handle
     end
 
     properties (Access = private)
-%         force 
-%         elasticModule
-%         superf 
-%         alpha 
-%         inercia 
-%         incrementT 
         barProperties
-
-%         coord
-%         connec
-%         dataForce
-%         fixNodes
-%         material
-%         connecMaterial
         preprocessData
 
         dimensions
@@ -108,12 +95,12 @@ classdef StructuralComputer < handle
 
         function computeDofConnectivities(obj)
             % Computation of the DOFs connectivities
-%             s.dimensions = obj.dimensions;
-%             s.preprocessData = obj.preprocessData ;
-            s.n_el = obj.dimensions.n_el ;
-            s.n_nod = obj.dimensions.n_nod ;
-            s.n_i = obj.dimensions.n_i ;
+            s.dimensions = obj.dimensions;
             s.Tn = obj.preprocessData.connec ;
+%             s.n_el = obj.dimensions.n_el ;
+%             s.n_nod = obj.dimensions.n_nod ;
+%             s.n_i = obj.dimensions.n_i ;
+%             s.Tn = obj.preprocessData.connec ;
 
             c = ConnectivitiesComputer(s);
             Td = c.compute();

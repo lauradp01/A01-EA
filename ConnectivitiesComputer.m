@@ -3,7 +3,7 @@ classdef ConnectivitiesComputer < handle
 
     properties (Access = private)
         dimensions
-        preprocessData
+        Tn
     end
 
     methods (Access = public)
@@ -21,14 +21,12 @@ classdef ConnectivitiesComputer < handle
     methods (Access = private)
 
         function init(obj,cParams)
-            obj.dimensions.n_el = cParams.n_el;
-            obj.dimensions.n_nod = cParams.n_nod ;
-            obj.dimensions.n_i = cParams.n_i ;
-            obj.preprocessData.Tn = cParams.Tn ;
+            obj.dimensions = cParams.dimensions ;
+            obj.Tn = cParams.Tn ;
         end
 
         function dof = computeDof(obj,i,j)
-            connec = obj.preprocessData.Tn;
+            connec = obj.Tn;
             nDim   = obj.dimensions.n_i;
             dof = nDim * connec(i,j);
         end
