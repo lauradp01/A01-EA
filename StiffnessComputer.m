@@ -2,12 +2,8 @@
 classdef StiffnessComputer < handle
    
     properties (Access = private)
-        n_d
-        n_el
-        x
-        Tn
-        mat
-        Tmat
+        dimensions
+        preprocessData
     end
 
     methods (Access = public)
@@ -22,18 +18,18 @@ classdef StiffnessComputer < handle
 
     methods (Access = private)
         function init(obj,cParams)
-            obj.n_d = cParams.n_d ;
-            obj.n_el = cParams.n_el ;
-            obj.x = cParams.x ;
-            obj.Tn = cParams.Tn ;
-            obj.mat = cParams.mat ;
-            obj.Tmat = cParams.Tmat ;
+            obj.dimensions.n_d = cParams.n_d ;
+            obj.dimensions.n_el = cParams.n_el ;
+            obj.preprocessData.x = cParams.x ;
+            obj.preprocessData.Tn = cParams.Tn ;
+            obj.preprocessData.mat = cParams.mat ;
+            obj.preprocessData.Tmat = cParams.Tmat ;
         end
 
         function Kel = createKel(obj)
-            nDim = obj.n_d ;
-            nElem = obj.n_el ;
-            connec = obj.Tn ;
+            nDim = obj.dimensions.n_d ;
+            nElem = obj.dimensions.n_el ;
+            connec = obj.preprocessData.Tn ;
 
             n_nod = size(connec,2) ;  
             n_el_dof = nDim*n_nod ;
@@ -41,8 +37,8 @@ classdef StiffnessComputer < handle
         end
 
         function n = computeNodes(obj)
-            nElem = obj.n_el ;
-            connec = obj.Tn ;
+            nElem = obj.dimensions.n_el ;
+            connec = obj.preprocessData.Tn ;
             for i = 1:nElem
                 n.node1(i) = connec(i,1) ;
                 n.node2(i) = connec(i,2) ;
@@ -50,8 +46,8 @@ classdef StiffnessComputer < handle
         end
 
         function co = computeCoordinates(obj)
-            nElem = obj.n_el ;
-            coord = obj.x ;
+            nElem = obj.dimensions.n_el ;
+            coord = obj.preprocessData.x ;
             n = obj.computeNodes() ;
              for i = 1:nElem
                 co.x1(i) = coord(n.node1(i),1) ;
@@ -62,7 +58,7 @@ classdef StiffnessComputer < handle
         end
 
         function [l,s,c] = computeData(obj) 
-            nElem = obj.n_el ;
+            nElem = obj.dimensions.n_el ;
             co = obj.computeCoordinates() ;
             for i = 1:nElem
                 l(i) = ((co.x2(i)-co.x1(i))^2+(co.y2(i)-co.y1(i))^2)^0.5 ;
@@ -72,17 +68,17 @@ classdef StiffnessComputer < handle
         end
 
         function material = computeMaterial(obj)
-            nElem = obj.n_el ;
-            materialConnec = obj.Tmat ;
+            nElem = obj.dimensions.n_el ;
+            materialConnec = obj.preprocessData.Tmat ;
             for i = 1:nElem
                 material(i) = materialConnec(i) ;
             end
         end
 
         function Kel = computeKel(obj)
-            nElem = obj.n_el ;
+            nElem = obj.dimensions.n_el ;
             Kel = obj.createKel() ;
-            materialData = obj.mat ;
+            materialData = obj.preprocessData.mat ;
             [l,s,c] = obj.computeData() ;
             material = obj.computeMaterial() ;
             for i = 1:nElem

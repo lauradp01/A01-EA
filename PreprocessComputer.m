@@ -29,21 +29,21 @@ classdef PreprocessComputer < handle
         end
         
         function Fdata = extForceCreation(obj)
-            Force = obj.barProperties.F ;
+            force = obj.barProperties.F ;
             Fdata = [%   Node        DOF  Magnitude   
-            2 4 3*Force ;
-            3 6 2*Force ;
-            4 8 Force ;
+            2 4 3*force ;
+            3 6 2*force ;
+            4 8 force ;
             ];
         end
         
         function mat = materialData(obj)
-            ElasticMod = obj.barProperties.Young ;
-            Superf = obj.barProperties.Area ;
+            elasticModule = obj.barProperties.Young ;
+            superf = obj.barProperties.Area ;
             thermalCoef = obj.barProperties.thermal_coeff ;
-            Inercia = obj.barProperties.Inertia ;
+            inercia = obj.barProperties.Inertia ;
             mat = [% Young M.   Section A.   thermal_coeff   Inertia
-                     ElasticMod,   Superf,      thermalCoef,     Inercia;  % Material (1)
+                     elasticModule,   superf,      thermalCoef,     inercia;  % Material (1)
             ];
 
         end

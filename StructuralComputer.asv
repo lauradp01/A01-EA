@@ -87,11 +87,12 @@ classdef StructuralComputer < handle
 
         function computePreprocess(obj)
             % PREPROCESS
-            s.F = obj.barProperties.F ;
-            s.Young = obj.barProperties.Young ;
-            s.Area = obj.barProperties.Area ;
-            s.thermal_coeff = obj.barProperties.thermal_coeff ;
-            s.Inertia = obj.barProperties.Inertia ;
+            s = obj.barProperties ;
+%             s.F = obj.barProperties.F ;
+%             s.Young = obj.barProperties.Young ;
+%             s.Area = obj.barProperties.Area ;
+%             s.thermal_coeff = obj.barProperties.thermal_coeff ;
+%             s.Inertia = obj.barProperties.Inertia ;
             c = PreprocessComputer(s) ;
             [x,Tn,Fdata,fixNod,mat,Tmat] = c.compute() ;
             prepComp.coord = x ;
@@ -104,7 +105,7 @@ classdef StructuralComputer < handle
 
         end
 
-        function dim = createDimensions(obj)
+        function createDimensions(obj)
             x = obj.preprocessData.coord ;
             Tn = obj.preprocessData.connec ;
             % Dimensions
@@ -121,6 +122,8 @@ classdef StructuralComputer < handle
 
         function computeDofConnectivities(obj)
             % Computation of the DOFs connectivities
+            s.dimensions = obj.dimensions ;
+            s.
             s.n_el = obj.dimensions.n_el ;
             s.n_nod = obj.dimensions.n_nod ;
             s.n_i = obj.dimensions.n_i ;
@@ -148,7 +151,7 @@ classdef StructuralComputer < handle
         function computeForceVectorAssembly(obj)
             % Global force vector assembly
             s.n_dof = obj.dimensions.n_dof ;
-            s.Fdata = obj.dataForce ;
+            s.Fdata = obj.preprocessData.dataForce ;
 
             c = ForceComputer(s) ;
             Fext = c.compute() ;
@@ -161,7 +164,7 @@ classdef StructuralComputer < handle
             obj.computeForceVectorAssembly() ;
 
             s.dimensions = obj.dimensions ;
-            s.fixNodes = obj.fixNodes ;
+            s.fixNodes = obj.preprocessData.fixNodes ;
             s.stiffnessMatrix = obj.stiffnessMatrix ;
             s.externalForce = obj.externalForce ;
             s.solverType = obj.solverType ;
@@ -178,10 +181,10 @@ classdef StructuralComputer < handle
             s.incrementT = obj.barProperties.deltaT;
             s.dimensions = obj.dimensions ;
             s.connecDofs = obj.connecDofs ;
-            s.coord = obj.coord ;
-            s.connec = obj.connec ;
-            s.material = obj.material ;
-            s.connecMaterial = obj.connecMaterial ;
+            s.coord = obj.preprocessData.coord ;
+            s.connec = obj.preprocessData.connec ;
+            s.material = obj.preprocessData.material ;
+            s.connecMaterial = obj.preprocessData.connecMaterial ;
 
             c = CriticalStressComputer(s) ;
             [eps,sig,sig_cr] = c.compute() ;
@@ -194,8 +197,8 @@ classdef StructuralComputer < handle
         function computePlots(obj)
             s.dimensions = obj.dimensions ;
             s.displacements = obj.displacements ;
-            s.coord = obj.coord ;
-            s.connec = obj.connec ;
+            s.coord = obj.preprocessData.coord ;
+            s.connec = obj.preprocessData.connec ;
             s.epsilon = obj.epsilon ;
             s.sigma = obj.sigma ;
 

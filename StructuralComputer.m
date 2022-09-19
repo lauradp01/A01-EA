@@ -25,8 +25,6 @@ classdef StructuralComputer < handle
 
         connecDofs
 
-        elemStiffnessMat
-
         stiffnessMatrix
 
         externalForce
@@ -76,23 +74,11 @@ classdef StructuralComputer < handle
             prop.Inertia = 1400e-12 ; %m^4
             prop.deltaT = 0 ; %K
             obj.barProperties = prop ;
-%             obj.force = F ;
-%             obj.elasticModule = Young ;
-%             obj.superf = Area ;
-%             obj.alpha = thermal_coeff ;
-%             obj.inercia = Inertia ;
-%             obj.incrementT = deltaT ;
-
         end
 
         function computePreprocess(obj)
             % PREPROCESS
             s = obj.barProperties ;
-%             s.F = obj.barProperties.F ;
-%             s.Young = obj.barProperties.Young ;
-%             s.Area = obj.barProperties.Area ;
-%             s.thermal_coeff = obj.barProperties.thermal_coeff ;
-%             s.Inertia = obj.barProperties.Inertia ;
             c = PreprocessComputer(s) ;
             [x,Tn,Fdata,fixNod,mat,Tmat] = c.compute() ;
             prepComp.coord = x ;
@@ -122,6 +108,8 @@ classdef StructuralComputer < handle
 
         function computeDofConnectivities(obj)
             % Computation of the DOFs connectivities
+%             s.dimensions = obj.dimensions;
+%             s.preprocessData = obj.preprocessData ;
             s.n_el = obj.dimensions.n_el ;
             s.n_nod = obj.dimensions.n_nod ;
             s.n_i = obj.dimensions.n_i ;
