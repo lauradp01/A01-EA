@@ -1,6 +1,6 @@
 
-classdef DisplacementsComputer < handle
-
+classdef ReactionsComputer < handle
+  
     properties (Access = private)
         vL
         vR
@@ -9,6 +9,7 @@ classdef DisplacementsComputer < handle
         Fext
         solverType
     end
+
     properties (Access = private)
         splittedK
         extF
@@ -16,12 +17,12 @@ classdef DisplacementsComputer < handle
     end
 
     methods (Access = public)
-        function obj = DisplacementsComputer(cParams)
+        function obj = ReactionsComputer(cParams)
             obj.init(cParams) ;
-        end
+        end 
 
-        function u = compute(obj)
-            u = obj.computeDisp() ;
+        function R = compute(obj)
+            R = obj.computeReactions() ;    
         end
     end
 
@@ -32,33 +33,31 @@ classdef DisplacementsComputer < handle
             obj.uR = cParams.uR ;
             obj.KG = cParams.KG ;
             obj.Fext = cParams.Fext ;
-            obj.solverType = cParams.solverType;
         end
-
-%         function K = splitStiffnessMatrix(obj)
+ 
+%         function K = splitStiffnessMatrix(obj) 
+%             stiffnessMat = obj.KG ;
 %             freeDOF = obj.vL ;
 %             prescribedDOF = obj.vR ;
-%             StiffMat = obj.KG;
-%             K.KLL = StiffMat(freeDOF,freeDOF) ;
-%             K.KLR = StiffMat(freeDOF,prescribedDOF) ;
-%             K.KRL = StiffMat(prescribedDOF,freeDOF) ;
-%             K.KRR = StiffMat(prescribedDOF,prescribedDOF) ;
+%             K.KLL = stiffnessMat(freeDOF,freeDOF) ;
+%             K.KLR = stiffnessMat(freeDOF,prescribedDOF) ;
+%             K.KRL = stiffnessMat(prescribedDOF,freeDOF) ;
+%             K.KRR = stiffnessMat(prescribedDOF,prescribedDOF) ;
 %         end
 % 
-%         function F = createFext(obj)
+%         function F = createFext(obj) 
+%             extForce = obj.Fext ;
 %             freeDOF = obj.vL ;
 %             prescribedDOF = obj.vR ;
-%             Forces = obj.Fext;
-%             F.Fext_L = Forces(freeDOF,1) ;
-%             F.Fext_R = Forces(prescribedDOF,1) ;
+%             F.Fext_L = extForce(freeDOF,1) ;
+%             F.Fext_R = extForce(prescribedDOF,1) ;
 %         end
-% 
-%         function uL = computeFreeDisp(obj)
+%        
+%         function uL = computeuL(obj)
 %             prescribedDispl = obj.uR ;
 %             K = obj.splitStiffnessMatrix() ;
 %             F = obj.createFext() ;
-%             solver = Solver.chooseMode(obj.solverType);
-%             uL = solver.system((F.Fext_L-K.KLR*prescribedDispl),K.KLL) ;
+%             uL = K.KLL\(F.Fext_L-K.KLR*prescribedDispl) ;
 %         end
 
         function computeSolverPreparation(obj)
@@ -75,18 +74,21 @@ classdef DisplacementsComputer < handle
             obj.uLdisp = uL ;
         end
 
-        function u = computeDisp(obj)
-            obj.computeSolverPreparation() ;
-            freeDOF = obj.vL ;
-            prescribedDOF = obj.vR ;
+
+        function RR = computeRR(obj)
             prescribedDispl = obj.uR ;
-            u = zeros(size(prescribedDOF,1)+size(freeDOF,1),1) ;
             uL = obj.uLdisp ;
-            u(freeDOF,1) = uL ;
-            u(prescribedDOF,1) = prescribedDispl ;
+            K = obj.splittedK() ;
+            F = obj.createFext() ;
+            RR = K.KRR*prescribedDispl + K.KRL*uL - F.Fext_R ;
         end
 
-
+        function R = computeReactions(obj)
+            freeDOF = obj.vL ;
+            prescribedDOF = obj.vR ;
+            RR = obj.computeRR() ;
+            R = zeros(size(prescribedDOF,1)+size(freeDOF,1),1) ; 
+            R(prescribedDOF,1) = RR ;
+        end
     end
-
 end
