@@ -8,13 +8,11 @@ classdef ReactionsComputer < handle
         KG
         Fext
         solverType
-    end
-    properties (Access = private)
         splittedK
         extF
         uLdisp
     end
-
+    
     methods (Access = public)
         function obj = ReactionsComputer(cParams)
             obj.init(cParams) ;
@@ -33,25 +31,12 @@ classdef ReactionsComputer < handle
             obj.KG = cParams.KG ;
             obj.Fext = cParams.Fext ;
             obj.solverType = cParams.solverType;
-        end
-
-
-        function computeSolverPreparation(obj)
-            s.vL = obj.vL ;
-            s.vR = obj.vR ;
-            s.uR = obj.uR ;
-            s.KG = obj.KG ;
-            s.Fext = obj.Fext ;
-            s.solverType = obj.solverType;
-            c = SolverPreparationComputer(s) ;
-            [K,F,uL] = c.compute() ;
-            obj.splittedK = K ;
-            obj.extF = F ;
-            obj.uLdisp = uL ;
+            obj.splittedK = cParams.splittedK ;
+            obj.extF = cParams.extF ;
+            obj.uLdisp = cParams.uLdisp ;
         end
 
         function RR = computeRR(obj)
-            obj.computeSolverPreparation() ;
             prescribedDispl = obj.uR ;
             uL = obj.uLdisp ;
             K = obj.splittedK ;

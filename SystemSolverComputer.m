@@ -15,6 +15,9 @@ classdef SystemSolverComputer < handle
         prescribedDispl
         displacements
         reactions
+        splittedK
+        extF
+        uLdisp
     end
 
     methods (Access = public)
@@ -41,10 +44,8 @@ classdef SystemSolverComputer < handle
         end
 
         function computeConditions(obj)
-            % Apply conditions
             s.n_dof = obj.dimensions.n_dof ;
             s.fixNod = obj.fixNodes ;
-
             c = ConditionsComputer(s) ;
             [vL,vR,uR] = c.compute() ;
             obj.freeDof = vL ;
@@ -52,33 +53,48 @@ classdef SystemSolverComputer < handle
             obj.prescribedDispl = uR ;
         end
 
-        function u = computeDisplacements(obj)
-            % Displacements
+        function computeSolverPreparation(obj)
             s.vL = obj.freeDof ;
             s.vR = obj.prescribedDof ;
             s.uR = obj.prescribedDispl ;
             s.KG = obj.stiffnessMatrix ;
             s.Fext = obj.externalForce ;
             s.solverType = obj.solverType;
+            c = SolverPreparationComputer(s) ;
+            [K,F,uL] = c.compute() ;
+            obj.splittedK = K ;
+            obj.extF = F ;
+            obj.uLdisp = uL ;
+        end
 
+        function u = computeDisplacements(obj)
+            obj.computeSolverPreparation() ;
+            s.vL = obj.freeDof ;
+            s.vR = obj.prescribedDof ;
+            s.uR = obj.prescribedDispl ;
+            s.KG = obj.stiffnessMatrix ;
+            s.Fext = obj.externalForce ;
+            s.solverType = obj.solverType;
+            s.uLdisp = obj.uLdisp ;
             c = DisplacementsComputer(s) ;
             [u] = c.compute() ;
             obj.displacements = u ;
         end
 
         function R = computeReactions(obj)
-            % Reactions
+            obj.computeSolverPreparation() ;
             s.vL = obj.freeDof ;
             s.vR = obj.prescribedDof ;
             s.uR = obj.prescribedDispl ;
             s.KG = obj.stiffnessMatrix ;
             s.Fext = obj.externalForce ;
             s.solverType = obj.solverType ;
-
+            s.uLdisp = obj.uLdisp ;
+            s.splittedK = obj.splittedK ;
+            s.extF = obj.extF ;  
             c = ReactionsComputer(s) ;
             R = c.compute() ;
             obj.reactions = R ;
         end
     end
-
 end
