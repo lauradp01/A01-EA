@@ -35,30 +35,7 @@ classdef ReactionsComputer < handle
             obj.solverType = cParams.solverType;
         end
 
-%         function K = splitStiffnessMatrix(obj) 
-%             stiffnessMat = obj.KG ;
-%             freeDOF = obj.vL ;
-%             prescribedDOF = obj.vR ;
-%             K.KLL = stiffnessMat(freeDOF,freeDOF) ;
-%             K.KLR = stiffnessMat(freeDOF,prescribedDOF) ;
-%             K.KRL = stiffnessMat(prescribedDOF,freeDOF) ;
-%             K.KRR = stiffnessMat(prescribedDOF,prescribedDOF) ;
-%         end
-% 
-%         function F = createFext(obj) 
-%             extForce = obj.Fext ;
-%             freeDOF = obj.vL ;
-%             prescribedDOF = obj.vR ;
-%             F.Fext_L = extForce(freeDOF,1) ;
-%             F.Fext_R = extForce(prescribedDOF,1) ;
-%         end
-%        
-%         function uL = computeuL(obj)
-%             prescribedDispl = obj.uR ;
-%             K = obj.splitStiffnessMatrix() ;
-%             F = obj.createFext() ;
-%             uL = K.KLL\(F.Fext_L-K.KLR*prescribedDispl) ;
-%         end
+
         function computeSolverPreparation(obj)
             s.vL = obj.vL ;
             s.vR = obj.vR ;

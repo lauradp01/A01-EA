@@ -35,32 +35,6 @@ classdef DisplacementsComputer < handle
             obj.solverType = cParams.solverType;
         end
 
-%         function K = splitStiffnessMatrix(obj)
-%             freeDOF = obj.vL ;
-%             prescribedDOF = obj.vR ;
-%             StiffMat = obj.KG;
-%             K.KLL = StiffMat(freeDOF,freeDOF) ;
-%             K.KLR = StiffMat(freeDOF,prescribedDOF) ;
-%             K.KRL = StiffMat(prescribedDOF,freeDOF) ;
-%             K.KRR = StiffMat(prescribedDOF,prescribedDOF) ;
-%         end
-% 
-%         function F = createFext(obj)
-%             freeDOF = obj.vL ;
-%             prescribedDOF = obj.vR ;
-%             Forces = obj.Fext;
-%             F.Fext_L = Forces(freeDOF,1) ;
-%             F.Fext_R = Forces(prescribedDOF,1) ;
-%         end
-% 
-%         function uL = computeFreeDisp(obj)
-%             prescribedDispl = obj.uR ;
-%             K = obj.splitStiffnessMatrix() ;
-%             F = obj.createFext() ;
-%             solver = Solver.chooseMode(obj.solverType);
-%             uL = solver.system((F.Fext_L-K.KLR*prescribedDispl),K.KLL) ;
-%         end
-
         function computeSolverPreparation(obj)
             s.vL = obj.vL ;
             s.vR = obj.vR ;
