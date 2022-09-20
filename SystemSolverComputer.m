@@ -73,6 +73,7 @@ classdef SystemSolverComputer < handle
             s.uR = obj.prescribedDispl ;
             s.KG = obj.stiffnessMatrix ;
             s.Fext = obj.externalForce ;
+            s.solverType = obj.solverType ;
 
             c = ReactionsComputer(s) ;
             R = c.compute() ;

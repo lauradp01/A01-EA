@@ -49,6 +49,10 @@ classdef tests < matlab.unittest.TestCase
         function reactions(testCase)
             expectedSolution = load("Reactions.mat").R ;
             actualSolution = evalin('base','R') ;
+            error = testCase.computeRealitveError(actualSolution,expectedSolution);
+            if error < testCase.TOL
+                actualSolution = expectedSolution ;
+            end
             testCase.verifyEqual(actualSolution,expectedSolution);
         end
 
