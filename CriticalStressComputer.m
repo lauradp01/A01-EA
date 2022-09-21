@@ -54,9 +54,7 @@ classdef CriticalStressComputer < handle
         function sig_cr = computeBuckling(obj)
             s.n_el = obj.dimensions.n_el ;
             s.Td = obj.connecDofs ;
-            s.x = obj.preprocessData.coord ;
-            s.Tn = obj.preprocessData.connec ;
-            s.mat = obj.preprocessData.material ;
+            s.preprocessData = obj.preprocessData ;
             c = BucklingComputer(s) ;
             sig_cr = c.compute() ;
             obj.sigma_cr = sig_cr ;

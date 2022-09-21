@@ -2,9 +2,7 @@ classdef BucklingComputer < handle
     properties (Access = private)
         n_el
         Td
-        x
-        Tn
-        mat
+        preprocessData
     end
 
     methods (Access = public)
@@ -21,15 +19,13 @@ classdef BucklingComputer < handle
         function init(obj,cParams)
             obj.n_el = cParams.n_el ;
             obj.Td = cParams.Td ;
-            obj.x = cParams.x ;
-            obj.Tn = cParams.Tn ;
-            obj.mat = cParams.mat ;
+            obj.preprocessData = cParams.preprocessData ;
         end
 
         function co = createCoordinates(obj) 
             nElem = obj.n_el ;
-            connec = obj.Tn ;
-            coord = obj.x ;
+            connec = obj.preprocessData.connec ;
+            coord = obj.preprocessData.coord ;
             for i = 1:nElem 
                 co.x1(i) = coord(connec(i,1),1) ;
                 co.y1(i) = coord(connec(i,1),2) ;
@@ -47,7 +43,7 @@ classdef BucklingComputer < handle
         end
 
         function sig_cr = computeSig_cr(obj)
-            material = obj.mat ;
+            material = obj.preprocessData.material ;
             nElem = obj.n_el ;
             l = obj.calcLength() ;
             sig_cr = zeros(nElem,1) ;
