@@ -11,6 +11,8 @@ classdef StrainStressComputer < handle
     properties (Access = private)
         coordinates
         length
+
+        precalculateStrainStress
     end
 
     methods (Access = public)
@@ -34,38 +36,49 @@ classdef StrainStressComputer < handle
             obj.preprocessData = cParams.preprocessData ;
         end
 
-        function co = computeCoordinates(obj)
-            nElem = obj.n_el ;
-            coord = obj.preprocessData.coord ;
-            connec = obj.preprocessData.connec ;
-
-             for i = 1:nElem
-                co.x1(i) = coord(connec(i,1),1) ;
-                co.y1(i) = coord(connec(i,1),2) ;
-                co.x2(i) = coord(connec(i,2),1) ;
-                co.y2(i) = coord(connec(i,2),2) ;
-             end
-             obj.coordinates = co;
+        function computePrecalculation(obj)
+            s.deltaT = obj.deltaT ;
+            s.n_el = obj.n_el ;
+            s.u = obj.u ;
+            s.Td = obj.Td ;
+            s.preprocessData = obj.preprocessData ;
+            c = PrecalculateStrainStressComputer(s) ;
+            obj.precalculateStrainStress = c.compute() ;
         end
 
-        function computeLength(obj) 
-            nElem = obj.n_el ;
-            co = obj.coordinates;
-            l = zeros(nElem,1) ;
-            for i = 1:nElem
-                l(i) = ((co.x2(i)-co.x1(i))^2+(co.y2(i)-co.y1(i))^2)^0.5 ;
-            end
-            obj.length = l;
-        end
-
+%         function co = computeCoordinates(obj)
+%             nElem = obj.n_el ;
+%             coord = obj.preprocessData.coord ;
+%             connec = obj.preprocessData.connec ;
+% 
+%              for i = 1:nElem
+%                 co.x1(i) = coord(connec(i,1),1) ;
+%                 co.y1(i) = coord(connec(i,1),2) ;
+%                 co.x2(i) = coord(connec(i,2),1) ;
+%                 co.y2(i) = coord(connec(i,2),2) ;
+%              end
+%              obj.coordinates = co;
+%         end
+% 
+%         function computeLength(obj) 
+%             nElem = obj.n_el ;
+%             co = obj.coordinates;
+%             l = zeros(nElem,1) ;
+%             for i = 1:nElem
+%                 l(i) = ((co.x2(i)-co.x1(i))^2+(co.y2(i)-co.y1(i))^2)^0.5 ;
+%             end
+%             obj.length = l;
+%         end
+% 
         function R = computeRotationMatrix(obj,iElem)
-            obj.computeCoordinates() ;
-            obj.computeLength() ;
-            x1 = obj.coordinates.x1(iElem);
-            x2 = obj.coordinates.x2(iElem);
-            y1 = obj.coordinates.y1(iElem);
-            y2 = obj.coordinates.y2(iElem);
-            l  = obj.length(iElem);
+            obj.computePrecalculation() ;
+%             obj.computeCoordinates() ;
+%             obj.computeLength() ;
+            x1 = obj.precalculateStrainStress.coordinates.x1(iElem);
+            x2 = obj.precalculateStrainStress.coordinates.x2(iElem);
+            y1 = obj.precalculateStrainStress.coordinates.y1(iElem);
+            y2 = obj.precalculateStrainStress.coordinates.y2(iElem);
+            l  = obj.precalculateStrainStress.length(iElem);
             s = (y2-y1)/l;
             c = (x2-x1)/l;
             R = [c s 0 0 ;
@@ -73,15 +86,15 @@ classdef StrainStressComputer < handle
                 0 0 c s ;
                 0 0 -s c] ;
         end
-
-        function iMat = computeMaterial(obj)
-            connecMaterial = obj.preprocessData.connecMaterial ;
-            nElem = obj.n_el ;
-            for i = 1:nElem
-                iMat = connecMaterial(i) ; 
-            end
-        end
-
+% 
+%         function iMat = computeMaterial(obj)
+%             connecMaterial = obj.preprocessData.connecMaterial ;
+%             nElem = obj.n_el ;
+%             for i = 1:nElem
+%                 iMat = connecMaterial(i) ; 
+%             end
+%         end
+% 
         function u_e = computeGlobalDisp(obj,iElem,j)
             displacements = obj.u ;
             connecDOFs = obj.Td ;
@@ -105,22 +118,24 @@ classdef StrainStressComputer < handle
         end
 
         function eps = computeEps(obj)
+            obj.computePrecalculation() ;
             nElem = obj.n_el ;
             incrementT = obj.deltaT ;
             material = obj.preprocessData.material ;
-            iMat = obj.computeMaterial() ;
+            iMat = obj.precalculateStrainStress.iMat ;
             u_e_l = obj.computeLocalDisp() ;
             eps = zeros(nElem,1) ;
             for iElem = 1:nElem
-                l = obj.length ;
+                l = obj.precalculateStrainStress.length ;
                 eps(iElem) = [-1 0 1 0] * u_e_l(:,iElem) / l(iElem) + incrementT*material(iMat,3);
             end
         end
 
         function sig = computeSig(obj)
+            obj.computePrecalculation() ;
             nElem = obj.n_el ;
             material = obj.preprocessData.material ;
-            iMat = obj.computeMaterial() ;
+            iMat = obj.precalculateStrainStress.iMat ; 
             eps = obj.computeEps() ;
             sig = zeros(nElem,1) ;
             for iElem = 1:nElem
