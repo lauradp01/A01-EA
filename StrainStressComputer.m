@@ -43,50 +43,13 @@ classdef StrainStressComputer < handle
             obj.precalculateStrainStress = c.compute() ;
         end
 
-        function R = computeRotationMatrix(obj,iElem)
-            obj.computePrecalculation() ;
-            x1 = obj.precalculateStrainStress.coordinates.x1(iElem);
-            x2 = obj.precalculateStrainStress.coordinates.x2(iElem);
-            y1 = obj.precalculateStrainStress.coordinates.y1(iElem);
-            y2 = obj.precalculateStrainStress.coordinates.y2(iElem);
-            l  = obj.precalculateStrainStress.length(iElem);
-            s = (y2-y1)/l;
-            c = (x2-x1)/l;
-            R = [c s 0 0 ;
-                -s c 0 0 ;
-                0 0 c s ;
-                0 0 -s c] ;
-        end
-
-        function u_e = computeGlobalDisp(obj,iElem,j)
-            displacements = obj.u ;
-            connecDOFs = obj.Td ;
-            I = connecDOFs(iElem,j) ;
-            u_e = displacements(I) ;
-        end
-
-        function u_e_l = computeLocalDisp(obj)
-            nElem = obj.n_el ;
-            connecDOFs = obj.Td ;
-            n_el_dof = size(connecDOFs,2) ;
-            u_e_l = zeros(n_el_dof,nElem) ;
-            u_e = zeros(n_el_dof,1) ;
-            for iElem = 1:nElem
-                R = obj.computeRotationMatrix(iElem) ;
-                for j = 1:n_el_dof
-                    u_e(j,1) = obj.computeGlobalDisp(iElem,j) ;
-                end
-                u_e_l(:,iElem) = R*u_e ;
-            end            
-        end
-
         function eps = computeEps(obj)
             obj.computePrecalculation() ;
             nElem = obj.n_el ;
             incrementT = obj.deltaT ;
             material = obj.preprocessData.material ;
             iMat = obj.precalculateStrainStress.iMat ;
-            u_e_l = obj.computeLocalDisp() ;
+            u_e_l = obj.precalculateStrainStress.localDisp ;
             eps = zeros(nElem,1) ;
             for iElem = 1:nElem
                 l = obj.precalculateStrainStress.length ;
