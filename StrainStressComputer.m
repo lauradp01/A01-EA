@@ -6,10 +6,6 @@ classdef StrainStressComputer < handle
         u
         Td
         preprocessData
-%         x
-%         Tn
-%         mat
-%         Tmat
     end
 
     properties (Access = private)
