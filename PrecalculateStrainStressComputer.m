@@ -64,8 +64,5 @@ classdef PrecalculateStrainStressComputer < handle
             end
             obj.precalculateStrainStress.iMat = iMaterial ;
         end
-
-        
-        
     end
 end

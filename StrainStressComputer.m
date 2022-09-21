@@ -1,6 +1,5 @@
 classdef StrainStressComputer < handle
-   
-    properties (Access = private)
+   properties (Access = private)
         deltaT
         n_el
         u
@@ -11,7 +10,6 @@ classdef StrainStressComputer < handle
     properties (Access = private)
         coordinates
         length
-
         precalculateStrainStress
     end
 
@@ -24,7 +22,6 @@ classdef StrainStressComputer < handle
             eps = obj.computeEps() ;
             sig = obj.computeSig() ;
         end
-
     end
 
     methods (Access = private)
@@ -46,34 +43,8 @@ classdef StrainStressComputer < handle
             obj.precalculateStrainStress = c.compute() ;
         end
 
-%         function co = computeCoordinates(obj)
-%             nElem = obj.n_el ;
-%             coord = obj.preprocessData.coord ;
-%             connec = obj.preprocessData.connec ;
-% 
-%              for i = 1:nElem
-%                 co.x1(i) = coord(connec(i,1),1) ;
-%                 co.y1(i) = coord(connec(i,1),2) ;
-%                 co.x2(i) = coord(connec(i,2),1) ;
-%                 co.y2(i) = coord(connec(i,2),2) ;
-%              end
-%              obj.coordinates = co;
-%         end
-% 
-%         function computeLength(obj) 
-%             nElem = obj.n_el ;
-%             co = obj.coordinates;
-%             l = zeros(nElem,1) ;
-%             for i = 1:nElem
-%                 l(i) = ((co.x2(i)-co.x1(i))^2+(co.y2(i)-co.y1(i))^2)^0.5 ;
-%             end
-%             obj.length = l;
-%         end
-% 
         function R = computeRotationMatrix(obj,iElem)
             obj.computePrecalculation() ;
-%             obj.computeCoordinates() ;
-%             obj.computeLength() ;
             x1 = obj.precalculateStrainStress.coordinates.x1(iElem);
             x2 = obj.precalculateStrainStress.coordinates.x2(iElem);
             y1 = obj.precalculateStrainStress.coordinates.y1(iElem);
@@ -86,15 +57,7 @@ classdef StrainStressComputer < handle
                 0 0 c s ;
                 0 0 -s c] ;
         end
-% 
-%         function iMat = computeMaterial(obj)
-%             connecMaterial = obj.preprocessData.connecMaterial ;
-%             nElem = obj.n_el ;
-%             for i = 1:nElem
-%                 iMat = connecMaterial(i) ; 
-%             end
-%         end
-% 
+
         function u_e = computeGlobalDisp(obj,iElem,j)
             displacements = obj.u ;
             connecDOFs = obj.Td ;
