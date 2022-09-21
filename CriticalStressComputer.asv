@@ -6,6 +6,10 @@ classdef CriticalStressComputer < handle
         dimensions
         connecDofs
         preprocessData
+%         coord
+%         connec
+%         material
+%         connecMaterial
     end
 
     properties (Access = private)
@@ -36,10 +40,10 @@ classdef CriticalStressComputer < handle
             obj.incrementT = cParams.incrementT ;
             obj.dimensions = cParams.dimensions ;
             obj.connecDofs = cParams.connecDofs ;
-            obj.preprocessData.coord = cParams.preprocessData.coord ;
-            obj.preprocessData.connec = cParams.preprocessData.connec ;
-            obj.preprocessData.material = cParams.preprocessData.material ;
-            obj.preprocessData.connecMaterial = cParams.preprocessData.connecMaterial ;
+            obj.preprocessData.coord = cParams.coord ;
+            obj.preprocessData.connec = cParams.connec ;
+            obj.preprocessData.material = cParams.material ;
+            obj.preprocessData.connecMaterial = cParams.connecMaterial ;
         end
 
         function [eps,sig] = computeStrainStress(obj)
