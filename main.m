@@ -1,5 +1,4 @@
-
-+s.solverType = 'Iterative';
+s.solverType = 'Iterative';
 str = StructuralComputer(s);
 [u,R,KG,Fext,eps,sig,sig_cr] = str.compute();
 
