@@ -146,7 +146,6 @@ classdef StructuralComputer < handle
             s.preprocessData = obj.preprocessData ;
             c = CriticalStressComputer(s) ;
             [eps,sig,sig_cr] = c.compute() ;
-
             obj.epsilon = eps ;
             obj.sigma = sig ;
             obj.sigma_cr = sig_cr ;

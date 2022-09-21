@@ -36,23 +36,15 @@ classdef CriticalStressComputer < handle
             obj.incrementT = cParams.incrementT ;
             obj.dimensions = cParams.dimensions ;
             obj.connecDofs = cParams.connecDofs ;
-            obj.preprocessData.coord = cParams.preprocessData.coord ;
-            obj.preprocessData.connec = cParams.preprocessData.connec ;
-            obj.preprocessData.material = cParams.preprocessData.material ;
-            obj.preprocessData.connecMaterial = cParams.preprocessData.connecMaterial ;
+            obj.preprocessData = cParams.preprocessData ;
         end
 
         function [eps,sig] = computeStrainStress(obj)
-            % Compute strain and stresses
             s.deltaT = obj.incrementT ;
             s.n_el = obj.dimensions.n_el ;
             s.u = obj.displacements ;
             s.Td = obj.connecDofs ;
-            s.x = obj.preprocessData.coord ;
-            s.Tn = obj.preprocessData.connec ;
-            s.mat = obj.preprocessData.material ;
-            s.Tmat = obj.preprocessData.connecMaterial ;
-
+            s.preprocessData = obj.preprocessData ;
             c = StrainStressComputer(s) ;
             [eps,sig] = c.compute() ;
             obj.epsilon = eps ;
@@ -60,7 +52,6 @@ classdef CriticalStressComputer < handle
         end
 
         function sig_cr = computeBuckling(obj)
-            % Buckling
             s.n_el = obj.dimensions.n_el ;
             s.Td = obj.connecDofs ;
             s.x = obj.preprocessData.coord ;

@@ -35,16 +35,16 @@ classdef StrainStressComputer < handle
             obj.n_el = cParams.n_el ;
             obj.u = cParams.u ;
             obj.Td = cParams.Td ;
-            obj.preprocessData.coord = cParams.preprocessData.coord ;
-            obj.preprocessData.connec = cParams.preprocessData.connec ;
-            obj.preprocessData.material = cParams.preprocessData.material ;
-            obj.preprocessData.connecMaterial = cParams.preprocessData.connecMaterial ;
+            obj.x = cParams.x ;
+            obj.Tn = cParams.Tn ;
+            obj.mat = cParams.mat ;
+            obj.Tmat = cParams.Tmat ;
         end
 
         function co = computeCoordinates(obj)
             nElem = obj.n_el ;
-            coord = obj.preprocessData.coord ;
-            connec = obj.preprocessData.connec ;
+            coord = obj.x ;
+            connec = obj.Tn ;
 
              for i = 1:nElem
                 co.x1(i) = coord(connec(i,1),1) ;
@@ -83,7 +83,7 @@ classdef StrainStressComputer < handle
 
 
         function iMat = computeMaterial(obj)
-            connecMaterial = obj.preprocessData.connecMaterial ;
+            connecMaterial = obj.Tmat ;
             nElem = obj.n_el ;
             for i = 1:nElem
                 iMat = connecMaterial(i) ; 
@@ -119,7 +119,7 @@ classdef StrainStressComputer < handle
         function eps = computeEps(obj)
             nElem = obj.n_el ;
             incrementT = obj.deltaT ;
-            material = obj.preprocessData.material ;
+            material = obj.mat ;
             
 
             iMat = obj.computeMaterial() ;
@@ -134,7 +134,7 @@ classdef StrainStressComputer < handle
 
         function sig = computeSig(obj)
             nElem = obj.n_el ;
-            material = obj.preprocessData.material ;
+            material = obj.mat ;
             iMat = obj.computeMaterial() ;
             eps = obj.computeEps() ;
             sig = zeros(nElem,1) ;
