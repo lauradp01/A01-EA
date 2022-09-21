@@ -126,13 +126,11 @@ classdef StructuralComputer < handle
         function computeDisplacementsAndReactions(obj)
             obj.computeStiffnessMatrix() ;
             obj.computeForceVectorAssembly() ;
-
             s.dimensions = obj.dimensions ;
             s.fixNodes = obj.preprocessData.fixNodes ;
             s.stiffnessMatrix = obj.stiffnessMatrix ;
             s.externalForce = obj.externalForce ;
             s.solverType = obj.solverType ;
-
             c = SystemSolverComputer(s) ;
             [u,R] = c.compute() ;
             obj.displacements = u ;
@@ -145,11 +143,7 @@ classdef StructuralComputer < handle
             s.incrementT = obj.barProperties.deltaT;
             s.dimensions = obj.dimensions ;
             s.connecDofs = obj.connecDofs ;
-            s.coord = obj.preprocessData.coord ;
-            s.connec = obj.preprocessData.connec ;
-            s.material = obj.preprocessData.material ;
-            s.connecMaterial = obj.preprocessData.connecMaterial ;
-
+            s.preprocessData = obj.preprocessData ;
             c = CriticalStressComputer(s) ;
             [eps,sig,sig_cr] = c.compute() ;
 
