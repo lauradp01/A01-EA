@@ -52,7 +52,7 @@ classdef CriticalStressComputer < handle
         end
 
         function [eps,sig] = computeStrainStress(obj)
-            obj.computePrecalculation() ; 
+            
             s.deltaT = obj.incrementT ;
             s.n_el = obj.dimensions.n_el ;
             s.u = obj.displacements ;

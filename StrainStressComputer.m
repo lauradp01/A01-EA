@@ -5,12 +5,12 @@ classdef StrainStressComputer < handle
         u
         Td
         preprocessData
+        precalculateStrainStress
     end
 
     properties (Access = private)
         coordinates
         length
-        precalculateStrainStress
     end
 
     methods (Access = public)
@@ -31,20 +31,21 @@ classdef StrainStressComputer < handle
             obj.u = cParams.u ;
             obj.Td = cParams.Td ;
             obj.preprocessData = cParams.preprocessData ;
+            obj.precalculateStrainStress = cParams.precalculateStrainStress ;
         end
 
-        function computePrecalculation(obj)
-            s.deltaT = obj.deltaT ;
-            s.n_el = obj.n_el ;
-            s.u = obj.u ;
-            s.Td = obj.Td ;
-            s.preprocessData = obj.preprocessData ;
-            c = PrecalculateStrainStressComputer(s) ;
-            obj.precalculateStrainStress = c.compute() ;
-        end
+%         function computePrecalculation(obj)
+%             s.deltaT = obj.deltaT ;
+%             s.n_el = obj.n_el ;
+%             s.u = obj.u ;
+%             s.Td = obj.Td ;
+%             s.preprocessData = obj.preprocessData ;
+%             c = PrecalculateStrainStressComputer(s) ;
+%             obj.precalculateStrainStress = c.compute() ;
+%         end
 
         function eps = computeEps(obj)
-            obj.computePrecalculation() ;
+%             obj.computePrecalculation() ;
             nElem = obj.n_el ;
             incrementT = obj.deltaT ;
             material = obj.preprocessData.material ;
@@ -58,7 +59,7 @@ classdef StrainStressComputer < handle
         end
 
         function sig = computeSig(obj)
-            obj.computePrecalculation() ;
+%             obj.computePrecalculation() ;
             nElem = obj.n_el ;
             material = obj.preprocessData.material ;
             iMat = obj.precalculateStrainStress.iMat ; 
