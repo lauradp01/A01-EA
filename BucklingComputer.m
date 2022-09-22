@@ -3,6 +3,7 @@ classdef BucklingComputer < handle
         n_el
         Td
         preprocessData
+        precalculateStrainStress
     end
 
     methods (Access = public)
@@ -20,32 +21,13 @@ classdef BucklingComputer < handle
             obj.n_el = cParams.n_el ;
             obj.Td = cParams.Td ;
             obj.preprocessData = cParams.preprocessData ;
-        end
-
-        function co = createCoordinates(obj) 
-            nElem = obj.n_el ;
-            connec = obj.preprocessData.connec ;
-            coord = obj.preprocessData.coord ;
-            for i = 1:nElem 
-                co.x1(i) = coord(connec(i,1),1) ;
-                co.y1(i) = coord(connec(i,1),2) ;
-                co.x2(i) = coord(connec(i,2),1) ;
-                co.y2(i) = coord(connec(i,2),2) ;
-            end
-        end
-
-        function l = calcLength(obj)
-            nElem = obj.n_el ;
-            co = obj.createCoordinates() ;
-            for i = 1:nElem
-                l(i) = ((co.x2(i)-co.x1(i))^2+(co.y2(i)-co.y1(i))^2)^0.5 ;
-            end
+            obj.precalculateStrainStress = cParams.precalculateStrainStress ;
         end
 
         function sig_cr = computeSig_cr(obj)
             material = obj.preprocessData.material ;
             nElem = obj.n_el ;
-            l = obj.calcLength() ;
+            l = obj.precalculateStrainStress.length ;
             sig_cr = zeros(nElem,1) ;
 
             for i = 1:nElem
