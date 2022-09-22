@@ -35,5 +35,4 @@ classdef BucklingComputer < handle
             end
         end
     end
-
 end

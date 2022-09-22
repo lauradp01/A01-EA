@@ -9,8 +9,7 @@ classdef StrainStressComputer < handle
     end
 
     properties (Access = private)
-        coordinates
-        length
+        epsilon
     end
 
     methods (Access = public)
@@ -19,7 +18,8 @@ classdef StrainStressComputer < handle
         end
 
         function [eps,sig] = compute(obj)
-            eps = obj.computeEps() ;
+            obj.computeEps() ;
+            eps = obj.epsilon ;
             sig = obj.computeSig() ;
         end
     end
@@ -34,36 +34,31 @@ classdef StrainStressComputer < handle
             obj.precalculateStrainStress = cParams.precalculateStrainStress ;
         end
 
-%         function computePrecalculation(obj)
-%             s.deltaT = obj.deltaT ;
-%             s.n_el = obj.n_el ;
-%             s.u = obj.u ;
-%             s.Td = obj.Td ;
-%             s.preprocessData = obj.preprocessData ;
-%             c = PrecalculateStrainStressComputer(s) ;
-%             obj.precalculateStrainStress = c.compute() ;
-%         end
-
-        function eps = computeEps(obj)
-%             obj.computePrecalculation() ;
-            nElem = obj.n_el ;
-            incrementT = obj.deltaT ;
-            material = obj.preprocessData.material ;
-            iMat = obj.precalculateStrainStress.iMat ;
-            u_e_l = obj.precalculateStrainStress.localDisp ;
-            eps = zeros(nElem,1) ;
-            for iElem = 1:nElem
-                l = obj.precalculateStrainStress.length ;
-                eps(iElem) = [-1 0 1 0] * u_e_l(:,iElem) / l(iElem) + incrementT*material(iMat,3);
-            end
+        function computeEps(obj)
+%             nElem = obj.n_el ;
+%             incrementT = obj.deltaT ;
+%             material = obj.preprocessData.material ;
+%             iMat = obj.precalculateStrainStress.iMat ;
+%             u_e_l = obj.precalculateStrainStress.localDisp ;
+%             eps = zeros(nElem,1) ;
+%             for iElem = 1:nElem
+%                 l = obj.precalculateStrainStress.length ;
+%                 eps(iElem) = [-1 0 1 0] * u_e_l(:,iElem) / l(iElem) + incrementT*material(iMat,3);
+%             end
+            s.n_el = obj.n_el ;
+            s.deltaT = obj.deltaT ;
+            s.material = obj.preprocessData.material ;
+            s.precalculateStrainStress = obj.precalculateStrainStress ;
+            c = StrainComputer(s) ;
+            obj.epsilon = c.compute() ;
         end
 
         function sig = computeSig(obj)
-%             obj.computePrecalculation() ;
+            obj.computeEps() ;
             nElem = obj.n_el ;
             material = obj.preprocessData.material ;
             iMat = obj.precalculateStrainStress.iMat ; 
-            eps = obj.computeEps() ;
+            eps = obj.epsilon ;
             sig = zeros(nElem,1) ;
             for iElem = 1:nElem
                     sig(iElem) = material(iMat,1) * eps(iElem) ;
