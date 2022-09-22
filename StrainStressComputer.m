@@ -35,16 +35,6 @@ classdef StrainStressComputer < handle
         end
 
         function computeEps(obj)
-%             nElem = obj.n_el ;
-%             incrementT = obj.deltaT ;
-%             material = obj.preprocessData.material ;
-%             iMat = obj.precalculateStrainStress.iMat ;
-%             u_e_l = obj.precalculateStrainStress.localDisp ;
-%             eps = zeros(nElem,1) ;
-%             for iElem = 1:nElem
-%                 l = obj.precalculateStrainStress.length ;
-%                 eps(iElem) = [-1 0 1 0] * u_e_l(:,iElem) / l(iElem) + incrementT*material(iMat,3);
-%             end
             s.n_el = obj.n_el ;
             s.deltaT = obj.deltaT ;
             s.material = obj.preprocessData.material ;
