@@ -17,6 +17,9 @@ classdef StrainComputer < handle
         function eps = compute(obj)
             obj.computeStrain() ;
             eps = obj.epsilon ;
+        end
+
+        function plotEpsilon(obj)
             obj.plotStrain() ;
         end
     end

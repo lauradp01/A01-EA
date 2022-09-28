@@ -41,10 +41,11 @@ classdef StrainStressComputer < handle
             s.precalculateStrainStress = obj.precalculateStrainStress ;
             c = StrainComputer(s) ;
             obj.epsilon = c.compute() ;
+            c.plotEpsilon() ;
         end
 
         function sig = computeSig(obj)
-            obj.computeEps() ;
+            obj.epsilon ;
             nElem = obj.dimensions.n_el ;
             material = obj.preprocessData.material ;
             iMat = obj.precalculateStrainStress.iMat ; 
