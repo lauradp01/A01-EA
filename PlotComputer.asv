@@ -43,16 +43,16 @@ classdef PlotComputer < handle
             c.plot() ;
         end
 
-%         function plotStrain(obj)
-%             % Plot strain
-%             s.n_d = obj.dimensions.n_d ;
-%             s.a = obj.epsilon ;
-%             s.x = obj.coord ;
-%             s.Tn = obj.connec ;
-%             s.title_name = 'Strain' ;
-%             c = StrainStressGraph(s) ;
-%             c.plot() ;
-%         end
+        function plotStrain(obj)
+            % Plot strain
+            s.n_d = obj.dimensions.n_d ;
+            s.a = obj.epsilon ;
+            s.x = obj.coord ;
+            s.Tn = obj.connec ;
+            s.title_name = 'Strain' ;
+            c = StrainStressGraph(s) ;
+            c.plot() ;
+        end
 
         function plotStress(obj)            
             % Plot stress

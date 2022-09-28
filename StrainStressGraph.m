@@ -24,7 +24,6 @@ classdef StrainStressGraph < handle
             obj.addAxes() ;
             obj.plotUndeformedStructure() ;
             obj.setColorBar() ;
-
         end
     end
 
@@ -47,7 +46,6 @@ classdef StrainStressGraph < handle
                 X0{i} = reshape(coord(connec,i),size(connec))' ;
             end
             S = repmat(vectRepresented',size(connec,2),1);
-
             obj.undefStruc = X0 ;
             obj.reshapedS = S ;
         end
@@ -87,9 +85,5 @@ classdef StrainStressGraph < handle
             axis equal;    % Keep aspect ratio to 1
             colormap jet;  % Set colormap colors
         end
-
-        
-
     end
-
 end

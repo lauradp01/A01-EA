@@ -17,7 +17,6 @@ classdef StrainComputer < handle
         function eps = compute(obj)
             obj.computeStrain() ;
             eps = obj.epsilon ;
-            obj.plotStrain() ;
         end
     end
 
@@ -43,7 +42,8 @@ classdef StrainComputer < handle
             obj.epsilon = eps ;
         end
 
-        function plotStrain(obj)       
+        function plotStress(obj)            
+            % Plot stress
             s.n_d = obj.dimensions.n_d ;
             s.a = obj.epsilon ;
             s.x = obj.preprocessData.coord ;

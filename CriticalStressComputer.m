@@ -43,7 +43,7 @@ classdef CriticalStressComputer < handle
 
         function computePrecalculation(obj)
             s.deltaT = obj.incrementT ;
-            s.n_el = obj.dimensions.n_el ;
+            s.dimensions = obj.dimensions ;
             s.u = obj.displacements ;
             s.Td = obj.connecDofs ;
             s.preprocessData = obj.preprocessData ;
@@ -54,7 +54,7 @@ classdef CriticalStressComputer < handle
         function [eps,sig] = computeStrainStress(obj)
             obj.computePrecalculation() ; 
             s.deltaT = obj.incrementT ;
-            s.n_el = obj.dimensions.n_el ;
+            s.dimensions = obj.dimensions ;
             s.u = obj.displacements ;
             s.Td = obj.connecDofs ;
             s.preprocessData = obj.preprocessData ;

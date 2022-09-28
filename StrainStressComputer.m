@@ -1,7 +1,7 @@
 classdef StrainStressComputer < handle
    properties (Access = private)
         deltaT
-        n_el
+        dimensions
         u
         Td
         preprocessData
@@ -27,7 +27,7 @@ classdef StrainStressComputer < handle
     methods (Access = private)
         function init(obj,cParams)
             obj.deltaT = cParams.deltaT ;
-            obj.n_el = cParams.n_el ;
+            obj.dimensions = cParams.dimensions ;
             obj.u = cParams.u ;
             obj.Td = cParams.Td ;
             obj.preprocessData = cParams.preprocessData ;
@@ -35,9 +35,9 @@ classdef StrainStressComputer < handle
         end
 
         function computeEps(obj)
-            s.n_el = obj.n_el ;
+            s.dimensions = obj.dimensions ;
             s.deltaT = obj.deltaT ;
-            s.material = obj.preprocessData.material ;
+            s.preprocessData = obj.preprocessData ;
             s.precalculateStrainStress = obj.precalculateStrainStress ;
             c = StrainComputer(s) ;
             obj.epsilon = c.compute() ;
@@ -45,7 +45,7 @@ classdef StrainStressComputer < handle
 
         function sig = computeSig(obj)
             obj.computeEps() ;
-            nElem = obj.n_el ;
+            nElem = obj.dimensions.n_el ;
             material = obj.preprocessData.material ;
             iMat = obj.precalculateStrainStress.iMat ; 
             eps = obj.epsilon ;
