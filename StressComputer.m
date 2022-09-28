@@ -23,7 +23,7 @@ classdef StressComputer < handle
 
         function plotSigma(obj)
             obj.plotStress() ;
-%             obj.plotDeformedStress() ;
+            obj.plotDeformedStress() ;
         end
     end
 
@@ -33,6 +33,7 @@ classdef StressComputer < handle
             obj.preprocessData = cParams.preprocessData ;
             obj.iMat = cParams.iMat ;
             obj.eps = cParams.eps ;
+            obj.displacements = cParams.displacements ;
         end
 
         function sig = computeStress(obj)
@@ -57,14 +58,14 @@ classdef StressComputer < handle
             c.plot() ;
         end
 
-%         function plotDeformedStress(obj)    
-%             s.x = obj.preprocessData.coord ;
-%             s.Tn = obj.preprocessData.connec ;
-%             s.u = obj.displacements ;
-%             s.sig = obj.sigma ;
-%             s.scale = 10 ;
-%             c = StressDefGraph(s) ;
-%             c.plot() ;
-%         end
+        function plotDeformedStress(obj)            
+            s.x = obj.preprocessData.coord ;
+            s.Tn = obj.preprocessData.connec ;
+            s.u = obj.displacements ;
+            s.sig = obj.sigma ;
+            s.scale = 10 ;
+            c = StressDefGraph(s) ;
+            c.plot() ;
+        end         
     end
 end

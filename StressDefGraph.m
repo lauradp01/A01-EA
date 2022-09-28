@@ -6,6 +6,7 @@ classdef StressDefGraph < handle
         u
         sig
         scale
+
     end
 
     properties (Access = private)
@@ -65,6 +66,7 @@ classdef StressDefGraph < handle
         end
 
         function plotDefStructure(obj)
+            obj.precompute() ;
             connec = obj.Tn ;
             X = obj.horizCoord ;
             Y = obj.verticCoord ;
@@ -108,5 +110,4 @@ classdef StressDefGraph < handle
             ylabel('y (m)')
         end
     end
-
 end

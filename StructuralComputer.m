@@ -113,7 +113,6 @@ classdef StructuralComputer < handle
         end
 
         function computeForceVectorAssembly(obj)
-            % Global force vector assembly
             s.nDof = obj.dimensions.n_dof ;
             s.dataForce = obj.preprocessData.dataForce ;
             c = ForceComputer(s) ;
@@ -138,6 +137,7 @@ classdef StructuralComputer < handle
 
         function computeCriticalStress(obj)
             obj.computeDofConnectivities ;
+            obj.computeDisplacementsAndReactions() ;
             s.displacements = obj.displacements ;
             s.incrementT = obj.barProperties.deltaT;
             s.dimensions = obj.dimensions ;
@@ -150,17 +150,17 @@ classdef StructuralComputer < handle
             obj.sigma_cr = sig_cr ;
         end
 
-%         function computePlots(obj)
-%             s.dimensions = obj.dimensions ;
-%             s.displacements = obj.displacements ;
-%             s.coord = obj.preprocessData.coord ;
-%             s.connec = obj.preprocessData.connec ;
-%             s.epsilon = obj.epsilon ;
-%             s.sigma = obj.sigma ;
-% 
-%             c = PlotComputer(s) ;
-%             c.plot() ;
-%         end
+        function computePlots(obj)
+            s.dimensions = obj.dimensions ;
+            s.displacements = obj.displacements ;
+            s.coord = obj.preprocessData.coord ;
+            s.connec = obj.preprocessData.connec ;
+            s.epsilon = obj.epsilon ;
+            s.sigma = obj.sigma ;
+
+            c = PlotComputer(s) ;
+            c.plot() ;
+        end
 
     end
 end

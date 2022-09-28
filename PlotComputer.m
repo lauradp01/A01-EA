@@ -15,9 +15,9 @@ classdef PlotComputer < handle
         end
 
         function plot(obj)
-            obj.plotDisplacements() ;
-            obj.plotStrain() ;
-            obj.plotStress() ;
+%             obj.plotDisplacements() ;
+%             obj.plotStrain() ;
+%             obj.plotStress() ;
             obj.plotDeformedStress ;
         end
     end
@@ -43,38 +43,38 @@ classdef PlotComputer < handle
 %             c.plot() ;
 %         end
 
-        function plotStrain(obj)
-            % Plot strain
-            s.n_d = obj.dimensions.n_d ;
-            s.a = obj.epsilon ;
-            s.x = obj.coord ;
-            s.Tn = obj.connec ;
-            s.title_name = 'Strain' ;
-            c = StrainStressGraph(s) ;
-            c.plot() ;
-        end
+%         function plotStrain(obj)
+%             % Plot strain
+%             s.n_d = obj.dimensions.n_d ;
+%             s.a = obj.epsilon ;
+%             s.x = obj.coord ;
+%             s.Tn = obj.connec ;
+%             s.title_name = 'Strain' ;
+%             c = StrainStressGraph(s) ;
+%             c.plot() ;
+%         end
 
-        function plotStress(obj)            
-            % Plot stress
-            s.n_d = obj.dimensions.n_d ;
-            s.a = obj.sigma ;
-            s.x = obj.coord ;
-            s.Tn = obj.connec ;
-            s.title_name = 'Stress' ;
-            c = StrainStressGraph(s) ;
-            c.plot() ;
-        end
+%         function plotStress(obj)            
+%             % Plot stress
+%             s.n_d = obj.dimensions.n_d ;
+%             s.a = obj.sigma ;
+%             s.x = obj.coord ;
+%             s.Tn = obj.connec ;
+%             s.title_name = 'Stress' ;
+%             c = StrainStressGraph(s) ;
+%             c.plot() ;
+%         end
 
-        function plotDeformedStress(obj)            
-            % Plot stress in defomed mesh
-            s.x = obj.coord ;
-            s.Tn = obj.connec ;
-            s.u = obj.displacements ;
-            s.sig = obj.sigma ;
-            s.scale = 10 ;
-            c = StressDefGraph(s) ;
-            c.plot() ;
-        end
+%         function plotDeformedStress(obj)            
+%             % Plot stress in defomed mesh
+%             s.x = obj.coord ;
+%             s.Tn = obj.connec ;
+%             s.u = obj.displacements ;
+%             s.sig = obj.sigma ;
+%             s.scale = 10 ;
+%             c = StressDefGraph(s) ;
+%             c.plot() ;
+%         end
 
     end
 end
