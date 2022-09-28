@@ -76,8 +76,6 @@ classdef tests < matlab.unittest.TestCase
             testCase.verifyEqual(actualSolution,expectedSolution);
         end
 
-
-
         function sigmaCritica(testCase)
             expectedSolution = load("Sigma_critica.mat").sig_cr ;
             actualSolution = evalin('base','sig_cr') ;
@@ -87,17 +85,12 @@ classdef tests < matlab.unittest.TestCase
             end
             testCase.verifyEqual(actualSolution,expectedSolution);
         end
-
     end
 
     methods (Access = private)
-
         function err = computeRealitveError(testCase,a,b)
             absErr = abs((a-b)/b) ;
             err = norm(absErr)/norm(a(:));
         end        
-
     end
-
-
 end
