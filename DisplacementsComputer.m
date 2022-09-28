@@ -24,6 +24,10 @@ classdef DisplacementsComputer < handle
             obj.computeDisp() ;
             u = obj.displacements ;
         end
+
+        function plotDisplacements(obj)
+            obj.plotDisp() ;
+        end
     end
 
     methods (Access = private)
@@ -50,14 +54,10 @@ classdef DisplacementsComputer < handle
             obj.displacements = u ;
         end
 
-        function plotDisplacements(obj)
+        function plotDisp(obj)
             s.dimensions = obj.dimensions ;
-%             s.n_d = obj.dimensions.n_d ;
-%             s.n = obj.dimensions.n ;
             s.u = obj.displacements ;
             s.preprocessData = obj.preprocessData ;
-%             s.x = obj.coord ;
-%             s.Tn = obj.connec;
             s.fact = 1 ;
             c = DisplacementGraph(s) ;
             c.plot() ;

@@ -41,8 +41,8 @@ classdef DisplacementGraph < handle
             nDim = obj.dimensions.n_d ;
             nodes = obj.dimensions.n ;
             displacements = obj.u ;
-            coord = obj.preprocessData.x ;
-            connec = obj.preprocessData.Tn ;
+            coord = obj.preprocessData.coord ;
+            connec = obj.preprocessData.connec ;
             factor = obj.fact ;
             U = reshape(displacements,nDim,nodes);
             for i = 1:nDim
@@ -87,7 +87,6 @@ classdef DisplacementGraph < handle
         end
 
         function addAxes()
-            % Add axes labels
             xlabel('x (m)')
             ylabel('y (m)')
             title('Displacement');

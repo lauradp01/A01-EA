@@ -3,7 +3,6 @@ classdef SystemSolverComputer < handle
     
     properties (Access = private)
         dimensions
-%         fixNodes
         stiffnessMatrix
         externalForce
         solverType
@@ -47,7 +46,6 @@ classdef SystemSolverComputer < handle
         function computeConditions(obj)
             s.n_dof = obj.dimensions.n_dof ;
             s.fixNod = obj.preprocessData.fixNodes ;
-%             s.fixNod = obj.fixNodes ;
             c = ConditionsComputer(s) ;
             [vL,vR,uR] = c.compute() ;
             obj.freeDof = vL ;
@@ -84,6 +82,7 @@ classdef SystemSolverComputer < handle
             s.uLdisp = obj.uLdisp ;
             c = DisplacementsComputer(s) ;
             [u] = c.compute() ;
+            c.plotDisplacements() ;
             obj.displacements = u ;
         end
 
