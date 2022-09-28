@@ -3,10 +3,11 @@ classdef SystemSolverComputer < handle
     
     properties (Access = private)
         dimensions
-        fixNodes
+%         fixNodes
         stiffnessMatrix
         externalForce
         solverType
+        preprocessData
     end
 
     properties (Access = private)
@@ -37,7 +38,7 @@ classdef SystemSolverComputer < handle
 
         function init(obj,cParams)
             obj.dimensions = cParams.dimensions ;
-            obj.fixNodes = cParams.fixNodes ;
+            obj.preprocessData = cParams.preprocessData ;
             obj.stiffnessMatrix = cParams.stiffnessMatrix ;
             obj.externalForce = cParams.externalForce ;
             obj.solverType = cParams.solverType ;
@@ -45,7 +46,8 @@ classdef SystemSolverComputer < handle
 
         function computeConditions(obj)
             s.n_dof = obj.dimensions.n_dof ;
-            s.fixNod = obj.fixNodes ;
+            s.fixNod = obj.preprocessData.fixNodes ;
+%             s.fixNod = obj.fixNodes ;
             c = ConditionsComputer(s) ;
             [vL,vR,uR] = c.compute() ;
             obj.freeDof = vL ;
@@ -59,6 +61,8 @@ classdef SystemSolverComputer < handle
             s.uR = obj.prescribedDispl ;
             s.KG = obj.stiffnessMatrix ;
             s.Fext = obj.externalForce ;
+            s.dimensions = obj.dimensions ;
+            s.preprocessData = obj.preprocessData ;
             s.solverType = obj.solverType;
             c = SolverPreparationComputer(s) ;
             [K,F,uL] = c.compute() ;
@@ -69,6 +73,8 @@ classdef SystemSolverComputer < handle
 
         function u = computeDisplacements(obj)
             obj.computeSolverPreparation() ;
+            s.dimensions = obj.dimensions ;
+            s.preprocessData = obj.preprocessData ;
             s.vL = obj.freeDof ;
             s.vR = obj.prescribedDof ;
             s.uR = obj.prescribedDispl ;

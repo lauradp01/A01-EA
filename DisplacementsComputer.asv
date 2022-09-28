@@ -51,11 +51,9 @@ classdef DisplacementsComputer < handle
         end
 
         function plotDisplacements(obj)
-            s.dimensions = obj.dimensions ;
 %             s.n_d = obj.dimensions.n_d ;
 %             s.n = obj.dimensions.n ;
             s.u = obj.displacements ;
-            s.preprocessData = obj.preprocessData ;
 %             s.x = obj.coord ;
 %             s.Tn = obj.connec;
             s.fact = 1 ;

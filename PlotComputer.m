@@ -32,16 +32,16 @@ classdef PlotComputer < handle
             obj.sigma = cParams.sigma ;
         end
         
-        function plotDisplacements(obj)
-            s.n_d = obj.dimensions.n_d ;
-            s.n = obj.dimensions.n ;
-            s.u = obj.displacements ;
-            s.x = obj.coord ;
-            s.Tn = obj.connec;
-            s.fact = 1 ;
-            c = DisplacementGraph(s) ;
-            c.plot() ;
-        end
+%         function plotDisplacements(obj)
+%             s.n_d = obj.dimensions.n_d ;
+%             s.n = obj.dimensions.n ;
+%             s.u = obj.displacements ;
+%             s.x = obj.coord ;
+%             s.Tn = obj.connec;
+%             s.fact = 1 ;
+%             c = DisplacementGraph(s) ;
+%             c.plot() ;
+%         end
 
         function plotStrain(obj)
             % Plot strain

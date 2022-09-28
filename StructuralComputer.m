@@ -126,7 +126,7 @@ classdef StructuralComputer < handle
             obj.computeStiffnessMatrix() ;
             obj.computeForceVectorAssembly() ;
             s.dimensions = obj.dimensions ;
-            s.fixNodes = obj.preprocessData.fixNodes ;
+            s.preprocessData = obj.preprocessData ;
             s.stiffnessMatrix = obj.stiffnessMatrix ;
             s.externalForce = obj.externalForce ;
             s.solverType = obj.solverType ;
