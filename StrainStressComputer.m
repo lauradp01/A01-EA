@@ -10,6 +10,7 @@ classdef StrainStressComputer < handle
 
     properties (Access = private)
         epsilon
+        sigma
     end
 
     methods (Access = public)
@@ -19,8 +20,9 @@ classdef StrainStressComputer < handle
 
         function [eps,sig] = compute(obj)
             obj.computeEps() ;
+            obj.computeSig() ;
             eps = obj.epsilon ;
-            sig = obj.computeSig() ;
+            sig = obj.sigma ;
         end
     end
 
@@ -44,15 +46,14 @@ classdef StrainStressComputer < handle
             c.plotEpsilon() ;
         end
 
-        function sig = computeSig(obj)
-            nElem = obj.dimensions.n_el ;
-            material = obj.preprocessData.material ;
-            iMat = obj.precalculateStrainStress.iMat ; 
-            eps = obj.epsilon ;
-            sig = zeros(nElem,1) ;
-            for iElem = 1:nElem
-                    sig(iElem) = material(iMat,1) * eps(iElem) ;
-            end
+        function computeSig(obj)
+            s.dimensions = obj.dimensions ;
+            s.preprocessData = obj.preprocessData ;
+            s.iMat = obj.precalculateStrainStress.iMat ; 
+            s.eps = obj.epsilon ;
+            c = StressComputer(s) ;
+            obj.sigma = c.compute() ;
+            c.plotSigma() ;
         end
     end
 end
