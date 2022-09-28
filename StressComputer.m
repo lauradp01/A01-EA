@@ -1,19 +1,21 @@
 classdef StressComputer < handle
-    properties
-        Property1
+    properties (Access = private)
+        
     end
 
-    methods
-        function obj = untitled2(inputArg1,inputArg2)
-            %UNTITLED2 Construct an instance of this class
-            %   Detailed explanation goes here
-            obj.Property1 = inputArg1 + inputArg2;
+    methods (Access = public)
+        function obj = StressComputer(cParams)
+            obj.init(cParams) ;
         end
 
-        function outputArg = method1(obj,inputArg)
-            %METHOD1 Summary of this method goes here
-            %   Detailed explanation goes here
-            outputArg = obj.Property1 + inputArg;
+        function sig = compute(obj)
+            sig = obj.sigma ;
+        end
+    end
+
+    methods (Access = private)
+        function init(obj,cParams)
+            
         end
     end
 end
