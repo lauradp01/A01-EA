@@ -4,6 +4,7 @@ classdef StressComputer < handle
         preprocessData 
         iMat
         eps
+        displacements
     end
 
     properties (Access = private)
@@ -22,6 +23,7 @@ classdef StressComputer < handle
 
         function plotSigma(obj)
             obj.plotStress() ;
+%             obj.plotDeformedStress() ;
         end
     end
 
@@ -54,5 +56,15 @@ classdef StressComputer < handle
             c = StrainStressGraph(s) ;
             c.plot() ;
         end
+
+%         function plotDeformedStress(obj)    
+%             s.x = obj.preprocessData.coord ;
+%             s.Tn = obj.preprocessData.connec ;
+%             s.u = obj.displacements ;
+%             s.sig = obj.sigma ;
+%             s.scale = 10 ;
+%             c = StressDefGraph(s) ;
+%             c.plot() ;
+%         end
     end
 end

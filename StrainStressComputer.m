@@ -51,6 +51,7 @@ classdef StrainStressComputer < handle
             s.preprocessData = obj.preprocessData ;
             s.iMat = obj.precalculateStrainStress.iMat ; 
             s.eps = obj.epsilon ;
+            s.displacements = obj.u ;
             c = StressComputer(s) ;
             obj.sigma = c.compute() ;
             c.plotSigma() ;
