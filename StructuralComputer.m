@@ -37,7 +37,6 @@ classdef StructuralComputer < handle
             obj.createDimensions() ;
             obj.computeDisplacementsAndReactions() ;
             obj.computeCriticalStress() ;
-%             obj.computePlots() ;
 
             u = obj.displacements ;
             R = obj.reactions ;
@@ -46,14 +45,12 @@ classdef StructuralComputer < handle
             eps = obj.epsilon ;
             sig = obj.sigma ;
             sig_cr = obj.sigma_cr ;
-
         end
     end
 
     methods (Access = private)
 
         function createData(obj)
-            % INPUT DATA
             prop.F = 920 ; %N
             prop.Young = 75e9 ; %Pa
             prop.Area = 120e-6 ; %m^2
@@ -149,18 +146,5 @@ classdef StructuralComputer < handle
             obj.sigma = sig ;
             obj.sigma_cr = sig_cr ;
         end
-
-        function computePlots(obj)
-            s.dimensions = obj.dimensions ;
-            s.displacements = obj.displacements ;
-            s.coord = obj.preprocessData.coord ;
-            s.connec = obj.preprocessData.connec ;
-            s.epsilon = obj.epsilon ;
-            s.sigma = obj.sigma ;
-
-            c = PlotComputer(s) ;
-            c.plot() ;
-        end
-
     end
 end
