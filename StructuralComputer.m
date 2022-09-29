@@ -42,17 +42,11 @@ classdef StructuralComputer < handle
 
     methods (Access = private)
         function createData(obj)
-            prop.F = 920 ; %N
-            prop.Young = 75e9 ; %Pa
-            prop.Area = 120e-6 ; %m^2
-            prop.thermal_coeff = 23e-6 ;%1/K
-            prop.Inertia = 1400e-12 ; %m^4
-            prop.deltaT = 0 ; %K
-            obj.barProperties = prop ;
+            c = DataComputer() ;
+            obj.barProperties = c.compute() ;
         end
 
         function computePreprocess(obj)
-            % PREPROCESS
             s = obj.barProperties ;
             c = PreprocessComputer(s) ;
             [x,Tn,Fdata,fixNod,mat,Tmat] = c.compute() ;
