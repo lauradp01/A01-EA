@@ -7,22 +7,15 @@ classdef StructuralComputer < handle
     properties (Access = private)
         barProperties
         preprocessData
-
         dimensions
-
         connecDofs
-
         stiffnessMatrix
-
         externalForce
-
         displacements
         reactions
-
         epsilon
         sigma
         sigma_cr
-        
     end
 
     methods (Access = public)
@@ -37,7 +30,6 @@ classdef StructuralComputer < handle
             obj.createDimensions() ;
             obj.computeDisplacementsAndReactions() ;
             obj.computeCriticalStress() ;
-
             u = obj.displacements ;
             R = obj.reactions ;
             KG = obj.stiffnessMatrix ;
@@ -49,7 +41,6 @@ classdef StructuralComputer < handle
     end
 
     methods (Access = private)
-
         function createData(obj)
             prop.F = 920 ; %N
             prop.Young = 75e9 ; %Pa
@@ -77,7 +68,6 @@ classdef StructuralComputer < handle
         function createDimensions(obj)
             x = obj.preprocessData.coord ;
             Tn = obj.preprocessData.connec ;
-            % Dimensions
             dim.n_d = size(x,2) ;              % Number of dimensions
             dim.n_i = dim.n_d ;                % Number of DOFs for each node
             dim.n = size(x,1) ;                % Total number of nodes
