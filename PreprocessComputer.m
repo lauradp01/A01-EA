@@ -26,12 +26,7 @@ classdef PreprocessComputer < handle
 
     methods (Access = private)
         function init(obj,cParams)
-%             obj.barProperties = cParams.barProperties ;
-            obj.barProperties.F = cParams.F ;
-            obj.barProperties.Young = cParams.Young ;
-            obj.barProperties.Area = cParams.Area ;
-            obj.barProperties.thermal_coeff = cParams.thermal_coeff ;
-            obj.barProperties.Inertia = cParams.Inertia ;
+            obj.barProperties = cParams.barProperties ;
         end
         
         function extForceCreation(obj)
@@ -53,7 +48,6 @@ classdef PreprocessComputer < handle
                      elasticModule,   superf,      thermalCoef,     inercia;  % Material (1)
             ];
             obj.preprocessData.material = mat ;
-
         end
    
         function x = nodalCoordCreation(obj)

@@ -47,23 +47,15 @@ classdef StructuralComputer < handle
         end
 
         function computePreprocess(obj)
-            s = obj.barProperties ;
+            s.barProperties = obj.barProperties ;
             c = PreprocessComputer(s) ;
             obj.preprocessData = c.compute() ;
         end
 
         function createDimensions(obj)
-            x = obj.preprocessData.coord ;
-            Tn = obj.preprocessData.connec ;
-            dim.n_d = size(x,2) ;              % Number of dimensions
-            dim.n_i = dim.n_d ;                % Number of DOFs for each node
-            dim.n = size(x,1) ;                % Total number of nodes
-            dim.n_dof = dim.n_i*dim.n ;        % Total number of degrees of freedom
-            dim.n_el = size(Tn,1) ;            % Total number of elements
-            dim.n_nod = size(Tn,2) ;           % Number of nodes for each element
-            dim.n_el_dof = dim.n_i*dim.n_nod ; % Number of DOFs for each element
-            obj.dimensions = dim ;
-
+            s.preprocessData = obj.preprocessData ;
+            c = DimensionsComputer(s) ;
+            obj.dimensions = c.compute() ;
         end
 
         function computeDofConnectivities(obj)
