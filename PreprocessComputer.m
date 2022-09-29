@@ -4,23 +4,29 @@ classdef PreprocessComputer < handle
         barProperties
     end
 
+    properties (Access = private)
+        preprocessData
+    end
+
     methods (Access = public)
         function obj = PreprocessComputer(cParams)
             obj.init(cParams) ;
         end
 
-        function [x,Tn,Fdata,fixNod,mat,Tmat] = compute(obj)
-            x = obj.nodalCoordCreation() ;
-            Tn = obj.connectMatCreation() ;
-            Fdata = obj.extForceCreation() ;
-            fixNod = obj.fixNodesCreation() ;
-            mat = obj.materialData() ;
-            Tmat = obj.materialConnec() ;
+        function preprocessData = compute(obj)
+            obj.extForceCreation() ;
+            obj.nodalCoordCreation() ;
+            obj.connectMatCreation() ;
+            obj.fixNodesCreation() ;
+            obj.materialConnec() ;
+            obj.materialData() ;
+            preprocessData = obj.preprocessData ;
         end
     end
 
     methods (Access = private)
         function init(obj,cParams)
+%             obj.barProperties = cParams.barProperties ;
             obj.barProperties.F = cParams.F ;
             obj.barProperties.Young = cParams.Young ;
             obj.barProperties.Area = cParams.Area ;
@@ -28,16 +34,17 @@ classdef PreprocessComputer < handle
             obj.barProperties.Inertia = cParams.Inertia ;
         end
         
-        function Fdata = extForceCreation(obj)
+        function extForceCreation(obj)
             force = obj.barProperties.F ;
             Fdata = [%   Node        DOF  Magnitude   
             2 4 3*force ;
             3 6 2*force ;
             4 8 force ;
             ];
+            obj.preprocessData.dataForce = Fdata ;
         end
         
-        function mat = materialData(obj)
+        function materialData(obj)
             elasticModule = obj.barProperties.Young ;
             superf = obj.barProperties.Area ;
             thermalCoef = obj.barProperties.thermal_coeff ;
@@ -45,12 +52,11 @@ classdef PreprocessComputer < handle
             mat = [% Young M.   Section A.   thermal_coeff   Inertia
                      elasticModule,   superf,      thermalCoef,     inercia;  % Material (1)
             ];
+            obj.preprocessData.material = mat ;
 
         end
-    end
-    methods(Access = private, Static)
-
-        function x = nodalCoordCreation()
+   
+        function x = nodalCoordCreation(obj)
             x = [%  X       Y
             0 0 ;
             0.5 0.2 ;
@@ -61,9 +67,10 @@ classdef PreprocessComputer < handle
             1 0.7 ;
             1.5 0.8
             ];
+            obj.preprocessData.coord = x ;
         end
 
-        function Tn = connectMatCreation()
+        function Tn = connectMatCreation(obj)
             Tn = [%     a      b
             1 2 ;
             2 3 ;
@@ -82,21 +89,24 @@ classdef PreprocessComputer < handle
             4 7 ;
             4 8 ;
             ];
+            obj.preprocessData.connec = Tn ;
         end
 
-        function fixNod = fixNodesCreation()
+        function fixNod = fixNodesCreation(obj)
             fixNod = [% Node        DOF  Magnitude
             1 1 0 ;
             1 2 0 ;
             5 9 0 ;
             5 10 0 ;
             ];
+            obj.preprocessData.fixNodes = fixNod ;
         end
 
-        function Tmat = materialConnec()
+        function Tmat = materialConnec(obj)
             Tmat = [% Mat. index
             1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1 ; 1  
             ];
+            obj.preprocessData.connecMaterial = Tmat ;
         end
     end
 end

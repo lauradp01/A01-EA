@@ -49,14 +49,7 @@ classdef StructuralComputer < handle
         function computePreprocess(obj)
             s = obj.barProperties ;
             c = PreprocessComputer(s) ;
-            [x,Tn,Fdata,fixNod,mat,Tmat] = c.compute() ;
-            prepComp.coord = x ;
-            prepComp.connec = Tn ;
-            prepComp.dataForce = Fdata ;
-            prepComp.fixNodes = fixNod ;
-            prepComp.material = mat ;
-            prepComp.connecMaterial = Tmat ;
-            obj.preprocessData = prepComp ;
+            obj.preprocessData = c.compute() ;
         end
 
         function createDimensions(obj)
