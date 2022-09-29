@@ -7,7 +7,6 @@ classdef ConnectivitiesComputer < handle
     end
 
     methods (Access = public)
-
         function obj = ConnectivitiesComputer(cParams)
            obj.init(cParams);
         end
@@ -15,11 +14,9 @@ classdef ConnectivitiesComputer < handle
         function Td = compute(obj)
             Td = obj.computeTd() ;
         end
-
     end
   
     methods (Access = private)
-
         function init(obj,cParams)
             obj.dimensions = cParams.dimensions ;
             obj.connec = cParams.connec ;
@@ -50,5 +47,4 @@ classdef ConnectivitiesComputer < handle
             end
         end
     end
-
 end

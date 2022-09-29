@@ -10,10 +10,7 @@ classdef CriticalStressComputer < handle
 
     properties (Access = private)
         precalculateStrainStress
-
-        epsilon
-        sigma
-        sigma_cr
+        criticalStressData
     end
 
     methods
@@ -21,13 +18,10 @@ classdef CriticalStressComputer < handle
             obj.init(cParams) ;
         end
 
-        function [eps,sig,sig_cr] = compute(obj)
+        function criticalStressData = compute(obj)
             obj.computeStrainStress ;
             obj.computeBuckling ;
-
-            eps = obj.epsilon ;
-            sig = obj.sigma ;
-            sig_cr = obj.sigma_cr ;            
+            criticalStressData = obj.criticalStressData ;
         end
 
     end
@@ -61,8 +55,8 @@ classdef CriticalStressComputer < handle
             s.precalculateStrainStress = obj.precalculateStrainStress ;
             c = StrainStressComputer(s) ;
             [eps,sig] = c.compute() ;
-            obj.epsilon = eps ;
-            obj.sigma = sig ;
+            obj.criticalStressData.epsilon = eps ;
+            obj.criticalStressData.sigma = sig ;
         end
 
         function sig_cr = computeBuckling(obj)
@@ -73,9 +67,8 @@ classdef CriticalStressComputer < handle
             s.precalculateStrainStress = obj.precalculateStrainStress ;
             c = BucklingComputer(s) ;
             sig_cr = c.compute() ;
-            obj.sigma_cr = sig_cr ;
+            obj.criticalStressData.sigma_cr = sig_cr ;
         end
-
     end
 
 end

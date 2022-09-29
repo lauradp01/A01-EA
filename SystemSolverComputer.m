@@ -1,6 +1,4 @@
-
-classdef SystemSolverComputer < handle
-    
+classdef SystemSolverComputer < handle    
     properties (Access = private)
         dimensions
         stiffnessMatrix

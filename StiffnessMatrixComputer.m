@@ -30,7 +30,6 @@ classdef StiffnessMatrixComputer < handle
         end
 
         function computeElementStiffnessMatrix(obj)
-            % Computation of element stiffness matrices
             s.dimensions = obj.dimensions ;
             s.preprocessData = obj.preprocessData ;
             c = StiffnessComputer(s) ;
@@ -40,7 +39,6 @@ classdef StiffnessMatrixComputer < handle
 
         function computeMatrixAssembly(obj)
             obj.computeElementStiffnessMatrix() ;            
-            % Global matrix assembly
             s.dimensions = obj.dimensions ;
             s.Td = obj.connecDofs ;
             s.Kel = obj.elemStiffnessMat ;

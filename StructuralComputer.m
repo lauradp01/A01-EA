@@ -13,9 +13,7 @@ classdef StructuralComputer < handle
         externalForce
         displacements
         reactions
-        epsilon
-        sigma
-        sigma_cr
+        criticalStressData
     end
 
     methods (Access = public)
@@ -34,9 +32,9 @@ classdef StructuralComputer < handle
             R = obj.reactions ;
             KG = obj.stiffnessMatrix ;
             Fext = obj.externalForce ;
-            eps = obj.epsilon ;
-            sig = obj.sigma ;
-            sig_cr = obj.sigma_cr ;
+            eps = obj.criticalStressData.epsilon ;
+            sig = obj.criticalStressData.sigma ;
+            sig_cr = obj.criticalStressData.sigma_cr ;
         end
     end
 
@@ -59,7 +57,6 @@ classdef StructuralComputer < handle
         end
 
         function computeDofConnectivities(obj)
-            % Computation of the DOFs connectivities
             s.dimensions = obj.dimensions;
             s.connec = obj.preprocessData.connec ;
             c = ConnectivitiesComputer(s);
@@ -110,10 +107,7 @@ classdef StructuralComputer < handle
             s.connecDofs = obj.connecDofs ;
             s.preprocessData = obj.preprocessData ;
             c = CriticalStressComputer(s) ;
-            [eps,sig,sig_cr] = c.compute() ;
-            obj.epsilon = eps ;
-            obj.sigma = sig ;
-            obj.sigma_cr = sig_cr ;
+            obj.criticalStressData = c.compute() ;
         end
     end
 end

@@ -23,15 +23,12 @@ classdef ForceComputer < handle
 
         function Fext = computeFext(obj)
             nDim = obj.nDof ;
-            Forces = obj.dataForce ;
-            
+            Forces = obj.dataForce ;            
             Fext = zeros(nDim,1) ;
-
             for i = 1:size(Forces,1)
                 Fext(Forces(i,2)) = Forces(i,3) ;
             end
         end
-
     end
 
 end
