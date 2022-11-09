@@ -81,7 +81,6 @@ classdef StructuralComputer < handle
             c = ForceComputer(s) ;
             Fext = c.compute() ;
             obj.externalForce =  Fext ;
-
         end
 
         function computeDisplacementsAndReactions(obj)
