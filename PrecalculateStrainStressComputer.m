@@ -23,7 +23,6 @@ classdef PrecalculateStrainStressComputer < handle
             precalculateStrainStress = obj.precalculateStrainStress ;
         end
     end
-
     methods (Access = private)
         function init(obj,cParams)
             obj.deltaT = cParams.deltaT ;
@@ -32,7 +31,6 @@ classdef PrecalculateStrainStressComputer < handle
             obj.Td = cParams.Td ;
             obj.preprocessData = cParams.preprocessData ;
         end
-
          function co = computeCoordinates(obj)
             nElem = obj.dimensions.n_el ;
             coord = obj.preprocessData.coord ;
@@ -46,7 +44,6 @@ classdef PrecalculateStrainStressComputer < handle
              end
              obj.precalculateStrainStress.coordinates = co;
         end
-
         function computeLength(obj) 
             nElem = obj.dimensions.n_el ;
             co = obj.precalculateStrainStress.coordinates;
@@ -56,7 +53,6 @@ classdef PrecalculateStrainStressComputer < handle
             end
             obj.precalculateStrainStress.length = l;
         end
-
        function iMaterial = computeMaterial(obj)
             connecMaterial = obj.preprocessData.connecMaterial ;
             nElem = obj.dimensions.n_el ;
@@ -79,14 +75,12 @@ classdef PrecalculateStrainStressComputer < handle
                 0 0 c s ;
                 0 0 -s c] ;
         end
-
         function u_e = computeGlobalDisp(obj,iElem,j)
             displacements = obj.u ;
             connecDOFs = obj.Td ;
             I = connecDOFs(iElem,j) ;
             u_e = displacements(I) ;
         end
-
         function u_e_l = computeLocalDisp(obj)
             nElem = obj.dimensions.n_el ;
             connecDOFs = obj.Td ;
