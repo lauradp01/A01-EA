@@ -1,7 +1,6 @@
 classdef DimensionsComputer < handle
     properties (Access = private)
         preprocessData
-%         necessaryData
     end
 
     properties (Access = private)

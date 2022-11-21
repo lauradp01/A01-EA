@@ -6,10 +6,6 @@ classdef StructuralComputer < handle
 
     properties (Access = private)
         necessaryData
-%         barProperties
-%         preprocessData
-%         dimensions
-%         connecDofs
         stiffnessMatrix
         externalForce
         displacements
@@ -45,29 +41,8 @@ classdef StructuralComputer < handle
             obj.necessaryData = c.compute() ;
         end
 
-%         function computePreprocess(obj)
-%             s.barProperties = obj.barProperties ;
-%             c = PreprocessComputer(s) ;
-%             obj.preprocessData = c.compute() ;
-%         end
-
-%         function createDimensions(obj)
-%             s.preprocessData = obj.necessaryData.preprocessData ;
-%             c = DimensionsComputer(s) ;
-%             obj.dimensions = c.compute() ;
-%         end
-
-%         function computeDofConnectivities(obj)
-%             s.dimensions = obj.dimensions;
-%             s.connec = obj.necessaryData.preprocessData.connec ;
-%             c = ConnectivitiesComputer(s);
-%             Td = c.compute();
-%             obj.connecDofs = Td ;
-%         end
-
         function computeStiffnessMatrix(obj)
             obj.createData() ;
-%             obj.computeDofConnectivities() ;
             s.connecDofs = obj.necessaryData.connecDofs ;
             s.dimensions = obj.necessaryData.dimensions ;
             s.preprocessData = obj.necessaryData.preprocessData ;
@@ -101,7 +76,6 @@ classdef StructuralComputer < handle
 
         function computeCriticalStress(obj)
             obj.createData() ;
-%             obj.computeDofConnectivities ;
             obj.computeDisplacementsAndReactions() ;
             s.displacements = obj.displacements ;
             s.incrementT = obj.necessaryData.barProperties.deltaT;
