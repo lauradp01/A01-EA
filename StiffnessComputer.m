@@ -33,7 +33,6 @@ classdef StiffnessComputer < handle
             n_el_dof = nDim*n_nod ;
             Kel = zeros(n_el_dof,n_el_dof,nElem) ;
         end
-
         function n = computeNodes(obj)
             nElem = obj.dimensions.n_el ;
             connec = obj.preprocessData.connec ;
@@ -42,7 +41,6 @@ classdef StiffnessComputer < handle
                 n.node2(i) = connec(i,2) ;
             end
         end
-
         function co = computeCoordinates(obj)
             nElem = obj.dimensions.n_el ;
             coord = obj.preprocessData.coord ;

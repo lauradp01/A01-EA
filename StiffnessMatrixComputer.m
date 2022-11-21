@@ -7,7 +7,6 @@ classdef StiffnessMatrixComputer < handle
     end
     
     properties (Access = private)
-%         elemStiffnessMat
         stiffnessMatrix
     end
 
