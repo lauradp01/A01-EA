@@ -100,13 +100,12 @@ classdef StructuralComputer < handle
         end
 
         function computeCriticalStress(obj)
-            obj.createData() ;
-%             obj.computeDofConnectivities ;
+            obj.computeDofConnectivities ;
             obj.computeDisplacementsAndReactions() ;
             s.displacements = obj.displacements ;
             s.incrementT = obj.necessaryData.barProperties.deltaT;
-            s.dimensions = obj.necessaryData.dimensions ;
-            s.connecDofs = obj.necessaryData.connecDofs ;
+            s.dimensions = obj.dimensions ;
+            s.connecDofs = obj.connecDofs ;
             s.preprocessData = obj.necessaryData.preprocessData ;
             c = CriticalStressComputer(s) ;
             obj.criticalStressData = c.compute() ;

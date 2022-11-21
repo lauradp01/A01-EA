@@ -1,13 +1,22 @@
 classdef DataComputer < handle
     properties (Access = private)
         barProperties
+        preprocessData
+        dimensions
+        connecDofs
     end
 
     methods (Access = public)
-        function barProperties = compute(obj)
+        function necessaryData = compute(obj)
             obj.createData() ;
-            barProperties = obj.barProperties ;
-        end
+            obj.computePreprocess() ;
+            obj.createDimensions() ;
+            obj.computeDofConnectivities() ;
+            necessaryData.barProperties = obj.barProperties ;
+            necessaryData.preprocessData = obj.preprocessData ;
+            necessaryData.dimensions = obj.dimensions ;
+            necessaryData.connecDofs = obj.connecDofs ;
+         end
     end
 
     methods (Access = private)
@@ -19,6 +28,24 @@ classdef DataComputer < handle
             prop.Inertia = 1400e-12 ; %m^4
             prop.deltaT = 0 ; %K
             obj.barProperties = prop ;
+        end
+
+        function computePreprocess(obj)
+            s.barProperties = obj.barProperties ;
+            c = PreprocessComputer(s) ;
+            obj.preprocessData = c.compute() ;
+        end
+        function createDimensions(obj)
+            s.preprocessData = obj.preprocessData ;
+            c = DimensionsComputer(s) ;
+            obj.dimensions = c.compute() ;
+        end
+        function computeDofConnectivities(obj)
+            s.dimensions = obj.dimensions;
+            s.connec = obj.preprocessData.connec ;
+            c = ConnectivitiesComputer(s);
+            Td = c.compute();
+            obj.connecDofs = Td ;
         end
     end
 end
