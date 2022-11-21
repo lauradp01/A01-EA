@@ -21,8 +21,6 @@ classdef StructuralComputer < handle
         function [u,R,KG,Fext,eps,sig,sig_cr] = compute(obj)
             close all ;
             obj.createData();
-%             obj.computePreprocess();
-%             obj.createDimensions() ;
             obj.computeDisplacementsAndReactions() ;
             obj.computeCriticalStress() ;
             u = obj.displacements ;
