@@ -86,7 +86,6 @@ classdef StiffnessComputer < handle
             end
         end
         function computeMatrixAssembly(obj)
-%             obj.computeElementStiffnessMatrix() ;            
             s.dimensions = obj.dimensions ;
             s.Td = obj.Td ;
             s.Kel = obj.computeKel() ;

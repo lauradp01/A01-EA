@@ -37,5 +37,6 @@ classdef StiffnessMatrixComputer < handle
             KG = c.compute() ;
             obj.stiffnessMatrix = KG ;
         end
+
     end
 end
