@@ -7,7 +7,7 @@ classdef StiffnessMatrixComputer < handle
     end
     
     properties (Access = private)
-        elemStiffnessMat
+%         elemStiffnessMat
         stiffnessMatrix
     end
 
@@ -17,7 +17,7 @@ classdef StiffnessMatrixComputer < handle
         end
 
         function KG = compute(obj)
-            obj.computeMatrixAssembly() ;
+            obj.computeElementStiffnessMatrix() ;
             KG = obj.stiffnessMatrix ;
         end
     end
@@ -32,19 +32,20 @@ classdef StiffnessMatrixComputer < handle
         function computeElementStiffnessMatrix(obj)
             s.dimensions = obj.dimensions ;
             s.preprocessData = obj.preprocessData ;
-            c = StiffnessComputer(s) ;
-            Kel = c.compute() ;
-            obj.elemStiffnessMat = Kel ;
-        end
-
-        function computeMatrixAssembly(obj)
-            obj.computeElementStiffnessMatrix() ;            
-            s.dimensions = obj.dimensions ;
             s.Td = obj.connecDofs ;
-            s.Kel = obj.elemStiffnessMat ;
-            c = AssemblyComputer(s) ;
+            c = StiffnessComputer(s) ;
             KG = c.compute() ;
             obj.stiffnessMatrix = KG ;
         end
+
+%         function computeMatrixAssembly(obj)
+%             obj.computeElementStiffnessMatrix() ;            
+%             s.dimensions = obj.dimensions ;
+%             s.Td = obj.connecDofs ;
+%             s.Kel = obj.elemStiffnessMat ;
+%             c = AssemblyComputer(s) ;
+%             KG = c.compute() ;
+%             obj.stiffnessMatrix = KG ;
+%         end
     end
 end

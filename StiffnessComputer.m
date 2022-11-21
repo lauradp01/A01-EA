@@ -3,15 +3,19 @@ classdef StiffnessComputer < handle
     properties (Access = private)
         dimensions
         preprocessData
+        Td
+    end
+    properties (Access = private)
+        stiffnessMatrix
     end
 
     methods (Access = public)
         function obj = StiffnessComputer(cParams)
            obj.init(cParams);
         end
-
-        function Kel = compute(obj)
-            Kel = obj.computeKel() ;
+        function KG = compute(obj)
+            obj.computeMatrixAssembly() ;
+            KG = obj.stiffnessMatrix ;
          end
     end
 
@@ -19,13 +23,12 @@ classdef StiffnessComputer < handle
         function init(obj,cParams)
             obj.dimensions = cParams.dimensions ;
             obj.preprocessData = cParams.preprocessData ;
+            obj.Td = cParams.Td ;
         end
-
         function Kel = createKel(obj)
             nDim = obj.dimensions.n_d ;
             nElem = obj.dimensions.n_el ;
             connec = obj.preprocessData.connec ;
-
             n_nod = size(connec,2) ;  
             n_el_dof = nDim*n_nod ;
             Kel = zeros(n_el_dof,n_el_dof,nElem) ;
@@ -51,7 +54,6 @@ classdef StiffnessComputer < handle
                 co.y2(i) = coord(n.node2(i),2) ;
              end
         end
-
         function [l,s,c] = computeData(obj) 
             nElem = obj.dimensions.n_el ;
             co = obj.computeCoordinates() ;
@@ -61,7 +63,6 @@ classdef StiffnessComputer < handle
                 c(i) = (co.x2(i)-co.x1(i))/l(i) ;
             end
         end
-
         function iMat = computeMaterial(obj)
             nElem = obj.dimensions.n_el ;
             materialConnec = obj.preprocessData.connecMaterial ;
@@ -69,7 +70,6 @@ classdef StiffnessComputer < handle
                 iMat(i) = materialConnec(i) ;
             end
         end
-
         function Kel = computeKel(obj)
             nElem = obj.dimensions.n_el ;
             Kel = obj.createKel() ;
@@ -84,6 +84,15 @@ classdef StiffnessComputer < handle
                     -c(i)*s(i) -(s(i)^2) c(i)*s(i) s(i)^2
                     ] * materialData(iMat(i),2) * materialData(iMat(i),1) / l(i) ;
             end
-         end
+        end
+        function computeMatrixAssembly(obj)
+%             obj.computeElementStiffnessMatrix() ;            
+            s.dimensions = obj.dimensions ;
+            s.Td = obj.Td ;
+            s.Kel = obj.computeKel() ;
+            c = AssemblyComputer(s) ;
+            KG = c.compute() ;
+            obj.stiffnessMatrix = KG ;
+        end
     end
 end

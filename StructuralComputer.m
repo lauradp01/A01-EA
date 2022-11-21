@@ -47,7 +47,6 @@ classdef StructuralComputer < handle
             c = StiffnessMatrixComputer(s) ;
             KG = c.compute() ;
             obj.stiffnessMatrix = KG ;
-             
         end
 
         function computeForceVectorAssembly(obj)
