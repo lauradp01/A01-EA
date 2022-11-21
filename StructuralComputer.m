@@ -19,6 +19,7 @@ classdef StructuralComputer < handle
         end
 
         function [u,R,KG,Fext,eps,sig,sig_cr] = compute(obj)
+            close all ;
             obj.createData();
             obj.computeDisplacementsAndReactions() ;
             obj.computeCriticalStress() ;
