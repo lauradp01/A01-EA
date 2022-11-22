@@ -15,29 +15,17 @@ classdef SolverPreparationComputer < handle
         displacements
         reactions
     end
-
     methods (Access = public)
         function obj = SolverPreparationComputer(cParams)
             obj.init(cParams) ;
         end
-
-%         function [K,F,uL] = compute(obj)
-%             obj.splitStiffnessMatrix() ;
-%             obj.createFext() ;
-%             obj.computeFreeDisp() ;
-%             K = obj.splittedK ;
-%             F = obj.extF ;
-%             uL = obj.uLdisp ;
-%         end
         function  [u,R] = compute(obj)
-            obj.computeFreeDisp() ;
             obj.computeDisplacements() ;
             obj.computeReactions() ;
             u = obj.displacements ;
             R = obj.reactions ;
         end
     end
-
     methods (Access = private)
         function init(obj,cParams)
             obj.vL = cParams.vL ;
@@ -48,7 +36,6 @@ classdef SolverPreparationComputer < handle
             obj.solverType = cParams.solverType;
             obj.necessaryData = cParams.necessaryData ;
         end
-
         function splitStiffnessMatrix(obj)
             freeDOF = obj.vL ;
             prescribedDOF = obj.vR ;
@@ -59,7 +46,6 @@ classdef SolverPreparationComputer < handle
             K.KRR = StiffMat(prescribedDOF,prescribedDOF) ;
             obj.splittedK = K ;
         end
-
         function createFext(obj)
             freeDOF = obj.vL ;
             prescribedDOF = obj.vR ;
@@ -68,7 +54,6 @@ classdef SolverPreparationComputer < handle
             F.Fext_R = Forces(prescribedDOF,1) ;
             obj.extF = F ;
         end
-
         function computeFreeDisp(obj)
             obj.splitStiffnessMatrix() ;
             obj.createFext() ;
@@ -80,7 +65,7 @@ classdef SolverPreparationComputer < handle
             obj.uLdisp = uL ;
         end
         function u = computeDisplacements(obj)
-%             obj.computeSolverPreparation() ;
+            obj.computeFreeDisp() ;
             s.dimensions = obj.necessaryData.dimensions ;
             s.preprocessData = obj.necessaryData.preprocessData ;
             s.vL = obj.vL ;
@@ -95,9 +80,7 @@ classdef SolverPreparationComputer < handle
             c.plotDisplacements() ;
             obj.displacements = u ;
         end
-
         function R = computeReactions(obj)
-%             obj.computeSolverPreparation() ;
             s.vL = obj.vL ;
             s.vR = obj.vR ;
             s.uR = obj.uR ;
