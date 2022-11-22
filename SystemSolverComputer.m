@@ -24,7 +24,7 @@ classdef SystemSolverComputer < handle
 
         function [u,R] = compute(obj)
             obj.computeConditions() ;
-            obj.computeSolverPreparation() ;
+%             obj.computeSolverPreparation() ;
             u = obj.displacements ;
             R = obj.reactions ;
         end
@@ -39,27 +39,35 @@ classdef SystemSolverComputer < handle
         end
 
         function computeConditions(obj)
-            s.n_dof = obj.necessaryData.dimensions.n_dof ;
-            s.fixNod = obj.necessaryData.preprocessData.fixNodes ;
-            c = ConditionsComputer(s) ;
-            [vL,vR,uR] = c.compute() ;
-            obj.freeDof = vL ;
-            obj.prescribedDof = vR ;
-            obj.prescribedDispl = uR ;
-        end
-
-        function computeSolverPreparation(obj)
             s.necessaryData = obj.necessaryData ;
-            s.vL = obj.freeDof ;
-            s.vR = obj.prescribedDof ;
-            s.uR = obj.prescribedDispl ;
-            s.KG = obj.stiffnessMatrix ;
-            s.Fext = obj.externalForce ;
-            s.solverType = obj.solverType;
-            c = SolverPreparationComputer(s) ;
+            s.stiffnessMatrix = obj.stiffnessMatrix ;
+            s.externalForce = obj.externalForce ;
+            s.solverType = obj.solverType ;
+%             s.n_dof = obj.necessaryData.dimensions.n_dof ;
+%             s.fixNod = obj.necessaryData.preprocessData.fixNodes ;
+            c = ConditionsComputer(s) ;
             [u,R] = c.compute() ;
             obj.displacements = u ;
             obj.reactions = R ;
+%             [vL,vR,uR] = c.compute() ;
+%             obj.freeDof = vL ;
+%             obj.prescribedDof = vR ;
+%             obj.prescribedDispl = uR ;
+
         end
+
+%         function computeSolverPreparation(obj)
+%             s.necessaryData = obj.necessaryData ;
+%             s.vL = obj.freeDof ;
+%             s.vR = obj.prescribedDof ;
+%             s.uR = obj.prescribedDispl ;
+%             s.KG = obj.stiffnessMatrix ;
+%             s.Fext = obj.externalForce ;
+%             s.solverType = obj.solverType;
+%             c = SolverPreparationComputer(s) ;
+%             [u,R] = c.compute() ;
+%             obj.displacements = u ;
+%             obj.reactions = R ;
+%         end
     end
 end

@@ -37,8 +37,7 @@ classdef ConditionsComputer < handle
         function init(obj,cParams)
             obj.necessaryData = cParams.necessaryData ;
             obj.stiffnessMatrix = cParams.stiffnessMatrix ;
-            obj.externalForce = cParams.externalForce;
-            obj.solverType = cParams.solverType ;
+            obj.externalForce = cParams.external
 %             obj.n_dof = cParams.n_dof ;
 %             obj.fixNod = cParams.fixNod ;
         end
