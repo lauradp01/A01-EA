@@ -5,8 +5,6 @@ classdef ConditionsComputer < handle
         stiffnessMatrix
         externalForce
         solverType
-%         n_dof
-%         fixNod
     end
     properties (Access = private)
         displacements
@@ -23,14 +21,6 @@ classdef ConditionsComputer < handle
             u = obj.displacements ;
             R = obj.reactions ;
         end
-
-%         function [vL,vR,uR] = compute(obj)
-%             vL = obj.computeFreeDOF();
-%             vR = obj.computePrescDOF() ;
-%             uR = obj.computePrescDispl() ;
-%             
-%         end
-
     end
 
     methods (Access = private)
@@ -39,24 +29,18 @@ classdef ConditionsComputer < handle
             obj.stiffnessMatrix = cParams.stiffnessMatrix ;
             obj.externalForce = cParams.externalForce;
             obj.solverType = cParams.solverType ;
-%             obj.n_dof = cParams.n_dof ;
-%             obj.fixNod = cParams.fixNod ;
         end
-
         function prescribed_dofs = computePrescribed_dofs(obj)
             fixedNodes = obj.necessaryData.preprocessData.fixNodes ;
             prescribed_dofs = size(fixedNodes,1) ;
         end
-        
         function vL = computeFreeDOF(obj)
             nDim = obj.necessaryData.dimensions.n_dof ;
             fixedNodes = obj.necessaryData.preprocessData.fixNodes ;
             prescribed_dofs = obj.computePrescribed_dofs() ;
             vL = zeros(nDim-prescribed_dofs,1) ;
-
             a = 0 ;
             pos_vL = 1 ;
-
             for i = 1:nDim
                 for j = 1:prescribed_dofs
                     if i == fixedNodes(j,2)
@@ -76,7 +60,6 @@ classdef ConditionsComputer < handle
             fixedNodes = obj.necessaryData.preprocessData.fixNodes ;
             prescribed_dofs = obj.computePrescribed_dofs() ;
             vR = zeros(prescribed_dofs,1) ;
-            
             for i = 1:nDim
                 for j = 1:prescribed_dofs
                     if i == fixedNodes(j,2)
@@ -92,7 +75,6 @@ classdef ConditionsComputer < handle
             fixedNodes = obj.necessaryData.preprocessData.fixNodes ;
             prescribed_dofs = obj.computePrescribed_dofs() ;
             uR = zeros(prescribed_dofs,1) ;
-
             for i = 1:nDim
                 for j = 1:prescribed_dofs
                     if i == fixedNodes(j,2)
@@ -106,9 +88,6 @@ classdef ConditionsComputer < handle
             s.vL = obj.computeFreeDOF() ;
             s.vR = obj.computePrescDOF() ;
             s.uR = obj.computePrescDispl() ; 
-%             s.vL = obj.freeDof ;
-%             s.vR = obj.prescribedDof ;
-%             s.uR = obj.prescribedDispl ;
             s.KG = obj.stiffnessMatrix ;
             s.Fext = obj.externalForce ;
             s.solverType = obj.solverType;
@@ -117,7 +96,5 @@ classdef ConditionsComputer < handle
             obj.displacements = u ;
             obj.reactions = R ;
         end
-
     end
-
 end
