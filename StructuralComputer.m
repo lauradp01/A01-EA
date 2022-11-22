@@ -2,10 +2,11 @@ classdef StructuralComputer < handle
 
     properties (Access = private)
         solverType
+        necessaryData
     end
 
     properties (Access = private)
-        necessaryData
+        
         stiffnessMatrix
         externalForce
         displacements
@@ -60,8 +61,9 @@ classdef StructuralComputer < handle
         function computeDisplacementsAndReactions(obj)
             obj.computeStiffnessMatrix() ;
             obj.computeForceVectorAssembly() ;
-            s.dimensions = obj.necessaryData.dimensions ;
-            s.preprocessData = obj.necessaryData.preprocessData ;
+            s.necessaryData = obj.necessaryData ;
+%             s.dimensions = obj.necessaryData.dimensions ;
+%             s.preprocessData = obj.necessaryData.preprocessData ;
             s.stiffnessMatrix = obj.stiffnessMatrix ;
             s.externalForce = obj.externalForce ;
             s.solverType = obj.solverType ;

@@ -30,7 +30,7 @@ classdef SolverPreparationComputer < handle
 %             uL = obj.uLdisp ;
 %         end
         function  [u,R] = compute(obj)
-            obj.computeFreeDisp() ;
+            obj.computef
             obj.computeDisplacements() ;
             obj.computeReactions() ;
             u = obj.displacements ;
