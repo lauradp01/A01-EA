@@ -73,7 +73,6 @@ classdef StructuralComputer < handle
 
         function computeCriticalStress(obj)
             obj.createData() ;
-%             obj.computeDisplacementsAndReactions() ;
             s.displacements = obj.displacements ;
             s.incrementT = obj.necessaryData.barProperties.deltaT;
             s.dimensions = obj.necessaryData.dimensions ;
